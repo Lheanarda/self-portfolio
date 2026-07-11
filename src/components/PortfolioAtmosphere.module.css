@@ -1,0 +1,196 @@
+.ambient,
+.field,
+.vignette {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ambient {
+  z-index: 0;
+  background: linear-gradient(#0f7e8a, #0a4256);
+}
+
+.field {
+  z-index: 1;
+}
+
+.vignette {
+  z-index: 2;
+  background: radial-gradient(120% 95% at 50% 42%, transparent 48%, rgba(0, 0, 3, 0.7) 100%);
+  opacity: 0.72;
+}
+
+.tape {
+  position: fixed;
+  z-index: 8;
+  top: 0;
+  left: 0;
+  width: 76px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.telemetry {
+  position: fixed;
+  z-index: 9;
+  top: 4.5rem;
+  right: 1.6rem;
+  min-width: 224px;
+  padding: 0.9rem 1rem 0.8rem 1.2rem;
+  border-right: 2px solid rgba(159, 195, 207, 0.35);
+  background: rgba(0, 3, 7, 0.45);
+  backdrop-filter: blur(7px);
+  color: var(--ice-bright);
+  font-family: var(--font-mono);
+  text-align: right;
+  pointer-events: none;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 2px;
+  height: 100%;
+  background: var(--ice-bright);
+  box-shadow: 0 0 10px rgba(100, 240, 210, 0.35);
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.readout {
+  display: grid;
+  grid-template-columns: auto minmax(7rem, 1fr) auto;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin: 0.34rem 0;
+}
+
+.readout:not(.primaryReadout) .value {
+  grid-column: 2 / 4;
+}
+
+.label {
+  color: rgba(159, 195, 207, 0.66);
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+}
+
+.value {
+  overflow: hidden;
+  color: var(--ice-bright);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primaryReadout .value {
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.unit {
+  min-width: 1.2ch;
+  color: rgba(159, 195, 207, 0.66);
+  font-size: 0.56rem;
+}
+
+.bottomHud {
+  position: fixed;
+  z-index: 9;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.9rem 1.6rem 1.1rem;
+  background: linear-gradient(transparent, rgba(0, 2, 5, 0.62));
+  color: var(--ice-bright);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  pointer-events: none;
+}
+
+.bottomHud p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+
+.bottomHud span,
+.bottomHud small {
+  color: rgba(159, 195, 207, 0.56);
+  font-size: 0.56rem;
+}
+
+.bottomHud strong {
+  min-width: 4ch;
+  font-weight: 500;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .tape {
+    display: none;
+  }
+
+  .telemetry {
+    top: 3.45rem;
+    right: 1rem;
+    min-width: 174px;
+    padding: 0.62rem 0.72rem 0.56rem 0.85rem;
+    background: rgba(0, 3, 7, 0.62);
+  }
+
+  .readout {
+    grid-template-columns: auto minmax(5rem, 1fr) auto;
+    gap: 0.45rem;
+    margin: 0.2rem 0;
+  }
+
+  .readout.hideOnMobile {
+    display: none;
+  }
+
+  .primaryReadout .value {
+    font-size: 1.25rem;
+  }
+
+  .label,
+  .unit {
+    font-size: 0.5rem;
+  }
+
+  .value {
+    font-size: 0.65rem;
+  }
+
+  .bottomHud {
+    padding: 0.7rem 1rem 0.85rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+
+  .bottomHud .hideOnMobile {
+    display: none;
+  }
+
+  .bottomHud .rateItem {
+    margin-left: auto;
+  }
+}

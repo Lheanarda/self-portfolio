@@ -1,0 +1,3 @@
+# Repository-scoped Codex configuration for persistent portfolio project logging.
+[features]
+hooks = true
