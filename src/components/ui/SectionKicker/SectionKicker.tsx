@@ -10,20 +10,9 @@ type SectionKickerProps = Readonly<{
   variant: "depth" | "surface";
 }>;
 
-export function SectionKicker({
-  position,
-  digits,
-  divider,
-  label,
-  variant,
-}: SectionKickerProps) {
+export function SectionKicker({ position, digits, divider, label, variant }: SectionKickerProps) {
   return (
-    <p
-      {...stylex.props(
-        styles.root,
-        variant === "depth" ? styles.depth : styles.surface,
-      )}
-    >
+    <p {...stylex.props(styles.root, variant === "depth" ? styles.depth : styles.surface)}>
       {sequenceNumber(position, digits)}
       {divider}
       {label}

@@ -11,8 +11,7 @@ export type DepthSample = Readonly<{
   elapsedMinutes: number;
 }>;
 
-const lerp = (from: number, to: number, amount: number) =>
-  from + (to - from) * amount;
+const lerp = (from: number, to: number, amount: number) => from + (to - from) * amount;
 
 export function measureDepthAnchors(root: ParentNode = document): readonly DepthAnchor[] {
   return Array.from(root.querySelectorAll<HTMLElement>("[data-depth][data-elapsed]"))
@@ -48,8 +47,7 @@ export function sampleDepthTrack(
     if (probePosition > next.position) continue;
     const previous = anchors[index - 1];
     const amount =
-      (probePosition - previous.position) /
-      Math.max(1, next.position - previous.position);
+      (probePosition - previous.position) / Math.max(1, next.position - previous.position);
     return {
       depth: lerp(previous.depth, next.depth, amount),
       elapsedMinutes: lerp(previous.elapsedMinutes, next.elapsedMinutes, amount),

@@ -30,25 +30,14 @@ export function PortfolioPage({ config }: PortfolioPageProps) {
 
   return (
     <div {...stylex.props(styles.page)}>
-      <SkipLink
-        label={accessibility.skipToContent}
-        targetId={anchors.mainContent}
-      />
+      <SkipLink label={accessibility.skipToContent} targetId={anchors.mainContent} />
       <PortfolioAtmosphere copy={atmosphere} />
       <RevealController />
       <SiteHeader header={header} statusSeparator={symbols.statusSeparator} />
 
       <main {...stylex.props(styles.main)} id={anchors.mainContent}>
-        <HeroSection
-          hero={hero}
-          heroId={anchors.hero}
-          inlineSeparator={symbols.inlineSeparator}
-        />
-        <TraceJourney
-          sections={sections}
-          sequence={sequence}
-          symbols={symbols}
-        />
+        <HeroSection hero={hero} heroId={anchors.hero} inlineSeparator={symbols.inlineSeparator} />
+        <TraceJourney sections={sections} sequence={sequence} symbols={symbols} />
         <ContactSection
           contact={contact}
           position={sections.length + 1}

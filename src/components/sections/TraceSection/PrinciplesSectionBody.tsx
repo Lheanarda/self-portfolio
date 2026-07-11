@@ -8,21 +8,14 @@ type PrinciplesSectionBodyProps = Readonly<{
   digits: number;
 }>;
 
-export function PrinciplesSectionBody({
-  section,
-  digits,
-}: PrinciplesSectionBodyProps) {
+export function PrinciplesSectionBody({ section, digits }: PrinciplesSectionBodyProps) {
   return (
     <ol {...stylex.props(styles.principleList)}>
       {section.entry.items.map((item, index) => (
         <li key={item.id} {...stylex.props(styles.principleItem)}>
-          <span {...stylex.props(styles.itemSequence)}>
-            {sequenceNumber(index + 1, digits)}
-          </span>
+          <span {...stylex.props(styles.itemSequence)}>{sequenceNumber(index + 1, digits)}</span>
           <strong {...stylex.props(styles.principleTitle)}>{item.title}</strong>
-          <p {...stylex.props(styles.principleDescription)}>
-            {item.description}
-          </p>
+          <p {...stylex.props(styles.principleDescription)}>{item.description}</p>
         </li>
       ))}
     </ol>

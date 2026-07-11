@@ -18,11 +18,7 @@ export function WaypointEntry({
   sectionDivider,
 }: WaypointEntryProps) {
   return (
-    <TraceCard
-      journey={waypoint.journey}
-      dropVh={waypoint.journey.dropVh}
-      variant="waypoint"
-    >
+    <TraceCard journey={waypoint.journey} dropVh={waypoint.journey.dropVh} variant="waypoint">
       <TraceStamp
         prefix={sequence.tracePrefix}
         position={position}

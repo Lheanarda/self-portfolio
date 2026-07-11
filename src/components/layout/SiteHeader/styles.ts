@@ -1,10 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import {
-  breakpoints,
-  colors,
-  fonts,
-  motion,
-} from "@/styles/tokens.stylex";
+import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 
 const pulse = stylex.keyframes({
   "50%": {

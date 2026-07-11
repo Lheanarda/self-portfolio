@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  // Pinned explicitly even though it matches oxfmt's default: the whole codebase is already
+  // 100% double-quoted, so this locks that convention in rather than relying on an implicit
+  // default that could change in a future oxfmt release.
+  "singleQuote": false,
+  "ignorePatterns": []
+}

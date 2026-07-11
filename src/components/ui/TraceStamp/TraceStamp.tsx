@@ -11,14 +11,7 @@ type TraceStampProps = Readonly<{
   status?: string;
 }>;
 
-export function TraceStamp({
-  prefix,
-  position,
-  digits,
-  divider,
-  label,
-  status,
-}: TraceStampProps) {
+export function TraceStamp({ prefix, position, digits, divider, label, status }: TraceStampProps) {
   return (
     <p {...stylex.props(styles.root)}>
       {prefix} {sequenceNumber(position, digits)}

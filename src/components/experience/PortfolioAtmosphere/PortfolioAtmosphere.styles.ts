@@ -84,8 +84,7 @@ export const styles = stylex.create({
     animationFillMode: "forwards",
     animationName: sonarRing,
     animationTimingFunction: "cubic-bezier(0.18, 0.9, 0.32, 1)",
-    boxShadow:
-      "0 0 14px rgba(100, 240, 210, 0.25), inset 0 0 8px rgba(100, 240, 210, 0.18)",
+    boxShadow: "0 0 14px rgba(100, 240, 210, 0.25), inset 0 0 8px rgba(100, 240, 210, 0.18)",
     gridColumnStart: "1",
     gridRowStart: "1",
     opacity: 0,

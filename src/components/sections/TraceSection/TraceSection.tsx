@@ -3,10 +3,7 @@ import { SectionKicker } from "@/components/ui/SectionKicker/SectionKicker";
 import { TraceCard } from "@/components/ui/TraceCard/TraceCard";
 import { TraceStamp } from "@/components/ui/TraceStamp/TraceStamp";
 import type { PortfolioConfig, PortfolioSection } from "@/data/portfolio";
-import {
-  journeyAttributes,
-  sectionStatus,
-} from "@/lib/portfolio/presentation";
+import { journeyAttributes, sectionStatus } from "@/lib/portfolio/presentation";
 import { SectionBody } from "./SectionBody";
 import { WaypointEntry } from "./WaypointEntry";
 import { styles } from "./styles";
@@ -18,12 +15,7 @@ type TraceSectionProps = Readonly<{
   sectionDivider: string;
 }>;
 
-export function TraceSection({
-  section,
-  position,
-  sequence,
-  sectionDivider,
-}: TraceSectionProps) {
+export function TraceSection({ section, position, sequence, sectionDivider }: TraceSectionProps) {
   const titleId = section.id;
   const isWork = section.kind === "work";
 
@@ -36,10 +28,7 @@ export function TraceSection({
       )}
       aria-labelledby={titleId}
     >
-      <div
-        data-reveal
-        {...journeyAttributes(section.journey.stratum)}
-      >
+      <div data-reveal {...journeyAttributes(section.journey.stratum)}>
         <SectionKicker
           position={position}
           digits={sequence.digits}
@@ -50,9 +39,7 @@ export function TraceSection({
         <h2 {...stylex.props(styles.stratumTitle)} id={titleId} data-anchor>
           {section.header.title}
         </h2>
-        <span {...stylex.props(styles.stratumSubtitle)}>
-          {section.header.subtitle}
-        </span>
+        <span {...stylex.props(styles.stratumSubtitle)}>{section.header.subtitle}</span>
       </div>
 
       <TraceCard

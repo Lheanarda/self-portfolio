@@ -3,8 +3,8 @@ import { colors, fonts, motion } from "@/styles/tokens.stylex";
 
 export const styles = stylex.create({
   root: {
-    paddingBlock: '0.7rem',
-    paddingInline: '1.2rem',
+    paddingBlock: "0.7rem",
+    paddingInline: "1.2rem",
     backgroundColor: colors.biolume,
     color: colors.abyss,
     fontFamily: fonts.mono,

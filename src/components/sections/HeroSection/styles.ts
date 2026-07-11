@@ -1,10 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import {
-  breakpoints,
-  colors,
-  fonts,
-  motion,
-} from "@/styles/tokens.stylex";
+import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 
 const surfaceArrival = stylex.keyframes({
   to: {
@@ -155,8 +150,8 @@ export const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: "1px",
     gap: "0.9em",
-    paddingBlock: '0.85em',
-    paddingInline: '1.5em',
+    paddingBlock: "0.85em",
+    paddingInline: "1.5em",
     alignItems: "center",
     backgroundColor: {
       default: "transparent",

@@ -1,9 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import {
-  breakpoints,
-  colors,
-  motion,
-} from "@/styles/tokens.stylex";
+import { breakpoints, colors, motion } from "@/styles/tokens.stylex";
 
 const entryFlash = stylex.keyframes({
   "16%": {

@@ -11,9 +11,7 @@ const imperativeClassNames = {
   ring: stylex.props(styles.ring).className ?? "",
 } as const;
 
-export function PortfolioAtmosphere({
-  copy,
-}: Readonly<{ copy: AtmosphereCopy }>) {
+export function PortfolioAtmosphere({ copy }: Readonly<{ copy: AtmosphereCopy }>) {
   const {
     ambientRef,
     fieldRef,
@@ -48,33 +46,21 @@ export function PortfolioAtmosphere({
 
       <aside {...stylex.props(styles.telemetry)} aria-label={copy.ariaLabel}>
         <p {...stylex.props(styles.visuallyHidden)}>{copy.description}</p>
-        <span
-          ref={progressRef}
-          {...stylex.props(styles.progress)}
-          aria-hidden="true"
-        />
+        <span ref={progressRef} {...stylex.props(styles.progress)} aria-hidden="true" />
         <div aria-hidden="true">
           {copy.readouts.map((readout) => (
             <div
               key={readout.id}
-              {...stylex.props(
-                styles.readout,
-                readout.hideOnMobile && styles.hideOnCompact,
-              )}
+              {...stylex.props(styles.readout, readout.hideOnMobile && styles.hideOnCompact)}
             >
               <span {...stylex.props(styles.label)}>{readout.label}</span>
               <span
                 ref={readoutRefs[readout.id]}
-                {...stylex.props(
-                  styles.value,
-                  readout.primary && styles.primaryValue,
-                )}
+                {...stylex.props(styles.value, readout.primary && styles.primaryValue)}
               >
                 {readout.initialValue}
               </span>
-              {readout.unit ? (
-                <span {...stylex.props(styles.unit)}>{readout.unit}</span>
-              ) : null}
+              {readout.unit ? <span {...stylex.props(styles.unit)}>{readout.unit}</span> : null}
             </div>
           ))}
         </div>
@@ -87,9 +73,7 @@ export function PortfolioAtmosphere({
             copy.bottomReadouts.zone.hideOnMobile && styles.hideOnCompact,
           )}
         >
-          <span {...stylex.props(styles.bottomHudMeta)}>
-            {copy.bottomReadouts.zone.label}
-          </span>
+          <span {...stylex.props(styles.bottomHudMeta)}>{copy.bottomReadouts.zone.label}</span>
           <strong ref={zoneRef} {...stylex.props(styles.bottomHudValue)}>
             {copy.bottomReadouts.zone.initialValue}
           </strong>
@@ -101,15 +85,11 @@ export function PortfolioAtmosphere({
             copy.bottomReadouts.rate.hideOnMobile && styles.hideOnCompact,
           )}
         >
-          <span {...stylex.props(styles.bottomHudMeta)}>
-            {copy.bottomReadouts.rate.label}
-          </span>
+          <span {...stylex.props(styles.bottomHudMeta)}>{copy.bottomReadouts.rate.label}</span>
           <strong ref={rateRef} {...stylex.props(styles.bottomHudValue)}>
             {copy.bottomReadouts.rate.initialValue}
           </strong>
-          <small {...stylex.props(styles.bottomHudMeta)}>
-            {copy.bottomReadouts.rate.unit}
-          </small>
+          <small {...stylex.props(styles.bottomHudMeta)}>{copy.bottomReadouts.rate.unit}</small>
         </p>
       </div>
     </>

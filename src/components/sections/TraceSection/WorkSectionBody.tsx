@@ -15,10 +15,7 @@ export function WorkSectionBody({ section }: WorkSectionBodyProps) {
         </p>
       ))}
 
-      <ul
-        {...stylex.props(styles.tagList)}
-        aria-label={section.entry.tags.ariaLabel}
-      >
+      <ul {...stylex.props(styles.tagList)} aria-label={section.entry.tags.ariaLabel}>
         {section.entry.tags.items.map((tag) => (
           <li key={tag.id} {...stylex.props(styles.tag)}>
             {tag.label}
@@ -28,12 +25,8 @@ export function WorkSectionBody({ section }: WorkSectionBodyProps) {
 
       {section.entry.context ? (
         <aside {...stylex.props(styles.context)}>
-          <p {...stylex.props(styles.contextLabel)}>
-            {section.entry.context.label}
-          </p>
-          <strong {...stylex.props(styles.contextTitle)}>
-            {section.entry.context.title}
-          </strong>
+          <p {...stylex.props(styles.contextLabel)}>{section.entry.context.label}</p>
+          <strong {...stylex.props(styles.contextTitle)}>{section.entry.context.title}</strong>
           <div {...stylex.props(styles.contextCopy)}>
             {section.entry.context.paragraphs.map((paragraph, index) => (
               <p

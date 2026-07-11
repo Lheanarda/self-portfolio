@@ -11,12 +11,7 @@ type TraceCardProps = Readonly<{
   variant?: "default" | "waypoint" | "wide";
 }>;
 
-export function TraceCard({
-  children,
-  journey,
-  dropVh,
-  variant = "default",
-}: TraceCardProps) {
+export function TraceCard({ children, journey, dropVh, variant = "default" }: TraceCardProps) {
   return (
     <article
       {...stylex.props(

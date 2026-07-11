@@ -8,10 +8,7 @@ type DisciplinesSectionBodyProps = Readonly<{
   digits: number;
 }>;
 
-export function DisciplinesSectionBody({
-  section,
-  digits,
-}: DisciplinesSectionBodyProps) {
+export function DisciplinesSectionBody({ section, digits }: DisciplinesSectionBodyProps) {
   return (
     <>
       {section.entry.paragraphs.map((paragraph) => (
@@ -23,16 +20,10 @@ export function DisciplinesSectionBody({
       <div {...stylex.props(styles.disciplineGrid)}>
         {section.entry.items.map((item, index) => (
           <section key={item.id} {...stylex.props(styles.discipline)}>
-            <span {...stylex.props(styles.itemSequence)}>
-              {sequenceNumber(index + 1, digits)}
-            </span>
+            <span {...stylex.props(styles.itemSequence)}>{sequenceNumber(index + 1, digits)}</span>
             <h4 {...stylex.props(styles.disciplineName)}>{item.name}</h4>
-            <strong {...stylex.props(styles.disciplinePrinciple)}>
-              {item.principle}
-            </strong>
-            <p {...stylex.props(styles.disciplineDescription)}>
-              {item.description}
-            </p>
+            <strong {...stylex.props(styles.disciplinePrinciple)}>{item.principle}</strong>
+            <p {...stylex.props(styles.disciplineDescription)}>{item.description}</p>
           </section>
         ))}
       </div>

@@ -1,10 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import {
-  breakpoints,
-  colors,
-  fonts,
-  motion,
-} from "@/styles/tokens.stylex";
+import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 
 export const styles = stylex.create({
   root: {
@@ -81,8 +76,8 @@ export const styles = stylex.create({
   },
   email: {
     gap: "1rem",
-    paddingBlock: '1.1rem',
-    paddingInline: '0',
+    paddingBlock: "1.1rem",
+    paddingInline: "0",
     color: colors.floodlight,
     display: "flex",
     fontSize: {

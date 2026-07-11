@@ -22,6 +22,7 @@ When available, follow the vault skill `maintain-portfolio-memory` for the compl
 - The portfolio must remain semantic, accessible, responsive, reduced-motion aware, and tested across Safari, Firefox, and Chromium before it is called complete.
 
 <!-- BEGIN:nextjs-agent-rules -->
+
 ## Next.js 16 rules
 
 This version may contain APIs and conventions newer than model training data. Read the relevant local guide in `node_modules/next/dist/docs/` before changing framework behavior and heed all deprecation notices.

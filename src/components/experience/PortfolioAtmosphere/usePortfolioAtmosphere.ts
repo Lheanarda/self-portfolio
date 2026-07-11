@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import type { AtmosphereCopy, TelemetryReadoutId } from "@/data/portfolio";
 import { breakpoints } from "@/styles/tokens.stylex";
-import {
-  addClassNames,
-  removeClassNames,
-} from "@/lib/dom/stylex-class-names";
+import { addClassNames, removeClassNames } from "@/lib/dom/stylex-class-names";
 import {
   elapsedTimeString,
   measureDepthAnchors,
@@ -15,8 +12,7 @@ import {
 import { ambientColor, PortfolioSea } from "./sea";
 import { atmosphereGeometry } from "./geometry.stylex";
 
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(max, Math.max(min, value));
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 type ImperativeClassNames = Readonly<{
   flash: string;
@@ -52,10 +48,7 @@ export function usePortfolioAtmosphere({
         pressure: pressureRef,
         temperature: temperatureRef,
         elapsed: elapsedRef,
-      }) satisfies Record<
-        TelemetryReadoutId,
-        React.RefObject<HTMLSpanElement | null>
-      >,
+      }) satisfies Record<TelemetryReadoutId, React.RefObject<HTMLSpanElement | null>>,
     [],
   );
 
@@ -66,8 +59,7 @@ export function usePortfolioAtmosphere({
     const vignette = vignetteRef.current;
     const sonar = sonarRef.current;
     const tapeContext = tape?.getContext("2d");
-    if (!field || !tape || !ambient || !vignette || !sonar || !tapeContext)
-      return;
+    if (!field || !tape || !ambient || !vignette || !sonar || !tapeContext) return;
 
     const sea = new PortfolioSea(field, copy.scene, copy.model.maxDepth);
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -111,20 +103,14 @@ export function usePortfolioAtmosphere({
       return timer;
     };
 
-    const put = (
-      ref: React.RefObject<HTMLSpanElement | null>,
-      cacheKey: string,
-      value: string,
-    ) => {
+    const put = (ref: React.RefObject<HTMLSpanElement | null>, cacheKey: string, value: string) => {
       if (valueCache.get(cacheKey) === value || !ref.current) return;
       valueCache.set(cacheKey, value);
       ref.current.textContent = value;
     };
 
     const bootInstruments = () => {
-      const instruments = (
-        Object.keys(readoutRefs) as TelemetryReadoutId[]
-      ).map((id) => ({
+      const instruments = (Object.keys(readoutRefs) as TelemetryReadoutId[]).map((id) => ({
         id,
         ref: readoutRefs[id],
       }));
@@ -167,10 +153,7 @@ export function usePortfolioAtmosphere({
     };
 
     const sizeTape = () => {
-      const dpr = Math.min(
-        atmosphereGeometry.maxDevicePixelRatio,
-        window.devicePixelRatio || 1,
-      );
+      const dpr = Math.min(atmosphereGeometry.maxDevicePixelRatio, window.devicePixelRatio || 1);
       tape.width = Math.round(atmosphereGeometry.tapeWidth * dpr);
       tape.height = Math.round(window.innerHeight * dpr);
       tapeContext.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -193,8 +176,7 @@ export function usePortfolioAtmosphere({
       tapeContext.clearRect(0, 0, atmosphereGeometry.tapeWidth, height);
 
       const surfaceY = height / 2 - depth * pixelsPerMeter;
-      const floorY =
-        height / 2 + (copy.model.maxDepth - depth) * pixelsPerMeter;
+      const floorY = height / 2 + (copy.model.maxDepth - depth) * pixelsPerMeter;
       tapeContext.strokeStyle = "rgba(159, 195, 207, 0.34)";
       tapeContext.lineWidth = 1;
       tapeContext.beginPath();
@@ -230,8 +212,7 @@ export function usePortfolioAtmosphere({
         .forEach((zone) => {
           const y = height / 2 + (zone.startsAt - depth) * pixelsPerMeter;
           if (y < -4 || y > height + 4) return;
-          const edge =
-            1 - Math.pow(Math.abs(y - height / 2) / (height / 2), 2.6);
+          const edge = 1 - Math.pow(Math.abs(y - height / 2) / (height / 2), 2.6);
           tapeContext.strokeStyle = `rgba(100, 240, 210, ${0.75 * Math.max(0, edge)})`;
           tapeContext.lineWidth = 1.6;
           tapeContext.beginPath();
@@ -245,8 +226,7 @@ export function usePortfolioAtmosphere({
         .forEach((creature) => {
           const y = height / 2 + (creature.depth - depth) * pixelsPerMeter;
           if (y < -6 || y > height + 6) return;
-          const edge =
-            1 - Math.pow(Math.abs(y - height / 2) / (height / 2), 2.6);
+          const edge = 1 - Math.pow(Math.abs(y - height / 2) / (height / 2), 2.6);
           if (edge <= 0.03) return;
           tapeContext.fillStyle = `rgba(100, 240, 210, ${0.8 * edge})`;
           tapeContext.beginPath();
@@ -259,9 +239,7 @@ export function usePortfolioAtmosphere({
         });
 
       if (floorY < height + 40) {
-        const edge =
-          clamp(1 - Math.abs(floorY - height / 2) / (height / 2), 0, 1) * 0.5 +
-          0.5;
+        const edge = clamp(1 - Math.abs(floorY - height / 2) / (height / 2), 0, 1) * 0.5 + 0.5;
         tapeContext.strokeStyle = `rgba(255, 233, 196, ${0.8 * edge})`;
         tapeContext.lineWidth = 2;
         tapeContext.beginPath();
@@ -297,8 +275,7 @@ export function usePortfolioAtmosphere({
       const top = ambientColor(Math.max(0, depth * 0.88 - 8));
       const bottom = ambientColor(depth * 1.12 + 130);
       const background = `linear-gradient(rgb(${top.map(Math.round).join(",")}) 0%, rgb(${bottom.map(Math.round).join(",")}) 100%)`;
-      if (ambient.style.background !== background)
-        ambient.style.background = background;
+      if (ambient.style.background !== background) ambient.style.background = background;
       vignette.style.opacity = String(0.35 + 0.55 * clamp(depth / 3000, 0, 1));
     };
 
@@ -333,13 +310,8 @@ export function usePortfolioAtmosphere({
       }
     };
 
-    const updateTelemetry = (
-      depth: number,
-      elapsedMinutes: number,
-      rate: number,
-    ) => {
-      if (bootState.depth)
-        put(depthRef, "depth", numberFormatter.format(depth));
+    const updateTelemetry = (depth: number, elapsedMinutes: number, rate: number) => {
+      if (bootState.depth) put(depthRef, "depth", numberFormatter.format(depth));
       if (bootState.pressure) {
         put(
           pressureRef,
@@ -350,28 +322,16 @@ export function usePortfolioAtmosphere({
       if (bootState.temperature) {
         const temperature = temperatureAt(copy.model.temperatureProfile, depth);
         const sign =
-          temperature >= 0
-            ? copy.temperatureSigns.positive
-            : copy.temperatureSigns.negative;
-        put(
-          temperatureRef,
-          "temperature",
-          `${sign}${Math.abs(temperature).toFixed(1)}`,
-        );
+          temperature >= 0 ? copy.temperatureSigns.positive : copy.temperatureSigns.negative;
+        put(temperatureRef, "temperature", `${sign}${Math.abs(temperature).toFixed(1)}`);
       }
       if (bootState.elapsed) {
-        put(
-          elapsedRef,
-          "elapsed",
-          elapsedTimeString(elapsedMinutes, copy.elapsedPrefix),
-        );
+        put(elapsedRef, "elapsed", elapsedTimeString(elapsedMinutes, copy.elapsedPrefix));
       }
 
       const parked = target.depth >= copy.model.maxDepth - 0.5;
-      const shownRate =
-        parked || Math.abs(rate) < 0.5 ? 0 : Math.round(clamp(rate, -240, 240));
-      const rateSign =
-        shownRate >= 0 ? copy.rateSigns.positive : copy.rateSigns.negative;
+      const shownRate = parked || Math.abs(rate) < 0.5 ? 0 : Math.round(clamp(rate, -240, 240));
+      const rateSign = shownRate >= 0 ? copy.rateSigns.positive : copy.rateSigns.negative;
       put(rateRef, "rate", `${rateSign}${Math.abs(shownRate)}`);
       if (progressRef.current) {
         progressRef.current.style.transform = `scaleY(${clamp(depth / copy.model.maxDepth, 0, 1)})`;
@@ -398,8 +358,7 @@ export function usePortfolioAtmosphere({
       const depthDelta = smoothDepth - previousDepth;
       previousDepth = smoothDepth;
       const instantaneousRate = (depthDelta / deltaTime) * 60;
-      smoothedRate +=
-        (instantaneousRate - smoothedRate) * (1 - Math.exp(-deltaTime * 3.2));
+      smoothedRate += (instantaneousRate - smoothedRate) * (1 - Math.exp(-deltaTime * 3.2));
       smoothedRate = clamp(smoothedRate, -400, 400);
 
       const nextZoneIndex = zoneIndexAt(copy.model.zones, target.depth);

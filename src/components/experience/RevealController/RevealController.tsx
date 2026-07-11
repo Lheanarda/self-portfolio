@@ -2,10 +2,7 @@
 
 import { useEffect } from "react";
 import * as stylex from "@stylexjs/stylex";
-import {
-  addClassNames,
-  removeClassNames,
-} from "@/lib/dom/stylex-class-names";
+import { addClassNames, removeClassNames } from "@/lib/dom/stylex-class-names";
 import { styles } from "./styles";
 
 const revealClassNames = {
@@ -17,9 +14,7 @@ const revealSelector = "[data-reveal]";
 
 export function RevealController() {
   useEffect(() => {
-    const elements = Array.from(
-      document.querySelectorAll<HTMLElement>(revealSelector),
-    );
+    const elements = Array.from(document.querySelectorAll<HTMLElement>(revealSelector));
 
     elements.forEach((element) => {
       addClassNames(element, revealClassNames.transition);

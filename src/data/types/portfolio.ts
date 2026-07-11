@@ -115,16 +115,9 @@ export type DisciplinesSection = SectionBase &
     }>;
   }>;
 
-export type PortfolioSection =
-  | WorkSection
-  | PrinciplesSection
-  | DisciplinesSection;
+export type PortfolioSection = WorkSection | PrinciplesSection | DisciplinesSection;
 
-export type TelemetryReadoutId =
-  | "depth"
-  | "pressure"
-  | "temperature"
-  | "elapsed";
+export type TelemetryReadoutId = "depth" | "pressure" | "temperature" | "elapsed";
 
 export type CreatureId =
   | "siphonophore"
@@ -172,10 +165,7 @@ export type AtmosphereCopy = Readonly<{
     metersPerAtmosphere: number;
     numberLocale: string;
     zones: readonly DepthZone[];
-    temperatureProfile: readonly (readonly [
-      depth: number,
-      temperature: number,
-    ])[];
+    temperatureProfile: readonly (readonly [depth: number, temperature: number])[];
   }>;
   scene: AtmosphereScene;
   bootSequence: readonly string[];

@@ -1,10 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { SectionKicker } from "@/components/ui/SectionKicker/SectionKicker";
 import type { PortfolioConfig } from "@/data/portfolio";
-import {
-  externalLinkAttributes,
-  journeyAttributes,
-} from "@/lib/portfolio/presentation";
+import { externalLinkAttributes, journeyAttributes } from "@/lib/portfolio/presentation";
 import { styles } from "./styles";
 
 type ContactSectionProps = Readonly<{
@@ -64,8 +61,7 @@ export function ContactSection({
               href={link.href}
               {...externalLinkAttributes(link)}
             >
-              {link.label}{" "}
-              <span aria-hidden="true">{contact.linkSymbol}</span>
+              {link.label} <span aria-hidden="true">{contact.linkSymbol}</span>
             </a>
           ))}
         </div>

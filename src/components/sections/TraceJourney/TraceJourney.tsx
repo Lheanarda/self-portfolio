@@ -9,11 +9,7 @@ type TraceJourneyProps = Readonly<{
   symbols: PortfolioConfig["symbols"];
 }>;
 
-export function TraceJourney({
-  sections,
-  sequence,
-  symbols,
-}: TraceJourneyProps) {
+export function TraceJourney({ sections, sequence, symbols }: TraceJourneyProps) {
   return (
     <div {...stylex.props(styles.root)}>
       {sections.map((section, index) => (

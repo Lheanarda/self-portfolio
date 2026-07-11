@@ -22,9 +22,9 @@ export const styles = stylex.create({
     fontSize: "0.56rem",
     letterSpacing: "0.2em",
     textShadow: "0 0 10px rgba(100, 240, 210, 0.45)",
-    paddingBottom: '0.2em',
-    paddingLeft: '0.8em',
-    paddingRight: '0.8em',
-    paddingTop: '0.25em',
+    paddingBottom: "0.2em",
+    paddingLeft: "0.8em",
+    paddingRight: "0.8em",
+    paddingTop: "0.25em",
   },
 });

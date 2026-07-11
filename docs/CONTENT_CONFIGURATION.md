@@ -15,23 +15,23 @@ The boundary is deliberate:
 
 ## Configuration map
 
-| Key | Purpose |
-| --- | --- |
-| `metadata` | Browser title, description, author, and creator |
-| `document` | Document language |
-| `profile` | Canonical name, role, location, email, and expertise |
-| `accessibility` | Global accessibility copy such as the skip link |
-| `symbols` | Visible separators and directional symbols |
-| `sequence` | Generated section and item numbering format |
-| `anchors` | Stable page-level DOM anchors |
-| `header` | Wordmark, status, navigation labels, targets, and mobile visibility |
-| `hero` | Heading, note, paragraphs, reference links, and descent CTA |
-| `sections` | Ordered work/principles/disciplines sections plus their depth waypoints |
-| `contact` | Final depth point, contact copy, primary channel, and link list |
-| `footer` | Repeatable footer lines and return-to-surface CTA |
-| `atmosphere.model` | Maximum depth, viewport probe, pressure calibration, zones, and temperature profile |
-| `atmosphere.scene` | Surface, trench, floor, and creature depth/span configuration |
-| `atmosphere.readouts` | Instrument, zone, sonar, unit, sign, boot, and fallback copy |
+| Key                   | Purpose                                                                             |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| `metadata`            | Browser title, description, author, and creator                                     |
+| `document`            | Document language                                                                   |
+| `profile`             | Canonical name, role, location, email, and expertise                                |
+| `accessibility`       | Global accessibility copy such as the skip link                                     |
+| `symbols`             | Visible separators and directional symbols                                          |
+| `sequence`            | Generated section and item numbering format                                         |
+| `anchors`             | Stable page-level DOM anchors                                                       |
+| `header`              | Wordmark, status, navigation labels, targets, and mobile visibility                 |
+| `hero`                | Heading, note, paragraphs, reference links, and descent CTA                         |
+| `sections`            | Ordered work/principles/disciplines sections plus their depth waypoints             |
+| `contact`             | Final depth point, contact copy, primary channel, and link list                     |
+| `footer`              | Repeatable footer lines and return-to-surface CTA                                   |
+| `atmosphere.model`    | Maximum depth, viewport probe, pressure calibration, zones, and temperature profile |
+| `atmosphere.scene`    | Surface, trench, floor, and creature depth/span configuration                       |
+| `atmosphere.readouts` | Instrument, zone, sonar, unit, sign, boot, and fallback copy                        |
 
 `portfolioConfig` is checked against `PortfolioConfig`. Section objects are a discriminated union:
 their `kind` must be `work`, `principles`, or `disciplines`, and TypeScript requires the payload for

@@ -69,7 +69,7 @@ function createSiphonophore(placement: Placement): SeaCreature {
       points.forEach(([x, y], index) => (index ? context.lineTo(x, y) : context.moveTo(x, y)));
       context.stroke();
 
-      const pulse = (time * 0.13) % 1.6 - 0.3;
+      const pulse = ((time * 0.13) % 1.6) - 0.3;
       const secondPulse = pulse - 0.5;
       for (let index = 0; index <= pointCount; index += 2) {
         const [x, y, ratio] = points[index];
@@ -255,8 +255,7 @@ function createLanternfish(placement: Placement): SeaCreature {
       school.forEach((fish) => {
         const x = centerX + Math.sin(time * fish.speed + fish.phase) * width * fish.radiusX;
         const y =
-          centerY +
-          Math.cos(time * fish.speed * 0.83 + fish.phase * 1.7) * height * fish.radiusY;
+          centerY + Math.cos(time * fish.speed * 0.83 + fish.phase * 1.7) * height * fish.radiusY;
         const velocity = Math.cos(time * fish.speed + fish.phase);
         drawLanternfish(context, fish, x, y, velocity >= 0 ? 1 : -1, time, alpha);
       });

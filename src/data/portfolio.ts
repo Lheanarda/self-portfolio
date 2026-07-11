@@ -335,32 +335,27 @@ const sections = [
         {
           id: "understand-the-system",
           title: "Understand the system",
-          description:
-            "Start from first principles before touching the symptom.",
+          description: "Start from first principles before touching the symptom.",
         },
         {
           id: "measure-before-optimizing",
           title: "Measure before optimizing",
-          description:
-            "Replace vague performance claims with observable behavior.",
+          description: "Replace vague performance claims with observable behavior.",
         },
         {
           id: "design-for-change",
           title: "Design for change",
-          description:
-            "Keep boundaries explicit so tomorrow’s work stays local.",
+          description: "Keep boundaries explicit so tomorrow’s work stays local.",
         },
         {
           id: "make-complexity-visible",
           title: "Make complexity visible",
-          description:
-            "A named constraint is easier to solve than a hidden assumption.",
+          description: "A named constraint is easier to solve than a hidden assumption.",
         },
         {
           id: "prefer-durable-progress",
           title: "Prefer durable progress",
-          description:
-            "Ship a real slice, learn from it, and keep the foundation.",
+          description: "Ship a real slice, learn from it, and keep the foundation.",
         },
       ],
     },
@@ -428,15 +423,13 @@ const sections = [
           id: "cycling",
           name: "Cycling",
           principle: "Consistency compounds",
-          description:
-            "Endurance comes from repeatable work, not occasional intensity.",
+          description: "Endurance comes from repeatable work, not occasional intensity.",
         },
         {
           id: "piano",
           name: "Piano",
           principle: "Precision takes patience",
-          description:
-            "Difficult passages become fluent one deliberate repetition at a time.",
+          description: "Difficult passages become fluent one deliberate repetition at a time.",
         },
         {
           id: "reading",
@@ -459,31 +452,18 @@ function assertUnique(values: readonly string[], label: string) {
 }
 
 function assertDomId(id: string, label: string) {
-  invariant(
-    /^[A-Za-z][\w:.-]*$/.test(id),
-    `${label} must be a valid HTML id: ${id}`,
-  );
+  invariant(/^[A-Za-z][\w:.-]*$/.test(id), `${label} must be a valid HTML id: ${id}`);
 }
 
 function assertFiniteNumber(value: number, label: string) {
   invariant(Number.isFinite(value), `${label} must be finite.`);
 }
 
-function assertJourneyPoint(
-  point: JourneyPoint,
-  maxDepth: number,
-  label: string,
-) {
+function assertJourneyPoint(point: JourneyPoint, maxDepth: number, label: string) {
   assertFiniteNumber(point.depth, `${label} depth`);
   assertFiniteNumber(point.elapsedMinutes, `${label} elapsed time`);
-  invariant(
-    point.depth >= 0 && point.depth <= maxDepth,
-    `${label} depth is out of range.`,
-  );
-  invariant(
-    point.elapsedMinutes >= 0,
-    `${label} elapsed time cannot be negative.`,
-  );
+  invariant(point.depth >= 0 && point.depth <= maxDepth, `${label} depth is out of range.`);
+  invariant(point.elapsedMinutes >= 0, `${label} elapsed time cannot be negative.`);
 }
 
 function assertLink(link: PortfolioLink) {
@@ -494,20 +474,14 @@ function assertLink(link: PortfolioLink) {
 }
 
 function validatePortfolioConfig(config: PortfolioConfig) {
-  invariant(
-    config.sections.length > 0,
-    "At least one trace section is required.",
-  );
+  invariant(config.sections.length > 0, "At least one trace section is required.");
   const { model, scene } = config.atmosphere;
   invariant(model.maxDepth > 0, "Maximum depth must be positive.");
   invariant(
     model.probeViewportRatio > 0 && model.probeViewportRatio < 1,
     "The viewport probe ratio must be between zero and one.",
   );
-  invariant(
-    model.metersPerAtmosphere > 0,
-    "Meters per atmosphere must be positive.",
-  );
+  invariant(model.metersPerAtmosphere > 0, "Meters per atmosphere must be positive.");
 
   const anchorIds = [
     config.anchors.mainContent,
@@ -525,18 +499,13 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     config.footer.returnLink.targetId,
   ];
   targetIds.forEach((targetId) =>
-    invariant(
-      anchorIds.includes(targetId),
-      `Unresolved internal target: #${targetId}`,
-    ),
+    invariant(anchorIds.includes(targetId), `Unresolved internal target: #${targetId}`),
   );
   assertUnique(
     config.header.navigation.items.map((item) => item.id),
     "Navigation item ids",
   );
-  config.header.navigation.items.forEach((item) =>
-    assertDomId(item.id, "Navigation item id"),
-  );
+  config.header.navigation.items.forEach((item) => assertDomId(item.id, "Navigation item id"));
   assertUnique(
     config.hero.introduction.map((paragraph) => paragraph.id),
     "Hero paragraph ids",
@@ -547,19 +516,13 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     "Section ids",
   );
   config.sections.forEach((section) => {
-    const items =
-      section.kind === "work" ? section.entry.tags.items : section.entry.items;
-    invariant(
-      items.length > 0,
-      `Section ${section.id} requires at least one item.`,
-    );
+    const items = section.kind === "work" ? section.entry.tags.items : section.entry.items;
+    invariant(items.length > 0, `Section ${section.id} requires at least one item.`);
     assertUnique(
       items.map((item) => item.id),
       `Item ids in section ${section.id}`,
     );
-    items.forEach((item) =>
-      assertDomId(item.id, `Item id in section ${section.id}`),
-    );
+    items.forEach((item) => assertDomId(item.id, `Item id in section ${section.id}`));
     invariant(
       section.journey.stratumDropVh > 0 && section.journey.entryDropVh > 0,
       `Section ${section.id} requires positive journey spacing.`,
@@ -570,14 +533,8 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     );
     section.waypoints.forEach((waypoint) => {
       assertDomId(waypoint.id, `Waypoint id in section ${section.id}`);
-      invariant(
-        waypoint.journey.dropVh > 0,
-        `Waypoint ${waypoint.id} requires positive spacing.`,
-      );
-      invariant(
-        waypoint.paragraphs.length > 0,
-        `Waypoint ${waypoint.id} needs body copy.`,
-      );
+      invariant(waypoint.journey.dropVh > 0, `Waypoint ${waypoint.id} requires positive spacing.`);
+      invariant(waypoint.paragraphs.length > 0, `Waypoint ${waypoint.id} needs body copy.`);
       assertUnique(
         waypoint.paragraphs.map((paragraph) => paragraph.id),
         `Paragraph ids in waypoint ${waypoint.id}`,
@@ -602,9 +559,7 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     config.contact.links.map((link) => link.id),
     "Contact link ids",
   );
-  config.contact.links.forEach((link) =>
-    assertDomId(link.id, "Contact link id"),
-  );
+  config.contact.links.forEach((link) => assertDomId(link.id, "Contact link id"));
   assertUnique(
     config.contact.paragraphs.map((paragraph) => paragraph.id),
     "Contact paragraph ids",
@@ -613,10 +568,7 @@ function validatePortfolioConfig(config: PortfolioConfig) {
   const primaryLink = config.contact.links.find(
     (link) => link.id === config.contact.primaryLink.id,
   );
-  invariant(
-    primaryLink,
-    "The primary contact link must also exist in contact.links.",
-  );
+  invariant(primaryLink, "The primary contact link must also exist in contact.links.");
   invariant(
     primaryLink.href === config.contact.primaryLink.href,
     "The primary contact link must use the same href as its contact-list entry.",
@@ -632,10 +584,7 @@ function validatePortfolioConfig(config: PortfolioConfig) {
   journeyPoints.forEach((point, index) =>
     assertJourneyPoint(point, model.maxDepth, `Journey point ${index + 1}`),
   );
-  invariant(
-    journeyPoints[0]?.depth === 0,
-    "The journey must begin at the sea surface.",
-  );
+  invariant(journeyPoints[0]?.depth === 0, "The journey must begin at the sea surface.");
   invariant(
     journeyPoints.at(-1)?.depth === model.maxDepth,
     "The final contact point must reach maximum depth.",
@@ -643,20 +592,11 @@ function validatePortfolioConfig(config: PortfolioConfig) {
   journeyPoints.forEach((point, index) => {
     const previous = journeyPoints[index - 1];
     if (!previous) return;
-    invariant(
-      point.depth >= previous.depth,
-      "Journey depths must be monotonic.",
-    );
-    invariant(
-      point.elapsedMinutes >= previous.elapsedMinutes,
-      "Journey times must be monotonic.",
-    );
+    invariant(point.depth >= previous.depth, "Journey depths must be monotonic.");
+    invariant(point.elapsedMinutes >= previous.elapsedMinutes, "Journey times must be monotonic.");
   });
 
-  invariant(
-    config.contact.journey.dropVh > 0,
-    "Contact journey spacing must be positive.",
-  );
+  invariant(config.contact.journey.dropVh > 0, "Contact journey spacing must be positive.");
 
   invariant(model.zones.length > 0, "At least one depth zone is required.");
   assertUnique(
@@ -671,34 +611,18 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     );
     const previous = model.zones[index - 1];
     if (previous)
-      invariant(
-        zone.startsAt > previous.startsAt,
-        "Depth zones must be strictly ordered.",
-      );
+      invariant(zone.startsAt > previous.startsAt, "Depth zones must be strictly ordered.");
   });
-  invariant(
-    model.zones[0]?.startsAt === 0,
-    "The first depth zone must begin at zero.",
-  );
+  invariant(model.zones[0]?.startsAt === 0, "The first depth zone must begin at zero.");
 
-  invariant(
-    model.temperatureProfile.length >= 2,
-    "Temperature profile needs at least two points.",
-  );
+  invariant(model.temperatureProfile.length >= 2, "Temperature profile needs at least two points.");
   model.temperatureProfile.forEach(([depth, temperature], index) => {
     assertFiniteNumber(depth, `Temperature point ${index + 1} depth`);
     assertFiniteNumber(temperature, `Temperature point ${index + 1} value`);
     const previous = model.temperatureProfile[index - 1];
-    if (previous)
-      invariant(
-        depth > previous[0],
-        "Temperature depths must be strictly ordered.",
-      );
+    if (previous) invariant(depth > previous[0], "Temperature depths must be strictly ordered.");
   });
-  invariant(
-    model.temperatureProfile[0]?.[0] === 0,
-    "Temperature profile must begin at zero.",
-  );
+  invariant(model.temperatureProfile[0]?.[0] === 0, "Temperature profile must begin at zero.");
   invariant(
     model.temperatureProfile.at(-1)?.[0] === model.maxDepth,
     "Temperature profile must end at maximum depth.",
@@ -739,25 +663,16 @@ function validatePortfolioConfig(config: PortfolioConfig) {
   );
   scene.creatures.forEach((creature) => {
     invariant(
-      creature.depth >= 0 &&
-        creature.depth <= model.maxDepth &&
-        creature.span > 0,
+      creature.depth >= 0 && creature.depth <= model.maxDepth && creature.span > 0,
       `Creature ${creature.id} has an invalid depth or span.`,
     );
   });
 
   const readoutIds = config.atmosphere.readouts.map((readout) => readout.id);
-  invariant(
-    config.atmosphere.bootSequence.length > 0,
-    "Instrument boot sequence cannot be empty.",
-  );
+  invariant(config.atmosphere.bootSequence.length > 0, "Instrument boot sequence cannot be empty.");
   assertUnique(readoutIds, "Telemetry readout ids");
-  (["depth", "pressure", "temperature", "elapsed"] as const).forEach(
-    (requiredId) =>
-      invariant(
-        readoutIds.includes(requiredId),
-        `Missing telemetry readout: ${requiredId}`,
-      ),
+  (["depth", "pressure", "temperature", "elapsed"] as const).forEach((requiredId) =>
+    invariant(readoutIds.includes(requiredId), `Missing telemetry readout: ${requiredId}`),
   );
   assertUnique(
     config.footer.lines.map((line) => line.id),

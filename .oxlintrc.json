@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y", "import"],
+  "jsPlugins": ["@stylexjs/eslint-plugin"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "@stylexjs/enforce-extension": "error",
+    "@stylexjs/no-conflicting-props": "error",
+    "@stylexjs/no-legacy-contextual-styles": "error",
+    "@stylexjs/no-lookahead-selectors": "warn",
+    "@stylexjs/no-unused": "error",
+    "@stylexjs/sort-keys": "warn",
+    "@stylexjs/valid-shorthands": "error",
+    "@stylexjs/valid-styles": "error",
+    // common rules
+    "no-console": "error",
+    "dot-notation": "off",
+    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    "no-warning-comments": "off"
+  },
+  "env": {
+    "builtin": true
+  },
+  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"]
+}

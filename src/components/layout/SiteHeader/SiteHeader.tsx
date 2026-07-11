@@ -19,17 +19,11 @@ export function SiteHeader({ header, statusSeparator }: SiteHeaderProps) {
         {header.home.label}
       </a>
 
-      <nav
-        {...stylex.props(styles.navigation)}
-        aria-label={header.navigation.ariaLabel}
-      >
+      <nav {...stylex.props(styles.navigation)} aria-label={header.navigation.ariaLabel}>
         {header.navigation.items.map((item) => (
           <a
             key={item.id}
-            {...stylex.props(
-              styles.navigationLink,
-              item.hideOnMobile && styles.hideOnCompact,
-            )}
+            {...stylex.props(styles.navigationLink, item.hideOnMobile && styles.hideOnCompact)}
             href={anchorHref(item.targetId)}
           >
             {item.label}

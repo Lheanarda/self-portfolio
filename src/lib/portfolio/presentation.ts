@@ -1,8 +1,4 @@
-import type {
-  JourneyPoint,
-  PortfolioLink,
-  PortfolioSection,
-} from "@/data/portfolio";
+import type { JourneyPoint, PortfolioLink, PortfolioSection } from "@/data/portfolio";
 
 const externalRel = "noreferrer noopener";
 
@@ -26,17 +22,13 @@ export function sectionStatus(section: PortfolioSection) {
   if (status.kind === "text") return status.label;
 
   const count =
-    section.kind === "work"
-      ? section.entry.tags.items.length
-      : section.entry.items.length;
+    section.kind === "work" ? section.entry.tags.items.length : section.entry.items.length;
 
   return `${count} ${count === 1 ? status.singular : status.plural}`;
 }
 
 export function externalLinkAttributes(link: PortfolioLink) {
-  return link.openInNewTab
-    ? { target: "_blank" as const, rel: externalRel }
-    : {};
+  return link.openInNewTab ? { target: "_blank" as const, rel: externalRel } : {};
 }
 
 export function isInternalHref(href: string) {

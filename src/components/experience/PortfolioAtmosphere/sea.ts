@@ -2,10 +2,8 @@ import type { AtmosphereScene } from "@/data/portfolio";
 import { createCreatures } from "./creatures";
 
 const TAU = Math.PI * 2;
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(max, Math.max(min, value));
-const lerp = (from: number, to: number, amount: number) =>
-  from + (to - from) * amount;
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const lerp = (from: number, to: number, amount: number) => from + (to - from) * amount;
 const smooth = (from: number, to: number, value: number) => {
   const amount = clamp((value - from) / (to - from), 0, 1);
   return amount * amount * (3 - 2 * amount);
@@ -127,9 +125,7 @@ export class PortfolioSea {
     this.floorBumps = Array.from(
       { length: 120 },
       (_, index) =>
-        Math.sin(index * 0.9) * 4 +
-        Math.sin(index * 2.7 + 1.3) * 2.5 +
-        Math.sin(index * 0.31) * 6,
+        Math.sin(index * 0.9) * 4 + Math.sin(index * 2.7 + 1.3) * 2.5 + Math.sin(index * 0.31) * 6,
     );
     this.resize();
   }
@@ -210,8 +206,7 @@ export class PortfolioSea {
       context.save();
       context.globalCompositeOperation = "lighter";
       for (let index = 0; index < 6; index += 1) {
-        const x =
-          width * (0.05 + 0.17 * index) + Math.sin(time * 0.06 + index * 1.31) * 46;
+        const x = width * (0.05 + 0.17 * index) + Math.sin(time * 0.06 + index * 1.31) * 46;
         const topWidth = 24 + (index % 3) * 18;
         const slant = 90 + Math.sin(time * 0.045 + index) * 44;
         const ray = context.createLinearGradient(0, -40, 0, height);
@@ -278,11 +273,10 @@ export class PortfolioSea {
 
       for (let fleck = 0; fleck < 6; fleck += 1) {
         const y =
-          (((fleck * 613.7 + side * 271 - scroll) % (height + 120) + (height + 120)) %
+          ((((fleck * 613.7 + side * 271 - scroll) % (height + 120)) + (height + 120)) %
             (height + 120)) -
           60;
-        const x =
-          originX + direction * (baseWidth + jaggedAt(y, side) * amount) - direction * 3;
+        const x = originX + direction * (baseWidth + jaggedAt(y, side) * amount) - direction * 3;
         const pulse = reducedMotion
           ? 0.55
           : 0.3 + 0.7 * Math.max(0, Math.sin(time * 0.7 + fleck * 2.1 + side * 3));
@@ -339,15 +333,7 @@ export class PortfolioSea {
       const elapsed = (now - this.lightsOnAt) / 1000;
       if (elapsed < 0.9) {
         const gate =
-          elapsed < 0.12
-            ? 1
-            : elapsed < 0.22
-              ? 0.2
-              : elapsed < 0.34
-                ? 1
-                : elapsed < 0.42
-                  ? 0.4
-                  : 1;
+          elapsed < 0.12 ? 1 : elapsed < 0.22 ? 0.2 : elapsed < 0.34 ? 1 : elapsed < 0.42 ? 0.4 : 1;
         lightAlpha *= gate;
       }
     }
@@ -464,10 +450,7 @@ export class PortfolioSea {
             (amphipod.targetY - amphipod.y) * easing +
             Math.cos(time * 6.1 + amphipod.phase) * 54 * deltaTime;
         }
-        const heading = Math.atan2(
-          amphipod.targetY - amphipod.y,
-          amphipod.targetX - amphipod.x,
-        );
+        const heading = Math.atan2(amphipod.targetY - amphipod.y, amphipod.targetX - amphipod.x);
         const alpha =
           lightAlpha * (1 - clamp(Math.abs(amphipod.x - centerX) / poolRadius, 0, 1) * 0.6);
         context.save();
@@ -533,25 +516,14 @@ export class PortfolioSea {
       const flash = this.plankton[index];
       flash.life += deltaTime;
       flash.y -= depthDelta * 1.12 * flash.parallax;
-      if (
-        flash.life >= flash.duration ||
-        flash.y < -30 ||
-        flash.y > this.height + 30
-      ) {
+      if (flash.life >= flash.duration || flash.y < -30 || flash.y > this.height + 30) {
         this.plankton.splice(index, 1);
         continue;
       }
       const phase = flash.life / flash.duration;
       const alpha = Math.sin(phase * Math.PI) * intensity;
       const radius = flash.radius * (2.6 + phase * 3.2);
-      const glow = context.createRadialGradient(
-        flash.x,
-        flash.y,
-        0,
-        flash.x,
-        flash.y,
-        radius * 3,
-      );
+      const glow = context.createRadialGradient(flash.x, flash.y, 0, flash.x, flash.y, radius * 3);
       glow.addColorStop(0, `rgba(110, 242, 214, ${0.5 * alpha})`);
       glow.addColorStop(0.4, `rgba(110, 242, 214, ${0.14 * alpha})`);
       glow.addColorStop(1, "rgba(110, 242, 214, 0)");
