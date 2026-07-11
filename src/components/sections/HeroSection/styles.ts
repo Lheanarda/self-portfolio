@@ -100,10 +100,22 @@ export const styles = stylex.create({
   },
   note: {
     color: "#eaf6f6",
-    fontSize: "0.8rem",
+    fontSize: {
+      default: "1rem",
+      [breakpoints.compact]: "0.6rem",
+    },
+    fontStyle: "oblique",
     fontWeight: 200,
     letterSpacing: "0.1rem",
     marginBottom: "1.6rem",
+    marginTop: {
+      default: null,
+      [breakpoints.compact]: "0.5ch",
+    },
+    maxWidth: {
+      default: null,
+      [breakpoints.compact]: "50ch",
+    },
   },
   standfirst: {
     color: "#eaf6f6",
@@ -114,7 +126,7 @@ export const styles = stylex.create({
     textShadow: "0 1px 18px rgba(0, 18, 24, 0.6)",
     textWrap: "pretty",
     marginTop: "1.9rem",
-    maxWidth: "58ch",
+    maxWidth: "70ch",
   },
   followingStandfirst: {
     marginTop: "0.9rem",
