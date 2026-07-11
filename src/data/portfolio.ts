@@ -1,216 +1,27 @@
-export type PortfolioLink = Readonly<{
-  id: string;
-  label: string;
-  href: string;
-  displayLabel?: string;
-  openInNewTab?: boolean;
-}>;
+import type {
+  CreatureId,
+  JourneyPoint,
+  PortfolioConfig,
+  PortfolioLink,
+  PortfolioSection,
+} from "@/data/types/portfolio";
 
-export type AnchorLink = Readonly<{
-  id: string;
-  label: string;
-  targetId: string;
-  ariaLabel?: string;
-  symbol?: string;
-  hideOnMobile?: boolean;
-}>;
-
-type Paragraph = Readonly<{
-  id: string;
-  text: string;
-}>;
-
-type TraceState = Readonly<{
-  section: string;
-  focus?: string;
-}>;
-
-type StaticStatus = Readonly<{
-  kind: "text";
-  label: string;
-}>;
-
-type CountStatus = Readonly<{
-  kind: "count";
-  singular: string;
-  plural: string;
-}>;
-
-type SectionBase = Readonly<{
-  id: string;
-  telemetry: TraceState;
-  header: Readonly<{
-    kicker: string;
-    title: string;
-    subtitle: string;
-  }>;
-}>;
-
-export type WorkSection = SectionBase &
-  Readonly<{
-    kind: "work";
-    entry: Readonly<{
-      traceLabel: string;
-      status: StaticStatus;
-      title: string;
-      paragraphs: readonly Paragraph[];
-      tags: Readonly<{
-        ariaLabel: string;
-        items: readonly Readonly<{ id: string; label: string }>[];
-      }>;
-      context?: Readonly<{
-        label: string;
-        title: string;
-        paragraphs: readonly Paragraph[];
-      }>;
-    }>;
-  }>;
-
-export type PrinciplesSection = SectionBase &
-  Readonly<{
-    kind: "principles";
-    entry: Readonly<{
-      traceLabel: string;
-      status: CountStatus;
-      title: string;
-      items: readonly Readonly<{
-        id: string;
-        title: string;
-        description: string;
-      }>[];
-    }>;
-  }>;
-
-export type DisciplinesSection = SectionBase &
-  Readonly<{
-    kind: "disciplines";
-    entry: Readonly<{
-      traceLabel: string;
-      status: StaticStatus;
-      title: string;
-      paragraphs: readonly Paragraph[];
-      items: readonly Readonly<{
-        id: string;
-        name: string;
-        principle: string;
-        description: string;
-      }>[];
-    }>;
-  }>;
-
-export type PortfolioSection = WorkSection | PrinciplesSection | DisciplinesSection;
-
-export type TelemetryReadoutId = "progress" | "section" | "focus";
-
-export type AtmosphereCopy = Readonly<{
-  ariaLabel: string;
-  description: string;
-  readouts: readonly Readonly<{
-    id: TelemetryReadoutId;
-    label: string;
-    initialValue: string;
-    unit?: string;
-    primary?: boolean;
-    hideOnMobile?: boolean;
-  }>[];
-  bottomItems: readonly (
-    | Readonly<{
-        id: string;
-        kind: "static";
-        label: string;
-        value: string;
-        hideOnMobile?: boolean;
-      }>
-    | Readonly<{
-        id: string;
-        kind: "rate";
-        label: string;
-        initialValue: string;
-        unit: string;
-        hideOnMobile?: boolean;
-      }>
-  )[];
-  rateSigns: Readonly<{
-    positive: string;
-    negative: string;
-  }>;
-}>;
-
-export type PortfolioConfig = Readonly<{
-  metadata: Readonly<{
-    title: string;
-    description: string;
-    author: string;
-    creator: string;
-  }>;
-  document: Readonly<{ lang: string }>;
-  profile: Readonly<{
-    shortName: string;
-    fullName: string;
-    role: string;
-    location: string;
-    email: string;
-    expertise: readonly string[];
-  }>;
-  accessibility: Readonly<{
-    skipToContent: string;
-  }>;
-  symbols: Readonly<{
-    inlineSeparator: string;
-    statusSeparator: string;
-    sectionDivider: string;
-    down: string;
-    outbound: string;
-    up: string;
-  }>;
-  sequence: Readonly<{
-    digits: number;
-    tracePrefix: string;
-  }>;
-  anchors: Readonly<{
-    mainContent: string;
-    hero: string;
-  }>;
-  header: Readonly<{
-    home: AnchorLink;
-    navigation: Readonly<{
-      ariaLabel: string;
-      items: readonly AnchorLink[];
-    }>;
-    status: Readonly<{
-      label: string;
-      value: string;
-    }>;
-  }>;
-  hero: Readonly<{
-    telemetry: TraceState;
-    eyebrow: string;
-    title: string;
-    introduction: readonly Paragraph[];
-    details: readonly string[];
-    callToAction: AnchorLink;
-  }>;
-  sections: readonly PortfolioSection[];
-  contact: Readonly<{
-    id: string;
-    telemetry: TraceState;
-    kicker: string;
-    title: string;
-    paragraphs: readonly Paragraph[];
-    primaryLink: PortfolioLink;
-    links: readonly PortfolioLink[];
-    linkSymbol: string;
-  }>;
-  footer: Readonly<{
-    lines: readonly Readonly<{
-      id: string;
-      parts: readonly string[];
-      hideOnMobile?: boolean;
-    }>[];
-    returnLink: AnchorLink;
-  }>;
-  atmosphere: AtmosphereCopy;
-}>;
+export type {
+  AnchorLink,
+  AtmosphereCopy,
+  AtmosphereScene,
+  CreatureId,
+  DepthZone,
+  DisciplinesSection,
+  JourneyPoint,
+  JourneyWaypoint,
+  PortfolioConfig,
+  PortfolioLink,
+  PortfolioSection,
+  PrinciplesSection,
+  TelemetryReadoutId,
+  WorkSection,
+} from "@/data/types/portfolio";
 
 const profile = {
   shortName: "Alexander",
@@ -219,6 +30,23 @@ const profile = {
   location: "Jakarta, Indonesia",
   email: "alexanderleo0499@gmail.com",
   expertise: ["React", "Next.js", "TypeScript", "Architecture", "Performance"],
+  refer: [
+    {
+      id: "brought-to-life",
+      label: "Brought to life",
+      href: "#",
+    },
+    {
+      id: "codex",
+      label: "Codex",
+      href: "https://openai.com/codex/",
+    },
+    {
+      id: "guywithtwocats",
+      label: "guywithtwocats",
+      href: "https://github.com/GuyWithTwoCats?tab=repositories",
+    },
+  ],
 } as const;
 
 const symbols = {
@@ -236,15 +64,12 @@ const anchors = {
 } as const;
 
 const sectionIds = {
-  interfaces: "interfaces",
+  identity: "identity",
   craft: "craft",
-  practice: "practice",
+  curiosity: "curiosity",
+  journey: "journey",
+  connect: "connect",
   contact: "contact",
-} as const;
-
-const introTrace = {
-  section: "INTRO",
-  focus: "OVERVIEW",
 } as const;
 
 const emailLink = {
@@ -279,8 +104,28 @@ const contactLinks = [
 const sections = [
   {
     kind: "work",
-    id: sectionIds.interfaces,
-    telemetry: { section: "INTERFACES" },
+    id: sectionIds.identity,
+    journey: {
+      stratum: { depth: 0, elapsedMinutes: 0 },
+      entry: { depth: 40, elapsedMinutes: 2 },
+      stratumDropVh: 90,
+      entryDropVh: 26,
+    },
+    waypoints: [
+      {
+        id: "interface-edge-conditions",
+        journey: { depth: 150, elapsedMinutes: 9, dropVh: 115 },
+        traceLabel: "EDGE CONDITIONS",
+        status: "Observed",
+        title: "The edge case is part of the path.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "Loading, failure, recovery, and interruption are not side notes. I design them as part of the same journey so the interface stays understandable when the happy path disappears.",
+          },
+        ],
+      },
+    ],
     header: {
       kicker: "Work layer",
       title: "Interfaces",
@@ -308,8 +153,41 @@ const sections = [
   },
   {
     kind: "work",
-    id: "systems",
-    telemetry: { section: "SYSTEMS" },
+    id: sectionIds.craft,
+    journey: {
+      stratum: { depth: 200, elapsedMinutes: 12 },
+      entry: { depth: 340, elapsedMinutes: 16 },
+      stratumDropVh: 90,
+      entryDropVh: 105,
+    },
+    waypoints: [
+      {
+        id: "single-source-of-truth",
+        journey: { depth: 612, elapsedMinutes: 24, dropVh: 125 },
+        traceLabel: "STATE CONTRACT",
+        status: "Connected",
+        title: "One source of truth, many clear views.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "Shared rules belong in one authoritative boundary. Components can then stay focused on what they render instead of quietly rebuilding the same knowledge.",
+          },
+        ],
+      },
+      {
+        id: "local-change",
+        journey: { depth: 800, elapsedMinutes: 31, dropVh: 115 },
+        traceLabel: "CHANGE RADIUS",
+        status: "Contained",
+        title: "Change should stay local.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "A useful architecture makes the next requirement cheaper to place. Explicit contracts and orthogonal modules keep one change from becoming a tour of the entire codebase.",
+          },
+        ],
+      },
+    ],
     header: {
       kicker: "Work layer",
       title: "Systems",
@@ -347,8 +225,54 @@ const sections = [
   },
   {
     kind: "work",
-    id: "reliability",
-    telemetry: { section: "RELIABILITY" },
+    id: sectionIds.curiosity,
+    journey: {
+      stratum: { depth: 1000, elapsedMinutes: 38 },
+      entry: { depth: 1210, elapsedMinutes: 44 },
+      stratumDropVh: 100,
+      entryDropVh: 115,
+    },
+    waypoints: [
+      {
+        id: "browser-evidence",
+        journey: { depth: 1900, elapsedMinutes: 65, dropVh: 125 },
+        traceLabel: "BROWSER SIGNAL",
+        status: "Measured",
+        title: "Render what the browser can prove.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "Hydration, lifecycle events, and platform quirks become manageable when their behavior is observed directly and turned into a small, testable contract.",
+          },
+        ],
+      },
+      {
+        id: "hot-path",
+        journey: { depth: 2507, elapsedMinutes: 82, dropVh: 135 },
+        traceLabel: "HOT PATH",
+        status: "In focus",
+        title: "Measure the path that users actually feel.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "Performance work starts with a timeline, not a hunch. I isolate the blocking work, identify its owner, and optimize the boundary that changes the real experience.",
+          },
+        ],
+      },
+      {
+        id: "regression-proof",
+        journey: { depth: 3300, elapsedMinutes: 107, dropVh: 125 },
+        traceLabel: "REGRESSION LINE",
+        status: "Guarded",
+        title: "A fix is stronger when it leaves a test.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "The final step is preserving what was learned: a focused test, an explicit invariant, and enough context that the next engineer does not have to rediscover the same failure.",
+          },
+        ],
+      },
+    ],
     header: {
       kicker: "Work layer",
       title: "Reliability",
@@ -376,8 +300,28 @@ const sections = [
   },
   {
     kind: "principles",
-    id: sectionIds.craft,
-    telemetry: { section: "CRAFT", focus: "METHOD" },
+    id: sectionIds.journey,
+    journey: {
+      stratum: { depth: 4000, elapsedMinutes: 128 },
+      entry: { depth: 4050, elapsedMinutes: 130 },
+      stratumDropVh: 115,
+      entryDropVh: 55,
+    },
+    waypoints: [
+      {
+        id: "durable-trail",
+        journey: { depth: 5200, elapsedMinutes: 151, dropVh: 145 },
+        traceLabel: "KNOWLEDGE TRAIL",
+        status: "Recorded",
+        title: "Leave a durable trail.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "Good documentation captures the decision, the evidence, and the trade-off. It lets future work begin from the last safe state instead of from memory or coincidence.",
+          },
+        ],
+      },
+    ],
     header: {
       kicker: "Operating method",
       title: "Craft",
@@ -391,35 +335,73 @@ const sections = [
         {
           id: "understand-the-system",
           title: "Understand the system",
-          description: "Start from first principles before touching the symptom.",
+          description:
+            "Start from first principles before touching the symptom.",
         },
         {
           id: "measure-before-optimizing",
           title: "Measure before optimizing",
-          description: "Replace vague performance claims with observable behavior.",
+          description:
+            "Replace vague performance claims with observable behavior.",
         },
         {
           id: "design-for-change",
           title: "Design for change",
-          description: "Keep boundaries explicit so tomorrow’s work stays local.",
+          description:
+            "Keep boundaries explicit so tomorrow’s work stays local.",
         },
         {
           id: "make-complexity-visible",
           title: "Make complexity visible",
-          description: "A named constraint is easier to solve than a hidden assumption.",
+          description:
+            "A named constraint is easier to solve than a hidden assumption.",
         },
         {
           id: "prefer-durable-progress",
           title: "Prefer durable progress",
-          description: "Ship a real slice, learn from it, and keep the foundation.",
+          description:
+            "Ship a real slice, learn from it, and keep the foundation.",
         },
       ],
     },
   },
   {
     kind: "disciplines",
-    id: sectionIds.practice,
-    telemetry: { section: "PRACTICE", focus: "LONG TERM" },
+    id: sectionIds.connect,
+    journey: {
+      stratum: { depth: 6000, elapsedMinutes: 172 },
+      entry: { depth: 7400, elapsedMinutes: 184 },
+      stratumDropVh: 125,
+      entryDropVh: 145,
+    },
+    waypoints: [
+      {
+        id: "consistency",
+        journey: { depth: 9100, elapsedMinutes: 219, dropVh: 145 },
+        traceLabel: "LONG HORIZON",
+        status: "Holding",
+        title: "Consistency outlasts intensity.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "Boxing, cycling, piano, reading, and engineering reward the same habit: return to the work, protect the fundamentals, and let small improvements compound.",
+          },
+        ],
+      },
+      {
+        id: "composure",
+        journey: { depth: 10300, elapsedMinutes: 242, dropVh: 125 },
+        traceLabel: "COMPOSURE",
+        status: "Steady",
+        title: "Stay deliberate when the signal disappears.",
+        paragraphs: [
+          {
+            id: "overview",
+            text: "The difficult moment is where method matters most. Slow down, make the constraint visible, and choose the next move that keeps the system recoverable.",
+          },
+        ],
+      },
+    ],
     header: {
       kicker: "Beyond the screen",
       title: "Practice",
@@ -446,19 +428,22 @@ const sections = [
           id: "cycling",
           name: "Cycling",
           principle: "Consistency compounds",
-          description: "Endurance comes from repeatable work, not occasional intensity.",
+          description:
+            "Endurance comes from repeatable work, not occasional intensity.",
         },
         {
           id: "piano",
           name: "Piano",
           principle: "Precision takes patience",
-          description: "Difficult passages become fluent one deliberate repetition at a time.",
+          description:
+            "Difficult passages become fluent one deliberate repetition at a time.",
         },
         {
           id: "reading",
           name: "Reading",
           principle: "Better models, better judgment",
-          description: "Literature, history, and philosophy widen the questions engineering can ask.",
+          description:
+            "Literature, history, and philosophy widen the questions engineering can ask.",
         },
       ],
     },
@@ -474,7 +459,31 @@ function assertUnique(values: readonly string[], label: string) {
 }
 
 function assertDomId(id: string, label: string) {
-  invariant(/^[A-Za-z][\w:.-]*$/.test(id), `${label} must be a valid HTML id: ${id}`);
+  invariant(
+    /^[A-Za-z][\w:.-]*$/.test(id),
+    `${label} must be a valid HTML id: ${id}`,
+  );
+}
+
+function assertFiniteNumber(value: number, label: string) {
+  invariant(Number.isFinite(value), `${label} must be finite.`);
+}
+
+function assertJourneyPoint(
+  point: JourneyPoint,
+  maxDepth: number,
+  label: string,
+) {
+  assertFiniteNumber(point.depth, `${label} depth`);
+  assertFiniteNumber(point.elapsedMinutes, `${label} elapsed time`);
+  invariant(
+    point.depth >= 0 && point.depth <= maxDepth,
+    `${label} depth is out of range.`,
+  );
+  invariant(
+    point.elapsedMinutes >= 0,
+    `${label} elapsed time cannot be negative.`,
+  );
 }
 
 function assertLink(link: PortfolioLink) {
@@ -485,7 +494,20 @@ function assertLink(link: PortfolioLink) {
 }
 
 function validatePortfolioConfig(config: PortfolioConfig) {
-  invariant(config.sections.length > 0, "At least one trace section is required.");
+  invariant(
+    config.sections.length > 0,
+    "At least one trace section is required.",
+  );
+  const { model, scene } = config.atmosphere;
+  invariant(model.maxDepth > 0, "Maximum depth must be positive.");
+  invariant(
+    model.probeViewportRatio > 0 && model.probeViewportRatio < 1,
+    "The viewport probe ratio must be between zero and one.",
+  );
+  invariant(
+    model.metersPerAtmosphere > 0,
+    "Meters per atmosphere must be positive.",
+  );
 
   const anchorIds = [
     config.anchors.mainContent,
@@ -503,16 +525,64 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     config.footer.returnLink.targetId,
   ];
   targetIds.forEach((targetId) =>
-    invariant(anchorIds.includes(targetId), `Unresolved internal target: #${targetId}`),
+    invariant(
+      anchorIds.includes(targetId),
+      `Unresolved internal target: #${targetId}`,
+    ),
   );
-  assertUnique(config.header.navigation.items.map((item) => item.id), "Navigation item ids");
-  assertUnique(config.hero.introduction.map((paragraph) => paragraph.id), "Hero paragraph ids");
+  assertUnique(
+    config.header.navigation.items.map((item) => item.id),
+    "Navigation item ids",
+  );
+  config.header.navigation.items.forEach((item) =>
+    assertDomId(item.id, "Navigation item id"),
+  );
+  assertUnique(
+    config.hero.introduction.map((paragraph) => paragraph.id),
+    "Hero paragraph ids",
+  );
 
-  assertUnique(config.sections.map((section) => section.id), "Section ids");
+  assertUnique(
+    config.sections.map((section) => section.id),
+    "Section ids",
+  );
   config.sections.forEach((section) => {
-    const items = section.kind === "work" ? section.entry.tags.items : section.entry.items;
-    invariant(items.length > 0, `Section ${section.id} requires at least one item.`);
-    assertUnique(items.map((item) => item.id), `Item ids in section ${section.id}`);
+    const items =
+      section.kind === "work" ? section.entry.tags.items : section.entry.items;
+    invariant(
+      items.length > 0,
+      `Section ${section.id} requires at least one item.`,
+    );
+    assertUnique(
+      items.map((item) => item.id),
+      `Item ids in section ${section.id}`,
+    );
+    items.forEach((item) =>
+      assertDomId(item.id, `Item id in section ${section.id}`),
+    );
+    invariant(
+      section.journey.stratumDropVh > 0 && section.journey.entryDropVh > 0,
+      `Section ${section.id} requires positive journey spacing.`,
+    );
+    assertUnique(
+      section.waypoints.map((waypoint) => waypoint.id),
+      `Waypoint ids in ${section.id}`,
+    );
+    section.waypoints.forEach((waypoint) => {
+      assertDomId(waypoint.id, `Waypoint id in section ${section.id}`);
+      invariant(
+        waypoint.journey.dropVh > 0,
+        `Waypoint ${waypoint.id} requires positive spacing.`,
+      );
+      invariant(
+        waypoint.paragraphs.length > 0,
+        `Waypoint ${waypoint.id} needs body copy.`,
+      );
+      assertUnique(
+        waypoint.paragraphs.map((paragraph) => paragraph.id),
+        `Paragraph ids in waypoint ${waypoint.id}`,
+      );
+    });
 
     if (section.kind === "work" || section.kind === "disciplines") {
       assertUnique(
@@ -528,25 +598,171 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     }
   });
 
-  assertUnique(config.contact.links.map((link) => link.id), "Contact link ids");
-  assertUnique(config.contact.paragraphs.map((paragraph) => paragraph.id), "Contact paragraph ids");
+  assertUnique(
+    config.contact.links.map((link) => link.id),
+    "Contact link ids",
+  );
+  config.contact.links.forEach((link) =>
+    assertDomId(link.id, "Contact link id"),
+  );
+  assertUnique(
+    config.contact.paragraphs.map((paragraph) => paragraph.id),
+    "Contact paragraph ids",
+  );
   config.contact.links.forEach(assertLink);
+  const primaryLink = config.contact.links.find(
+    (link) => link.id === config.contact.primaryLink.id,
+  );
   invariant(
-    config.contact.links.some((link) => link.id === config.contact.primaryLink.id),
+    primaryLink,
     "The primary contact link must also exist in contact.links.",
   );
+  invariant(
+    primaryLink.href === config.contact.primaryLink.href,
+    "The primary contact link must use the same href as its contact-list entry.",
+  );
 
-  const readoutIds = config.atmosphere.readouts.map((readout) => readout.id);
-  assertUnique(readoutIds, "Telemetry readout ids");
-  (["progress", "section", "focus"] as const).forEach((requiredId) =>
-    invariant(readoutIds.includes(requiredId), `Missing telemetry readout: ${requiredId}`),
+  const journeyPoints = config.sections
+    .flatMap((section) => [
+      section.journey.stratum,
+      section.journey.entry,
+      ...section.waypoints.map((waypoint) => waypoint.journey),
+    ])
+    .concat(config.contact.journey);
+  journeyPoints.forEach((point, index) =>
+    assertJourneyPoint(point, model.maxDepth, `Journey point ${index + 1}`),
   );
   invariant(
-    config.atmosphere.bottomItems.filter((item) => item.kind === "rate").length === 1,
-    "Exactly one scroll-rate HUD item is required.",
+    journeyPoints[0]?.depth === 0,
+    "The journey must begin at the sea surface.",
   );
-  assertUnique(config.atmosphere.bottomItems.map((item) => item.id), "Bottom HUD item ids");
-  assertUnique(config.footer.lines.map((line) => line.id), "Footer line ids");
+  invariant(
+    journeyPoints.at(-1)?.depth === model.maxDepth,
+    "The final contact point must reach maximum depth.",
+  );
+  journeyPoints.forEach((point, index) => {
+    const previous = journeyPoints[index - 1];
+    if (!previous) return;
+    invariant(
+      point.depth >= previous.depth,
+      "Journey depths must be monotonic.",
+    );
+    invariant(
+      point.elapsedMinutes >= previous.elapsedMinutes,
+      "Journey times must be monotonic.",
+    );
+  });
+
+  invariant(
+    config.contact.journey.dropVh > 0,
+    "Contact journey spacing must be positive.",
+  );
+
+  invariant(model.zones.length > 0, "At least one depth zone is required.");
+  assertUnique(
+    model.zones.map((zone) => zone.id),
+    "Depth zone ids",
+  );
+  model.zones.forEach((zone, index) => {
+    assertDomId(zone.id, "Depth zone id");
+    invariant(
+      zone.startsAt >= 0 && zone.startsAt <= model.maxDepth,
+      `Zone ${zone.id} is out of range.`,
+    );
+    const previous = model.zones[index - 1];
+    if (previous)
+      invariant(
+        zone.startsAt > previous.startsAt,
+        "Depth zones must be strictly ordered.",
+      );
+  });
+  invariant(
+    model.zones[0]?.startsAt === 0,
+    "The first depth zone must begin at zero.",
+  );
+
+  invariant(
+    model.temperatureProfile.length >= 2,
+    "Temperature profile needs at least two points.",
+  );
+  model.temperatureProfile.forEach(([depth, temperature], index) => {
+    assertFiniteNumber(depth, `Temperature point ${index + 1} depth`);
+    assertFiniteNumber(temperature, `Temperature point ${index + 1} value`);
+    const previous = model.temperatureProfile[index - 1];
+    if (previous)
+      invariant(
+        depth > previous[0],
+        "Temperature depths must be strictly ordered.",
+      );
+  });
+  invariant(
+    model.temperatureProfile[0]?.[0] === 0,
+    "Temperature profile must begin at zero.",
+  );
+  invariant(
+    model.temperatureProfile.at(-1)?.[0] === model.maxDepth,
+    "Temperature profile must end at maximum depth.",
+  );
+
+  invariant(
+    scene.surface.sheetUntilDepth > 0 &&
+      scene.surface.sheetUntilDepth < scene.surface.sunUntilDepth &&
+      scene.surface.sunUntilDepth < scene.surface.raysUntilDepth,
+    "Surface thresholds must be positive and ordered.",
+  );
+  invariant(
+    scene.trench.wallsStartDepth < scene.trench.wallsFullDepth &&
+      scene.trench.wallsFullDepth <= model.maxDepth,
+    "Trench-wall thresholds must be ordered and in range.",
+  );
+  invariant(
+    scene.floor.visibleWithinMeters > scene.floor.lightsWithinMeters &&
+      scene.floor.lightsWithinMeters > 0,
+    "Floor and floodlight windows must be positive and ordered.",
+  );
+  const requiredCreatures: readonly CreatureId[] = [
+    "siphonophore",
+    "scattering-layer",
+    "lanternfish",
+    "anglerfish",
+    "dumbo-octopus",
+  ];
+  assertUnique(
+    scene.creatures.map((creature) => creature.id),
+    "Creature ids",
+  );
+  requiredCreatures.forEach((id) =>
+    invariant(
+      scene.creatures.some((creature) => creature.id === id),
+      `Missing creature: ${id}`,
+    ),
+  );
+  scene.creatures.forEach((creature) => {
+    invariant(
+      creature.depth >= 0 &&
+        creature.depth <= model.maxDepth &&
+        creature.span > 0,
+      `Creature ${creature.id} has an invalid depth or span.`,
+    );
+  });
+
+  const readoutIds = config.atmosphere.readouts.map((readout) => readout.id);
+  invariant(
+    config.atmosphere.bootSequence.length > 0,
+    "Instrument boot sequence cannot be empty.",
+  );
+  assertUnique(readoutIds, "Telemetry readout ids");
+  (["depth", "pressure", "temperature", "elapsed"] as const).forEach(
+    (requiredId) =>
+      invariant(
+        readoutIds.includes(requiredId),
+        `Missing telemetry readout: ${requiredId}`,
+      ),
+  );
+  assertUnique(
+    config.footer.lines.map((line) => line.id),
+    "Footer line ids",
+  );
 }
 
 function definePortfolio<const T extends PortfolioConfig>(config: T): T {
@@ -583,10 +799,21 @@ export const portfolioConfig = definePortfolio({
     navigation: {
       ariaLabel: "Primary navigation",
       items: [
-        { id: "work", label: "Work", targetId: sectionIds.interfaces },
-        { id: "method", label: "Method", targetId: sectionIds.craft, hideOnMobile: true },
-        { id: "practice", label: "Practice", targetId: sectionIds.practice, hideOnMobile: true },
-        { id: "contact", label: "Contact", targetId: sectionIds.contact },
+        { id: "identity", label: "Identity", targetId: sectionIds.identity },
+        {
+          id: "craft",
+          label: "Craft",
+          targetId: sectionIds.craft,
+          hideOnMobile: true,
+        },
+        {
+          id: "curiosity",
+          label: "Curiosity",
+          targetId: sectionIds.curiosity,
+          hideOnMobile: true,
+        },
+        { id: "journey", label: "Journey", targetId: sectionIds.journey },
+        { id: "contact", label: "Connect", targetId: sectionIds.connect },
       ],
     },
     status: {
@@ -595,27 +822,27 @@ export const portfolioConfig = definePortfolio({
     },
   },
   hero: {
-    telemetry: introTrace,
-    eyebrow: "Frontend engineer · Systems thinker · Portfolio index 2026",
+    eyebrow: "YOLO · Sophisticated Dreamer · Frontend engineer",
     title: profile.shortName,
+    note: "Design direction inspired by Susan Casey, an experience deep into the ocean",
     introduction: [
       {
         id: "overview",
-        text: "I build reliable interfaces for complex travel experiences—turning product rules, frontend architecture, and browser behavior into systems that remain clear under pressure.",
+        text: '"We are born and grow through childhood in spring. We live those glorious, lively, interesting years of our twenties, thirties, forties in summer. We settle into ourselves in autumn, that cool but not yet cold time, rich and aromatic. And in winter we age (brutally) and die. One turn of the seasons per person, unless it’s cut short." - Sybil Van Antwerp, and this is my summer.',
       },
     ],
-    details: [...profile.expertise, profile.location],
+    refers: profile.refer,
     callToAction: {
       id: "begin-trace",
       label: "Begin trace",
-      targetId: sectionIds.interfaces,
+      targetId: sectionIds.identity,
       symbol: symbols.down,
     },
   },
   sections,
   contact: {
     id: sectionIds.contact,
-    telemetry: { section: "CONTACT", focus: "OPEN CHANNEL" },
+    journey: { depth: 10911, elapsedMinutes: 258, dropVh: 115 },
     kicker: "Contact · End of trace",
     title: "Build something clear.",
     paragraphs: [
@@ -648,47 +875,137 @@ export const portfolioConfig = definePortfolio({
     },
   },
   atmosphere: {
-    ariaLabel: "Portfolio navigation telemetry",
+    ariaLabel: "Portfolio descent telemetry",
     description:
-      "Visual telemetry shows reading progress and the current portfolio section. It is decorative and does not affect navigation.",
+      "Live visual telemetry follows the portfolio journey from the sea surface to the trench floor. It is decorative and does not affect navigation.",
+    model: {
+      maxDepth: 10911,
+      probeViewportRatio: 0.55,
+      metersPerAtmosphere: 10.06,
+      numberLocale: "en-US",
+      zones: [
+        { id: "surface", startsAt: 0, label: "SURFACE" },
+        { id: "epipelagic", startsAt: 2, label: "EPIPELAGIC" },
+        {
+          id: "mesopelagic",
+          startsAt: 200,
+          label: "MESOPELAGIC",
+          pingLabel: "SONAR — ZONE BOUNDARY · MESOPELAGIC",
+          tapeMark: true,
+        },
+        {
+          id: "bathypelagic",
+          startsAt: 1000,
+          label: "BATHYPELAGIC",
+          pingLabel: "SONAR — ZONE BOUNDARY · BATHYPELAGIC",
+          tapeMark: true,
+        },
+        {
+          id: "abyssopelagic",
+          startsAt: 4000,
+          label: "ABYSSOPELAGIC",
+          pingLabel: "SONAR — ZONE BOUNDARY · ABYSSOPELAGIC",
+          tapeMark: true,
+        },
+        {
+          id: "hadal",
+          startsAt: 6000,
+          label: "HADAL",
+          pingLabel: "SONAR — ZONE BOUNDARY · HADAL",
+          tapeMark: true,
+        },
+        {
+          id: "trench-floor",
+          startsAt: 10880,
+          label: "HADAL · ON BOTTOM",
+          pingLabel: "BOTTOM CONTACT · DESCENT COMPLETE",
+        },
+      ],
+      temperatureProfile: [
+        [0, 21.4],
+        [80, 19.6],
+        [150, 13.8],
+        [200, 11.9],
+        [340, 9.4],
+        [612, 6.3],
+        [800, 5.2],
+        [1000, 4.4],
+        [1200, 3.9],
+        [1900, 3.0],
+        [2507, 2.4],
+        [3300, 2.0],
+        [4000, 1.8],
+        [5200, 1.6],
+        [6000, 1.6],
+        [7400, 1.8],
+        [9100, 2.0],
+        [10300, 2.2],
+        [10911, 2.3],
+      ],
+    },
+    scene: {
+      surface: {
+        sheetUntilDepth: 42,
+        sunUntilDepth: 95,
+        raysUntilDepth: 300,
+      },
+      trench: {
+        wallsStartDepth: 8400,
+        wallsFullDepth: 10500,
+      },
+      floor: {
+        visibleWithinMeters: 460,
+        lightsWithinMeters: 340,
+      },
+      creatures: [
+        { id: "siphonophore", depth: 612, span: 300, tapeMark: true },
+        { id: "scattering-layer", depth: 800, span: 330 },
+        { id: "lanternfish", depth: 1210, span: 260, tapeMark: true },
+        { id: "anglerfish", depth: 2507, span: 240, tapeMark: true },
+        { id: "dumbo-octopus", depth: 4050, span: 260, tapeMark: true },
+      ],
+    },
+    bootSequence: ["––––", "····", "––––"],
     readouts: [
       {
-        id: "progress",
-        label: "TRACE",
-        initialValue: "000.0",
-        unit: "%",
+        id: "depth",
+        label: "DEPTH",
+        initialValue: "····",
+        unit: "M",
         primary: true,
       },
       {
-        id: "section",
-        label: "SECTION",
-        initialValue: introTrace.section,
+        id: "pressure",
+        label: "PRESS",
+        initialValue: "····",
+        unit: "ATM",
       },
       {
-        id: "focus",
-        label: "FOCUS",
-        initialValue: introTrace.focus,
-        hideOnMobile: true,
+        id: "temperature",
+        label: "TEMP",
+        initialValue: "····",
+        unit: "°C",
       },
+      { id: "elapsed", label: "M.E.T.", initialValue: "····" },
     ],
-    bottomItems: [
-      {
-        id: "mode",
-        kind: "static",
-        label: "MODE",
-        value: "PORTFOLIO TRACE",
-        hideOnMobile: true,
+    elapsedPrefix: "T+",
+    bottomReadouts: {
+      zone: {
+        label: "ZONE",
+        initialValue: "SURFACE",
       },
-      {
-        id: "scroll-rate",
-        kind: "rate",
-        label: "SCROLL",
-        initialValue: "+000",
-        unit: "PX/S",
+      rate: {
+        label: "RATE",
+        initialValue: "0",
+        unit: "M/MIN",
       },
-    ],
-    rateSigns: {
+    },
+    temperatureSigns: {
       positive: "+",
+      negative: "−",
+    },
+    rateSigns: {
+      positive: "",
       negative: "−",
     },
   },
