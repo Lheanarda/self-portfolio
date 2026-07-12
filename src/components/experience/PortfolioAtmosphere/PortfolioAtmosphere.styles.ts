@@ -2,6 +2,8 @@ import * as stylex from "@stylexjs/stylex";
 import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 import { atmosphereGeometry } from "./geometry.stylex";
 
+export const TELEMETRY_TOP_OFFSIDE = "-10rem";
+
 const sonarRing = stylex.keyframes({
   "0%": {
     opacity: 0.95,
@@ -140,9 +142,14 @@ export const styles = stylex.create({
     },
     color: colors.iceBright,
     fontFamily: fonts.mono,
+    opacity: 0,
     pointerEvents: "none",
     position: "fixed",
     textAlign: "right",
+    transform: `translateY(${TELEMETRY_TOP_OFFSIDE})`,
+    transitionDuration: "1s",
+    transitionProperty: "opacity, transform",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 9,
     borderRightColor: "rgba(159, 195, 207, 0.35)",
     borderRightStyle: "solid",

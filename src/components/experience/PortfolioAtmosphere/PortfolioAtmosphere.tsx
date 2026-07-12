@@ -20,6 +20,7 @@ export function PortfolioAtmosphere({ copy }: Readonly<{ copy: AtmosphereCopy }>
     readoutRefs,
     sonarRef,
     tapeRef,
+    telemetryRef,
     vignetteRef,
     zoneRef,
   } = usePortfolioAtmosphere({ copy, imperativeClassNames });
@@ -44,7 +45,12 @@ export function PortfolioAtmosphere({ copy }: Readonly<{ copy: AtmosphereCopy }>
       <canvas ref={tapeRef} {...stylex.props(styles.tape)} aria-hidden="true" />
       <div ref={sonarRef} {...stylex.props(styles.sonar)} aria-hidden="true" />
 
-      <aside {...stylex.props(styles.telemetry)} aria-label={copy.ariaLabel}>
+      <aside
+        ref={telemetryRef}
+        {...stylex.props(styles.telemetry)}
+        aria-hidden="true"
+        aria-label={copy.ariaLabel}
+      >
         <p {...stylex.props(styles.visuallyHidden)}>{copy.description}</p>
         <span ref={progressRef} {...stylex.props(styles.progress)} aria-hidden="true" />
         <div aria-hidden="true">

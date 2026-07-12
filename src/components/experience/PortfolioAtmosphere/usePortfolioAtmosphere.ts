@@ -11,6 +11,7 @@ import {
 } from "./depth-model";
 import { ambientColor, PortfolioSea } from "./sea";
 import { atmosphereGeometry } from "./geometry.stylex";
+import { TELEMETRY_TOP_OFFSIDE } from "./PortfolioAtmosphere.styles";
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -31,6 +32,7 @@ export function usePortfolioAtmosphere({
 }>) {
   const fieldRef = useRef<HTMLCanvasElement>(null);
   const tapeRef = useRef<HTMLCanvasElement>(null);
+  const telemetryRef = useRef<HTMLElement>(null);
   const ambientRef = useRef<HTMLDivElement>(null);
   const vignetteRef = useRef<HTMLDivElement>(null);
   const sonarRef = useRef<HTMLDivElement>(null);
@@ -58,6 +60,7 @@ export function usePortfolioAtmosphere({
     const ambient = ambientRef.current;
     const vignette = vignetteRef.current;
     const sonar = sonarRef.current;
+    const telemetry = telemetryRef.current;
     const tapeContext = tape?.getContext("2d");
     if (!field || !tape || !ambient || !vignette || !sonar || !tapeContext) return;
 
@@ -91,6 +94,8 @@ export function usePortfolioAtmosphere({
     let dirty = true;
     let activeZoneIndex = zoneIndexAt(copy.model.zones, target.depth);
     let started = false;
+    let telemetryVisible = false;
+    let telemetryHideTimer: number | undefined;
     let disposed = false;
     let lastPingAt = -Infinity;
 
@@ -338,6 +343,35 @@ export function usePortfolioAtmosphere({
       }
     };
 
+    const setTelemetryVisibility = (depth: number) => {
+      const shouldShow = depth > 0;
+      if (!telemetry || shouldShow === telemetryVisible) return;
+
+      telemetryVisible = shouldShow;
+      telemetry.setAttribute("aria-hidden", String(!shouldShow));
+      if (shouldShow) {
+        if (telemetryHideTimer) {
+          window.clearTimeout(telemetryHideTimer);
+          scheduledTimers.delete(telemetryHideTimer);
+          telemetryHideTimer = undefined;
+        }
+        telemetry.style.visibility = "visible";
+        window.requestAnimationFrame(() => {
+          if (!disposed && telemetryVisible) {
+            telemetry.style.opacity = "1";
+            telemetry.style.transform = "translateY(0)";
+          }
+        });
+      } else {
+        telemetry.style.opacity = "0";
+        telemetry.style.transform = `translateY(${TELEMETRY_TOP_OFFSIDE})`;
+        telemetryHideTimer = schedule(() => {
+          if (!telemetryVisible) telemetry.style.visibility = "hidden";
+          telemetryHideTimer = undefined;
+        }, 240);
+      }
+    };
+
     const loop = (now: number) => {
       if (!visible) {
         frameId = 0;
@@ -371,6 +405,7 @@ export function usePortfolioAtmosphere({
       }
       put(zoneRef, "zone", copy.model.zones[activeZoneIndex].label);
       updateTelemetry(smoothDepth, smoothElapsed, smoothedRate);
+      setTelemetryVisibility(target.depth);
       paintAmbient(smoothDepth);
 
       if (!reducedMotion || dirty) {
@@ -448,6 +483,7 @@ export function usePortfolioAtmosphere({
     sonarRef,
     tapeRef,
     temperatureRef,
+    telemetryRef,
     vignetteRef,
     zoneRef,
   } as const;
