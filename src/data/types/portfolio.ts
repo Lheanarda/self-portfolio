@@ -251,7 +251,7 @@ export type PortfolioConfig = Readonly<{
     eyebrow: string;
     title: string;
     note?: string;
-    introduction: readonly Paragraph[];
+    introduction: readonly string[];
     refers: readonly PortfolioLink[];
     callToAction: AnchorLink;
   }>;

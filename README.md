@@ -25,10 +25,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Content configuration
 
-[`src/data/portfolio.ts`](src/data/portfolio.ts) is the single source of truth for all
-visitor-facing content and authored journey data: metadata, identity, accessibility labels,
-navigation, hero copy, ordered sections and waypoints, depth/time anchors, creature placement,
-contact links, footer copy, telemetry labels, sonar messages, and visible symbols.
+[`src/data/`](src/data) is the single source of truth for all visitor-facing content and authored
+journey data. `portfolio.ts` is the public assembly and validation boundary; focused modules own
+site chrome, editorial sections, atmosphere settings, and configuration invariants.
 
 Repeated content is array-driven, section numbering follows array order, and configuration
 invariants fail the build on broken IDs, anchors, links, depth ordering, scene thresholds, or required

@@ -107,7 +107,6 @@ export const styles = stylex.create({
     fontStyle: "oblique",
     fontWeight: 200,
     letterSpacing: "0.1rem",
-    marginBottom: "1.6rem",
     marginTop: {
       default: null,
       [breakpoints.compact]: "0.5ch",
@@ -120,13 +119,12 @@ export const styles = stylex.create({
   standfirst: {
     color: "#eaf6f6",
     fontSize: "clamp(1.02rem, 1.42vw, 1.23rem)",
-    fontStyle: "italic",
     fontWeight: 420,
     lineHeight: 1.68,
     textShadow: "0 1px 18px rgba(0, 18, 24, 0.6)",
     textWrap: "pretty",
     marginTop: "1.9rem",
-    maxWidth: "70ch",
+    maxWidth: "50ch",
   },
   followingStandfirst: {
     marginTop: "0.9rem",

@@ -1,13 +1,16 @@
 # Portfolio Content and Journey Configuration
 
-[`src/data/portfolio.ts`](../src/data/portfolio.ts) is the single source of truth for every
-visitor-facing string, content relationship, and authored descent waypoint. Components render the
-configuration; they do not own editorial copy.
+[`src/data/`](../src/data) is the single source of truth for every visitor-facing string, content
+relationship, and authored descent waypoint. Components render the configuration; they do not own
+editorial copy.
 
 The boundary is deliberate:
 
-- `src/data/portfolio.ts` owns copy, labels, links, ordering, depth/time anchors, scene thresholds,
-  creature placement, and visible symbols.
+- `src/data/content/site.ts` owns identity, chrome, metadata, hero, contact, footer, and visible symbols.
+- `src/data/content/sections.ts` owns ordered sections and their authored depth/time waypoints.
+- `src/data/atmosphere/config.ts` owns scene thresholds, creature placement, and telemetry copy.
+- `src/data/portfolio.ts` assembles and validates the public `portfolioConfig` contract.
+- `src/data/validation/portfolio.ts` owns cross-module configuration invariants.
 - `src/data/types/portfolio.ts` owns the corresponding TypeScript contracts.
 - React components own semantic markup, generated measurements, rendering rules, and lifecycle.
 - Co-located StyleX modules own component layout and motion; the atmosphere's Canvas engines own
@@ -39,7 +42,7 @@ that renderer.
 
 ## Editing rules
 
-1. Put every visitor-visible, metadata, accessibility, HUD, and sonar string in `portfolio.ts`.
+1. Put every visitor-visible, metadata, accessibility, HUD, and sonar string in its owning data module.
 2. Give every repeatable item a stable, unique, DOM-safe `id`.
 3. Keep published section IDs stable so inbound `#anchor` links keep working.
 4. Control optional UI by data presence or an explicit flag; never branch on a title or magic ID.
