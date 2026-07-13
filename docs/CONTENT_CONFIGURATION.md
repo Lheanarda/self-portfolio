@@ -56,8 +56,9 @@ Identity and contact facts live in `profile` and `contactLinks`. The email href 
 `profile.email` and reused by the primary contact action, so the address has one authoritative value.
 
 Hero introductions use stable `{ id, text }` records. The first record is the statically rendered
-fallback; after hydration, one valid ID is selected and retained for the browser-tab session. IDs
-must remain unique and stable so reordering the list does not change an existing session's choice.
+fallback; after hydration, one valid ID is randomly selected for that document load. A reload makes
+a fresh independent draw, so it can show the same introduction again by chance. IDs must remain
+unique and stable for configuration and DOM contracts; hero introductions do not use client storage.
 
 Each section has one specialized `entry` plus zero or more generic `waypoints`. Edit the specialized
 entry to change its work/principles/disciplines layout. Edit `waypoints` to add or remove narrative
