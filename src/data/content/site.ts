@@ -95,24 +95,20 @@ export const hero = {
   note: "Design direction inspired by Susan Casey & Vescovo deep sea adventure",
   introduction: [
     {
-      id: "naruto",
-      text: "Say I was part of Naruto Great Ninja War, I would be a random ninja killed by Madara. Stupid enough to charge in front face to face againts him.",
-    },
-    {
       id: "one-piece",
-      text: "If I were born inside One Piece universe, I would be a nameless marine officer living paycheck to paycheck. Being hopeful the world will get better each day.",
+      text: "Imagine I was born inside One Piece universe, high probability I would be a nameless marine officer living paycheck to paycheck or being part of a revolution. Hoping one day, the world might be a little bit better.",
     },
     {
       id: "existence",
-      text: "Have you ever wondered why humanity exist, why you exist? Yes I have and there are no concrete answers. We need to find it within ourself.",
-    },
-    {
-      id: "first-impression",
-      text: "Most first impression toward me will say im rigid, awkward, or someone who is assertive. Partly because of my strong square jawline.",
+      text: "Have you ever wondered why humanity exist, why do you exist? There are no concrete answers for it and we need to find the answer by ourself. Look at your own self.",
     },
     {
       id: "music",
-      text: "My favorite song is Alexandra by Reality Club, while my favorite melody is Gymnopedie No.1 by Erik Satie. Learnt piano for the sake to play it.",
+      text: 'One of my favorite song is Alexandra by Reality Club, an emotional rock that slowly bring you the letter of love, "The labyrinth i thought i knew rearranged to shape anew at amazement of the excitement that once rang true".',
+    },
+    {
+      id: "music-piece",
+      text: "I can listen to Gymnopedie No.1 by Erik Satie for hours. It is slow, and haunting yet calming. Melodies that uncover life memories, slowly, and there is nothing we can do than accept it. Learnt to play piano just for this piece.",
     },
   ],
   refers: profile.refer,
