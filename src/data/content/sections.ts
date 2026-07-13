@@ -4,7 +4,7 @@ import { sectionIds } from "./site";
 export const sections = [
   {
     kind: "work",
-    id: sectionIds.identity,
+    id: sectionIds.sunlight,
     journey: {
       stratum: { depth: 0, elapsedMinutes: 0 },
       entry: { depth: 40, elapsedMinutes: 2 },
@@ -53,7 +53,7 @@ export const sections = [
   },
   {
     kind: "work",
-    id: sectionIds.craft,
+    id: sectionIds.twilight,
     journey: {
       stratum: { depth: 200, elapsedMinutes: 12 },
       entry: { depth: 340, elapsedMinutes: 16 },
@@ -125,7 +125,7 @@ export const sections = [
   },
   {
     kind: "work",
-    id: sectionIds.curiosity,
+    id: sectionIds.midnight,
     journey: {
       stratum: { depth: 1000, elapsedMinutes: 38 },
       entry: { depth: 1210, elapsedMinutes: 44 },
@@ -200,7 +200,7 @@ export const sections = [
   },
   {
     kind: "principles",
-    id: sectionIds.journey,
+    id: sectionIds.abyss,
     journey: {
       stratum: { depth: 4000, elapsedMinutes: 128 },
       entry: { depth: 4050, elapsedMinutes: 130 },
@@ -262,7 +262,7 @@ export const sections = [
   },
   {
     kind: "disciplines",
-    id: sectionIds.connect,
+    id: sectionIds.hadal,
     journey: {
       stratum: { depth: 6000, elapsedMinutes: 172 },
       entry: { depth: 7400, elapsedMinutes: 184 },

@@ -27,11 +27,11 @@ export const symbols = {
 } as const;
 export const anchors = { mainContent: "main-content", hero: "top" } as const;
 export const sectionIds = {
-  identity: "identity",
-  craft: "craft",
-  curiosity: "curiosity",
-  journey: "journey",
-  connect: "connect",
+  sunlight: "sunlight",
+  twilight: "twilight",
+  midnight: "midnight",
+  abyss: "abyss",
+  hadal: "hadal",
   contact: "contact",
 } as const;
 export const emailLink = {
@@ -75,11 +75,16 @@ export const header = {
   navigation: {
     ariaLabel: "Primary navigation",
     items: [
-      { id: "identity", label: "Identity", targetId: sectionIds.identity },
-      { id: "craft", label: "Craft", targetId: sectionIds.craft, hideOnMobile: true },
-      { id: "curiosity", label: "Curiosity", targetId: sectionIds.curiosity, hideOnMobile: true },
-      { id: "journey", label: "Journey", targetId: sectionIds.journey },
-      { id: "contact", label: "Connect", targetId: sectionIds.connect },
+      { id: "epilagic", label: "Sunlight", targetId: sectionIds.sunlight },
+      { id: "mesopelagic", label: "Twilight", targetId: sectionIds.twilight, hideOnMobile: true },
+      {
+        id: "bathypelagic",
+        label: "Midnight",
+        targetId: sectionIds.midnight,
+        hideOnMobile: true,
+      },
+      { id: "abyssopelagic", label: "Abyss", targetId: sectionIds.abyss },
+      { id: "hadal", label: "Hadal", targetId: sectionIds.hadal },
     ],
   },
   status: { label: "Link", value: profile.location },
@@ -114,7 +119,7 @@ export const hero = {
   callToAction: {
     id: "begin-trace",
     label: "Begin trace",
-    targetId: sectionIds.identity,
+    targetId: sectionIds.sunlight,
     symbol: symbols.down,
   },
 } as const;
