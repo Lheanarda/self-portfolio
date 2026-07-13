@@ -22,7 +22,7 @@ export function sectionStatus(section: PortfolioSection) {
   if (status.kind === "text") return status.label;
 
   const count =
-    section.kind === "work" ? section.entry.tags.items.length : section.entry.items.length;
+    section.kind === "log" ? section.entry.tags.items.length : section.entry.items.length;
 
   return `${count} ${count === 1 ? status.singular : status.plural}`;
 }

@@ -2,11 +2,11 @@ import * as stylex from "@stylexjs/stylex";
 import type { PortfolioSection } from "@/data/portfolio";
 import { styles } from "./styles";
 
-type WorkSectionBodyProps = Readonly<{
-  section: Extract<PortfolioSection, { kind: "work" }>;
+type LogSectionBodyProps = Readonly<{
+  section: Extract<PortfolioSection, { kind: "log" }>;
 }>;
 
-export function WorkSectionBody({ section }: WorkSectionBodyProps) {
+export function LogSectionBody({ section }: LogSectionBodyProps) {
   return (
     <>
       {section.entry.paragraphs.map((paragraph) => (

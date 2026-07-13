@@ -1,7 +1,7 @@
 import type { PortfolioSection } from "@/data/portfolio";
-import { DisciplinesSectionBody } from "./DisciplinesSectionBody";
-import { PrinciplesSectionBody } from "./PrinciplesSectionBody";
-import { WorkSectionBody } from "./WorkSectionBody";
+import { LogSectionBody } from "./LogSectionBody";
+import { ProtocolSectionBody } from "./ProtocolSectionBody";
+import { SpecimenSectionBody } from "./SpecimenSectionBody";
 
 type SectionBodyProps = Readonly<{
   section: PortfolioSection;
@@ -14,12 +14,12 @@ function assertNever(value: never): never {
 
 export function SectionBody({ section, digits }: SectionBodyProps) {
   switch (section.kind) {
-    case "work":
-      return <WorkSectionBody section={section} />;
-    case "principles":
-      return <PrinciplesSectionBody section={section} digits={digits} />;
-    case "disciplines":
-      return <DisciplinesSectionBody section={section} digits={digits} />;
+    case "log":
+      return <LogSectionBody section={section} />;
+    case "protocol":
+      return <ProtocolSectionBody section={section} digits={digits} />;
+    case "specimen":
+      return <SpecimenSectionBody section={section} digits={digits} />;
     default:
       return assertNever(section);
   }

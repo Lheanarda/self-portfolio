@@ -29,7 +29,7 @@ The boundary is deliberate:
 | `anchors`             | Stable page-level DOM anchors                                                       |
 | `header`              | Wordmark, status, navigation labels, targets, and mobile visibility                 |
 | `hero`                | Heading, note, paragraphs, reference links, and descent CTA                         |
-| `sections`            | Ordered work/principles/disciplines sections plus their depth waypoints             |
+| `sections`            | Ordered log/protocol/specimen sections plus their depth waypoints                   |
 | `contact`             | Final depth point, contact copy, primary channel, and link list                     |
 | `footer`              | Repeatable footer lines and return-to-surface CTA                                   |
 | `atmosphere.model`    | Maximum depth, viewport probe, pressure calibration, zones, and temperature profile |
@@ -37,8 +37,8 @@ The boundary is deliberate:
 | `atmosphere.readouts` | Instrument, zone, sonar, unit, sign, boot, and fallback copy                        |
 
 `portfolioConfig` is checked against `PortfolioConfig`. Section objects are a discriminated union:
-their `kind` must be `work`, `principles`, or `disciplines`, and TypeScript requires the payload for
-that renderer.
+their `kind` must be `log`, `protocol`, or `specimen`, and TypeScript requires the payload for that
+renderer. These names describe the expedition-themed presentation rather than the editorial subject.
 
 ## Editing rules
 
@@ -61,8 +61,8 @@ a fresh independent draw, so it can show the same introduction again by chance. 
 unique and stable for configuration and DOM contracts; hero introductions do not use client storage.
 
 Each section has one specialized `entry` plus zero or more generic `waypoints`. Edit the specialized
-entry to change its work/principles/disciplines layout. Edit `waypoints` to add or remove narrative
-cards without changing React:
+entry to change its log/protocol/specimen layout. Edit `waypoints` to add or remove narrative cards
+without changing React:
 
 ```ts
 waypoints: [
@@ -89,7 +89,7 @@ their two spacing values, and a `waypoints` array:
 
 ```ts
 {
-  kind: "work",
+  kind: "log",
   id: "new-layer",
   journey: {
     stratum: { depth: 6000, elapsedMinutes: 172 },
@@ -119,9 +119,9 @@ their two spacing values, and a `waypoints` array:
 Adjust later section/contact depths so the complete authored sequence stays monotonic. Add a header
 navigation item only when the section needs a permanent shortcut.
 
-Principles use `{ id, title, description }`. Disciplines use
-`{ id, name, principle, description }`. Repeated-item numbers and count statuses update from array
-length and order.
+Protocol layouts use `{ id, title, description }`. Specimen layouts use
+`{ id, title, signal, description }`. Repeated-item numbers and count statuses update from array
+length and order. Log layouts use narrative paragraphs, focus tags, and an optional context panel.
 
 ## Editing the descent
 

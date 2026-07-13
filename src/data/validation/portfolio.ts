@@ -86,7 +86,7 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     "Section ids",
   );
   config.sections.forEach((section) => {
-    const items = section.kind === "work" ? section.entry.tags.items : section.entry.items;
+    const items = section.kind === "log" ? section.entry.tags.items : section.entry.items;
     invariant(items.length > 0, `Section ${section.id} requires at least one item.`);
     assertUnique(
       items.map((item) => item.id),
@@ -111,13 +111,13 @@ function validatePortfolioConfig(config: PortfolioConfig) {
       );
     });
 
-    if (section.kind === "work" || section.kind === "disciplines") {
+    if (section.kind === "log" || section.kind === "specimen") {
       assertUnique(
         section.entry.paragraphs.map((paragraph) => paragraph.id),
         `Paragraph ids in section ${section.id}`,
       );
     }
-    if (section.kind === "work" && section.entry.context) {
+    if (section.kind === "log" && section.entry.context) {
       assertUnique(
         section.entry.context.paragraphs.map((paragraph) => paragraph.id),
         `Context paragraph ids in section ${section.id}`,

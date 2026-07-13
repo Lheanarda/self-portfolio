@@ -21,16 +21,16 @@ export type {
   AtmosphereScene,
   CreatureId,
   DepthZone,
-  DisciplinesSection,
   HeroIntroduction,
   JourneyPoint,
   JourneyWaypoint,
+  LogSection,
   PortfolioConfig,
   PortfolioLink,
   PortfolioSection,
-  PrinciplesSection,
+  ProtocolSection,
+  SpecimenSection,
   TelemetryReadoutId,
-  WorkSection,
 } from "@/data/types/portfolio";
 
 /**

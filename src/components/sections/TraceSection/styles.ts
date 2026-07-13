@@ -143,14 +143,14 @@ export const styles = stylex.create({
   contextParagraphFollowing: {
     marginTop: "0.65rem",
   },
-  principleList: {
+  protocolList: {
     listStyle: "none",
     borderTopColor: "rgba(159, 195, 207, 0.28)",
     borderTopStyle: "solid",
     borderTopWidth: "1px",
     marginTop: "2.3rem",
   },
-  principleItem: {
+  protocolItem: {
     gap: {
       default: "1.2rem",
       [breakpoints.tiny]: "0.8rem",
@@ -172,12 +172,12 @@ export const styles = stylex.create({
     fontFamily: fonts.mono,
     fontSize: "0.62rem",
   },
-  principleTitle: {
+  protocolTitle: {
     color: colors.iceBright,
     fontSize: "0.94rem",
     fontWeight: 560,
   },
-  principleDescription: {
+  protocolDescription: {
     gridColumn: {
       default: "auto",
       [breakpoints.compact]: "2",
@@ -186,7 +186,7 @@ export const styles = stylex.create({
     fontSize: "0.88rem",
     lineHeight: 1.6,
   },
-  disciplineGrid: {
+  specimenGrid: {
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(2, 1fr)",
@@ -200,7 +200,7 @@ export const styles = stylex.create({
     borderTopWidth: "1px",
     marginTop: "2.4rem",
   },
-  discipline: {
+  specimen: {
     padding: {
       default: "1.35rem",
       [breakpoints.tiny]: "1.1rem",
@@ -216,14 +216,14 @@ export const styles = stylex.create({
       [breakpoints.compact]: "205px",
     },
   },
-  disciplineName: {
+  specimenTitle: {
     color: colors.iceBright,
     fontSize: "1.55rem",
     fontVariationSettings: '"wdth" 112',
     fontWeight: 600,
     marginTop: "2rem",
   },
-  disciplinePrinciple: {
+  specimenSignal: {
     color: colors.biolume,
     display: "block",
     fontFamily: fonts.mono,
@@ -234,7 +234,7 @@ export const styles = stylex.create({
     textTransform: "uppercase",
     marginTop: "0.7rem",
   },
-  disciplineDescription: {
+  specimenDescription: {
     color: "rgba(201, 218, 225, 0.78)",
     fontSize: "0.84rem",
     lineHeight: 1.6,

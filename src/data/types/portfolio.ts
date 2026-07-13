@@ -68,9 +68,9 @@ type SectionBase = Readonly<{
   }>;
 }>;
 
-export type WorkSection = SectionBase &
+export type LogSection = SectionBase &
   Readonly<{
-    kind: "work";
+    kind: "log";
     entry: Readonly<{
       traceLabel: string;
       status: StaticStatus;
@@ -88,9 +88,9 @@ export type WorkSection = SectionBase &
     }>;
   }>;
 
-export type PrinciplesSection = SectionBase &
+export type ProtocolSection = SectionBase &
   Readonly<{
-    kind: "principles";
+    kind: "protocol";
     entry: Readonly<{
       traceLabel: string;
       status: CountStatus;
@@ -103,9 +103,9 @@ export type PrinciplesSection = SectionBase &
     }>;
   }>;
 
-export type DisciplinesSection = SectionBase &
+export type SpecimenSection = SectionBase &
   Readonly<{
-    kind: "disciplines";
+    kind: "specimen";
     entry: Readonly<{
       traceLabel: string;
       status: StaticStatus;
@@ -113,14 +113,14 @@ export type DisciplinesSection = SectionBase &
       paragraphs: readonly Paragraph[];
       items: readonly Readonly<{
         id: string;
-        name: string;
-        principle: string;
+        title: string;
+        signal: string;
         description: string;
       }>[];
     }>;
   }>;
 
-export type PortfolioSection = WorkSection | PrinciplesSection | DisciplinesSection;
+export type PortfolioSection = LogSection | ProtocolSection | SpecimenSection;
 
 export type TelemetryReadoutId = "depth" | "pressure" | "temperature" | "elapsed";
 

@@ -3,7 +3,7 @@ import { sectionIds } from "./site";
 
 export const sections = [
   {
-    kind: "work",
+    kind: "log",
     id: sectionIds.sunlight,
     journey: {
       stratum: { depth: 0, elapsedMinutes: 0 },
@@ -52,7 +52,7 @@ export const sections = [
     },
   },
   {
-    kind: "work",
+    kind: "log",
     id: sectionIds.twilight,
     journey: {
       stratum: { depth: 200, elapsedMinutes: 12 },
@@ -124,7 +124,7 @@ export const sections = [
     },
   },
   {
-    kind: "work",
+    kind: "log",
     id: sectionIds.midnight,
     journey: {
       stratum: { depth: 1000, elapsedMinutes: 38 },
@@ -199,7 +199,7 @@ export const sections = [
     },
   },
   {
-    kind: "principles",
+    kind: "protocol",
     id: sectionIds.abyss,
     journey: {
       stratum: { depth: 4000, elapsedMinutes: 128 },
@@ -261,7 +261,7 @@ export const sections = [
     },
   },
   {
-    kind: "disciplines",
+    kind: "specimen",
     id: sectionIds.hadal,
     journey: {
       stratum: { depth: 6000, elapsedMinutes: 172 },
@@ -315,26 +315,26 @@ export const sections = [
       items: [
         {
           id: "boxing",
-          name: "Boxing",
-          principle: "Composure under pressure",
+          title: "Boxing",
+          signal: "Composure under pressure",
           description: "Technique still has to hold when the pace rises.",
         },
         {
           id: "cycling",
-          name: "Cycling",
-          principle: "Consistency compounds",
+          title: "Cycling",
+          signal: "Consistency compounds",
           description: "Endurance comes from repeatable work, not occasional intensity.",
         },
         {
           id: "piano",
-          name: "Piano",
-          principle: "Precision takes patience",
+          title: "Piano",
+          signal: "Precision takes patience",
           description: "Difficult passages become fluent one deliberate repetition at a time.",
         },
         {
           id: "reading",
-          name: "Reading",
-          principle: "Better models, better judgment",
+          title: "Reading",
+          signal: "Better models, better judgment",
           description:
             "Literature, history, and philosophy widen the questions engineering can ask.",
         },

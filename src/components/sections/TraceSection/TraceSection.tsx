@@ -17,14 +17,14 @@ type TraceSectionProps = Readonly<{
 
 export function TraceSection({ section, position, sequence, sectionDivider }: TraceSectionProps) {
   const titleId = section.id;
-  const isWork = section.kind === "work";
+  const isLog = section.kind === "log";
 
   return (
     <section
       {...stylex.props(
         styles.zone,
         styles.stratumDrop(section.journey.stratumDropVh),
-        !isWork && styles.extendedZone,
+        !isLog && styles.extendedZone,
       )}
       aria-labelledby={titleId}
     >
@@ -45,7 +45,7 @@ export function TraceSection({ section, position, sequence, sectionDivider }: Tr
       <TraceCard
         journey={section.journey.entry}
         dropVh={section.journey.entryDropVh}
-        variant={isWork ? "default" : "wide"}
+        variant={isLog ? "default" : "wide"}
       >
         <TraceStamp
           prefix={sequence.tracePrefix}
