@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { PortfolioConfig } from "@/data/portfolio";
 import { TraceSection } from "@/components/sections/TraceSection/TraceSection";
+import { layoutStyles } from "@/styles/layout";
 import { styles } from "./styles";
 
 type TraceJourneyProps = Readonly<{
@@ -11,7 +12,7 @@ type TraceJourneyProps = Readonly<{
 
 export function TraceJourney({ sections, sequence, symbols }: TraceJourneyProps) {
   return (
-    <div {...stylex.props(styles.root)}>
+    <div {...stylex.props(styles.root, layoutStyles.contentGutter)}>
       {sections.map((section, index) => (
         <TraceSection
           key={section.id}

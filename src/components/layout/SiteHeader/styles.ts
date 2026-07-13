@@ -13,14 +13,19 @@ export const styles = stylex.create({
     paddingInline: {
       default: "1.6rem",
       [breakpoints.compact]: "1rem",
+      [breakpoints.tiny]: "0.85rem",
     },
     alignItems: "baseline",
     backgroundImage: "linear-gradient(rgba(0, 2, 5, 0.62), transparent)",
+    columnGap: {
+      default: "1rem",
+      [breakpoints.tiny]: "0.62rem",
+    },
     display: "grid",
     fontFamily: fonts.mono,
     gridTemplateColumns: {
       default: "1fr auto 1fr",
-      [breakpoints.mediumDown]: "1fr auto",
+      [breakpoints.mediumDown]: "minmax(0, 1fr) auto",
     },
     position: "fixed",
     zIndex: 10,
@@ -42,6 +47,7 @@ export const styles = stylex.create({
     fontSize: {
       default: "1.02rem",
       [breakpoints.compact]: "0.84rem",
+      [breakpoints.tiny]: "0.78rem",
     },
     fontVariationSettings: '"wdth" 125',
     fontWeight: 800,
@@ -49,23 +55,28 @@ export const styles = stylex.create({
     letterSpacing: {
       default: "0.3em",
       [breakpoints.compact]: "0.24em",
+      [breakpoints.tiny]: "0.18em",
     },
     textTransform: "uppercase",
+    whiteSpace: "nowrap",
   },
   navigation: {
     gap: {
       default: "clamp(1rem, 2.4vw, 2.6rem)",
       [breakpoints.compact]: "0.9rem",
+      [breakpoints.tiny]: "0.62rem",
     },
     color: colors.ice,
     display: "flex",
     fontSize: {
       default: "0.62rem",
       [breakpoints.compact]: "0.54rem",
+      [breakpoints.tiny]: "0.5rem",
     },
     letterSpacing: {
       default: "0.18em",
       [breakpoints.compact]: "0.12em",
+      [breakpoints.tiny]: "0.08em",
     },
     textTransform: "uppercase",
   },
@@ -77,6 +88,7 @@ export const styles = stylex.create({
     transitionDuration: "0.3s",
     transitionProperty: "color",
     transitionTimingFunction: motion.easeOut,
+    whiteSpace: "nowrap",
   },
   status: {
     gap: "0.6rem",

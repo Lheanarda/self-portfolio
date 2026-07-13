@@ -10,15 +10,6 @@ export const styles = stylex.create({
       [breakpoints.compact]: "110vh",
     },
     paddingBottom: "24vh",
-    paddingLeft: {
-      default: "clamp(6rem, 16vw, 20rem)",
-      [breakpoints.mediumOnly]: "clamp(4.5rem, 12vw, 8rem)",
-      [breakpoints.compact]: "1rem",
-    },
-    paddingRight: {
-      default: "clamp(1.2rem, 4vw, 4rem)",
-      [breakpoints.compact]: "1rem",
-    },
     paddingTop: {
       default: "20vh",
       [breakpoints.compact]: "18vh",
@@ -31,6 +22,7 @@ export const styles = stylex.create({
     paddingInline: {
       default: "2.2rem",
       [breakpoints.compact]: "1.3rem",
+      [breakpoints.tiny]: "1rem",
     },
     backdropFilter: {
       default: "blur(8px)",
@@ -43,6 +35,7 @@ export const styles = stylex.create({
     borderLeftColor: "rgba(255, 233, 196, 0.55)",
     borderLeftStyle: "solid",
     borderLeftWidth: "1px",
+    minWidth: 0,
     paddingBottom: {
       default: "2.2rem",
       [breakpoints.compact]: "1.4rem",
@@ -58,18 +51,32 @@ export const styles = stylex.create({
     color: colors.floodlight,
     fontSize: {
       default: "clamp(3rem, 7vw, 7rem)",
-      [breakpoints.compact]: "clamp(2.35rem, 11vw, 3.5rem)",
+      [breakpoints.compact]: "clamp(2rem, 10vw, 3.5rem)",
     },
-    fontVariationSettings: '"wdth" 122',
+    fontVariationSettings: {
+      default: '"wdth" 122',
+      [breakpoints.compact]: '"wdth" 112',
+    },
     fontWeight: 760,
-    letterSpacing: "-0.04em",
+    letterSpacing: {
+      default: "-0.04em",
+      [breakpoints.compact]: "-0.025em",
+    },
     lineHeight: 0.95,
+    overflowWrap: {
+      default: "normal",
+      [breakpoints.compact]: "anywhere",
+    },
     textTransform: "uppercase",
     marginTop: "1.2rem",
   },
   paragraph: {
     color: colors.bodyText,
-    fontSize: "1.05rem",
+    fontSize: {
+      default: "1.05rem",
+      [breakpoints.compact]: "1rem",
+      [breakpoints.tiny]: "0.95rem",
+    },
     lineHeight: 1.72,
     marginTop: "1.7rem",
     maxWidth: "54ch",
@@ -78,13 +85,14 @@ export const styles = stylex.create({
     gap: "1rem",
     paddingBlock: "1.1rem",
     paddingInline: "0",
+    alignItems: "center",
     color: colors.floodlight,
-    display: "flex",
+    display: "grid",
     fontSize: {
       default: "clamp(1rem, 2.2vw, 1.8rem)",
       [breakpoints.compact]: "0.95rem",
     },
-    justifyContent: "space-between",
+    gridTemplateColumns: "minmax(0, 1fr) auto",
     letterSpacing: "-0.02em",
     overflowWrap: {
       default: "normal",
@@ -99,7 +107,10 @@ export const styles = stylex.create({
     marginTop: "3rem",
   },
   socials: {
-    gap: "1.6rem",
+    gap: {
+      default: "1.6rem",
+      [breakpoints.narrow]: "1.15rem",
+    },
     color: colors.ice,
     display: "flex",
     flexWrap: "wrap",
@@ -117,5 +128,6 @@ export const styles = stylex.create({
     transitionDuration: "0.3s",
     transitionProperty: "color",
     transitionTimingFunction: motion.easeOut,
+    whiteSpace: "nowrap",
   },
 });

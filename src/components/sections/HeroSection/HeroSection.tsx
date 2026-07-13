@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import * as stylex from "@stylexjs/stylex";
 import type { PortfolioConfig } from "@/data/portfolio";
 import { anchorHref, isInternalHref } from "@/lib/portfolio/presentation";
+import { layoutStyles } from "@/styles/layout";
 import { HeroIntroduction } from "./HeroIntroduction";
 import { styles } from "./styles";
 
@@ -15,7 +16,11 @@ export function HeroSection({ hero, heroId, inlineSeparator }: HeroSectionProps)
   const titleId = `${heroId}-title`;
 
   return (
-    <section {...stylex.props(styles.root)} id={heroId} aria-labelledby={titleId}>
+    <section
+      {...stylex.props(styles.root, layoutStyles.contentGutter)}
+      id={heroId}
+      aria-labelledby={titleId}
+    >
       <div {...stylex.props(styles.inner)}>
         <p {...stylex.props(styles.eyebrow, styles.arrival, styles.eyebrowArrival)}>
           {hero.eyebrow}

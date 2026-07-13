@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { PortfolioConfig } from "@/data/portfolio";
 import { anchorHref } from "@/lib/portfolio/presentation";
+import { layoutStyles } from "@/styles/layout";
 import { styles } from "./styles";
 
 type SiteFooterProps = Readonly<{
@@ -10,7 +11,7 @@ type SiteFooterProps = Readonly<{
 
 export function SiteFooter({ footer, inlineSeparator }: SiteFooterProps) {
   return (
-    <footer {...stylex.props(styles.root)}>
+    <footer {...stylex.props(styles.root, layoutStyles.contentGutter)}>
       <div {...stylex.props(styles.creditLines)}>
         {footer.lines.map((line) => (
           <p key={line.id} {...stylex.props(line.hideOnMobile && styles.hideOnCompact)}>

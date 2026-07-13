@@ -107,6 +107,10 @@ export const styles = stylex.create({
     },
     animationTimingFunction: motion.easeOut,
     color: colors.biolume,
+    display: {
+      default: null,
+      [breakpoints.compact]: "none",
+    },
     fontFamily: fonts.mono,
     fontSize: {
       default: "0.72rem",
@@ -124,15 +128,16 @@ export const styles = stylex.create({
     textShadow: "0 0 16px rgba(100, 240, 210, 0.5)",
     transform: "translateX(-50%)",
     whiteSpace: "nowrap",
+    bottom: {
+      default: "4.2rem",
+      [breakpoints.compact]: "3.7rem",
+    },
     left: "50%",
     maxWidth: {
       default: null,
       [breakpoints.compact]: "94vw",
     },
-    top: {
-      default: "20vh",
-      [breakpoints.compact]: "27vh",
-    },
+    top: "auto",
   },
   telemetry: {
     backdropFilter: "blur(7px)",
@@ -157,6 +162,7 @@ export const styles = stylex.create({
     minWidth: {
       default: 224,
       [breakpoints.compact]: 174,
+      [breakpoints.tiny]: 155,
     },
     paddingBottom: {
       default: "0.8rem",
@@ -165,10 +171,12 @@ export const styles = stylex.create({
     paddingLeft: {
       default: "1.2rem",
       [breakpoints.compact]: "0.85rem",
+      [breakpoints.tiny]: "0.65rem",
     },
     paddingRight: {
       default: "1rem",
       [breakpoints.compact]: "0.72rem",
+      [breakpoints.tiny]: "0.6rem",
     },
     paddingTop: {
       default: "0.9rem",
@@ -177,10 +185,12 @@ export const styles = stylex.create({
     right: {
       default: "1.6rem",
       [breakpoints.compact]: "1rem",
+      [breakpoints.tiny]: "0.85rem",
     },
     top: {
       default: "4.5rem",
-      [breakpoints.compact]: "3.45rem",
+      [breakpoints.compact]: "3rem",
+      [breakpoints.tiny]: "2.85rem",
     },
   },
   progress: {
@@ -212,6 +222,7 @@ export const styles = stylex.create({
     gridTemplateColumns: {
       default: "auto minmax(7rem, 1fr) auto",
       [breakpoints.compact]: "auto minmax(5rem, 1fr) auto",
+      [breakpoints.tiny]: "auto minmax(4.4rem, 1fr) auto",
     },
   },
   label: {
@@ -238,6 +249,7 @@ export const styles = stylex.create({
     fontSize: {
       default: "1.65rem",
       [breakpoints.compact]: "1.25rem",
+      [breakpoints.tiny]: "1.12rem",
     },
     fontWeight: 600,
     letterSpacing: "0.02em",

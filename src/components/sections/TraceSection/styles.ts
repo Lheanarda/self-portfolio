@@ -18,13 +18,24 @@ export const styles = stylex.create({
     color: colors.ice,
     fontSize: {
       default: "clamp(3rem, 8vw, 7rem)",
-      [breakpoints.compact]: "clamp(2.5rem, 15vw, 4.5rem)",
+      [breakpoints.compact]: "clamp(2rem, 10vw, 4.5rem)",
     },
-    fontVariationSettings: '"wdth" 125',
+    fontVariationSettings: {
+      default: '"wdth" 125',
+      [breakpoints.compact]: '"wdth" 112',
+    },
     fontWeight: 760,
-    letterSpacing: "0.055em",
+    letterSpacing: {
+      default: "0.055em",
+      [breakpoints.compact]: "0.035em",
+    },
     lineHeight: 0.96,
+    overflowWrap: {
+      default: "normal",
+      [breakpoints.compact]: "anywhere",
+    },
     textTransform: "uppercase",
+    maxWidth: "100%",
     scrollMarginTop: "100px",
   },
   stratumSubtitle: {
@@ -38,6 +49,7 @@ export const styles = stylex.create({
     letterSpacing: {
       default: "0.3em",
       [breakpoints.compact]: "0.2em",
+      [breakpoints.tiny]: "0.16em",
     },
     lineHeight: 1.65,
     textTransform: "uppercase",
@@ -66,6 +78,7 @@ export const styles = stylex.create({
     fontSize: {
       default: "1.02rem",
       [breakpoints.compact]: "0.95rem",
+      [breakpoints.tiny]: "0.92rem",
     },
     lineHeight: 1.75,
     textWrap: "pretty",
@@ -138,13 +151,17 @@ export const styles = stylex.create({
     marginTop: "2.3rem",
   },
   principleItem: {
-    gap: "1.2rem",
+    gap: {
+      default: "1.2rem",
+      [breakpoints.tiny]: "0.8rem",
+    },
     paddingBlock: "1.35rem",
     paddingInline: "0",
     display: "grid",
     gridTemplateColumns: {
       default: "3rem minmax(12rem, 0.72fr) 1fr",
       [breakpoints.compact]: "2.5rem 1fr",
+      [breakpoints.tiny]: "2rem minmax(0, 1fr)",
     },
     borderBottomColor: "rgba(159, 195, 207, 0.28)",
     borderBottomStyle: "solid",
@@ -184,7 +201,10 @@ export const styles = stylex.create({
     marginTop: "2.4rem",
   },
   discipline: {
-    padding: "1.35rem",
+    padding: {
+      default: "1.35rem",
+      [breakpoints.tiny]: "1.1rem",
+    },
     borderBottomColor: "rgba(159, 195, 207, 0.28)",
     borderBottomStyle: "solid",
     borderBottomWidth: "1px",
@@ -210,6 +230,7 @@ export const styles = stylex.create({
     fontSize: "0.62rem",
     fontWeight: 500,
     letterSpacing: "0.06em",
+    overflowWrap: "anywhere",
     textTransform: "uppercase",
     marginTop: "0.7rem",
   },

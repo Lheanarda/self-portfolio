@@ -8,7 +8,10 @@ export const styles = stylex.create({
     display: "grid",
     fontFamily: fonts.mono,
     fontSize: "0.58rem",
-    gridTemplateColumns: "minmax(0, 1fr) auto",
+    gridTemplateColumns: {
+      default: "minmax(0, 1fr) auto",
+      [breakpoints.compact]: "1fr",
+    },
     letterSpacing: "0.14em",
     lineHeight: 1.8,
     position: "relative",
@@ -17,15 +20,6 @@ export const styles = stylex.create({
     paddingBottom: {
       default: "8rem",
       [breakpoints.compact]: "6rem",
-    },
-    paddingLeft: {
-      default: "clamp(6rem, 16vw, 20rem)",
-      [breakpoints.mediumOnly]: "clamp(4.5rem, 12vw, 8rem)",
-      [breakpoints.compact]: "1rem",
-    },
-    paddingRight: {
-      default: "clamp(1.2rem, 4vw, 4rem)",
-      [breakpoints.compact]: "1rem",
     },
     paddingTop: "2rem",
   },
@@ -48,8 +42,13 @@ export const styles = stylex.create({
       default: "inherit",
       ":hover": colors.biolume,
     },
+    justifySelf: {
+      default: "auto",
+      [breakpoints.compact]: "start",
+    },
     transitionDuration: "0.3s",
     transitionProperty: "color",
     transitionTimingFunction: motion.easeOut,
+    whiteSpace: "nowrap",
   },
 });

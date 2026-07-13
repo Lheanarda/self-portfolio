@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import { SectionKicker } from "@/components/ui/SectionKicker/SectionKicker";
 import type { PortfolioConfig } from "@/data/portfolio";
 import { externalLinkAttributes, journeyAttributes } from "@/lib/portfolio/presentation";
+import { layoutStyles } from "@/styles/layout";
 import { styles } from "./styles";
 
 type ContactSectionProps = Readonly<{
@@ -21,7 +22,11 @@ export function ContactSection({
 
   return (
     <section
-      {...stylex.props(styles.root, styles.drop(contact.journey.dropVh))}
+      {...stylex.props(
+        styles.root,
+        layoutStyles.contentGutter,
+        styles.drop(contact.journey.dropVh),
+      )}
       aria-labelledby={titleId}
     >
       <div

@@ -15,6 +15,7 @@ export const styles = stylex.create({
     paddingInline: {
       default: "2rem",
       [breakpoints.compact]: "1.3rem",
+      [breakpoints.tiny]: "1rem",
     },
     backdropFilter: {
       default: "blur(7px)",
@@ -29,6 +30,7 @@ export const styles = stylex.create({
     borderLeftStyle: "solid",
     borderLeftWidth: "1px",
     maxWidth: "38rem",
+    minWidth: 0,
     paddingBottom: {
       default: "1.9rem",
       [breakpoints.compact]: "1.4rem",
@@ -37,6 +39,7 @@ export const styles = stylex.create({
       default: "1.7rem",
       [breakpoints.compact]: "1.25rem",
     },
+    width: "100%",
     "::before": {
       animationDelay: "0.12s",
       animationDuration: "2.6s",

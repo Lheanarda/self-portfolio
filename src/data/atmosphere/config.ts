@@ -105,14 +105,16 @@ export const atmosphere = {
       label: "PRESS",
       initialValue: "····",
       unit: "ATM",
+      hideOnMobile: true,
     },
     {
       id: "temperature",
       label: "TEMP",
       initialValue: "····",
       unit: "°C",
+      hideOnMobile: true,
     },
-    { id: "elapsed", label: "M.E.T.", initialValue: "····" },
+    { id: "elapsed", label: "M.E.T.", initialValue: "····", hideOnMobile: true },
   ],
   elapsedPrefix: "T+",
   bottomReadouts: {
