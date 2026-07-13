@@ -205,10 +205,6 @@ export const styles = stylex.create({
     width: 2,
   },
   readout: {
-    gap: {
-      default: "0.65rem",
-      [breakpoints.compact]: "0.45rem",
-    },
     marginBlock: {
       default: "0.34rem",
       [breakpoints.compact]: "0.2rem",
@@ -218,12 +214,14 @@ export const styles = stylex.create({
       [breakpoints.compact]: 0,
     },
     alignItems: "baseline",
-    display: "grid",
-    gridTemplateColumns: {
-      default: "auto minmax(7rem, 1fr) auto",
-      [breakpoints.compact]: "auto minmax(5rem, 1fr) auto",
-      [breakpoints.tiny]: "auto minmax(4.4rem, 1fr) auto",
-    },
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  measurement: {
+    gap: "0.65rem",
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "flex-end",
   },
   label: {
     color: "rgba(159, 195, 207, 0.66)",
@@ -320,7 +318,7 @@ export const styles = stylex.create({
   },
   hideOnCompact: {
     display: {
-      default: null,
+      default: "flex",
       [breakpoints.compact]: "none",
     },
   },

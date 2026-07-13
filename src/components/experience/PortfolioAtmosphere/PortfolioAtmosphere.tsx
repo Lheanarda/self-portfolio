@@ -60,13 +60,15 @@ export function PortfolioAtmosphere({ copy }: Readonly<{ copy: AtmosphereCopy }>
               {...stylex.props(styles.readout, readout.hideOnMobile && styles.hideOnCompact)}
             >
               <span {...stylex.props(styles.label)}>{readout.label}</span>
-              <span
-                ref={readoutRefs[readout.id]}
-                {...stylex.props(styles.value, readout.primary && styles.primaryValue)}
-              >
-                {readout.initialValue}
+              <span {...stylex.props(styles.measurement)}>
+                <span
+                  ref={readoutRefs[readout.id]}
+                  {...stylex.props(styles.value, readout.primary && styles.primaryValue)}
+                >
+                  {readout.initialValue}
+                </span>
+                {readout.unit ? <span {...stylex.props(styles.unit)}>{readout.unit}</span> : null}
               </span>
-              {readout.unit ? <span {...stylex.props(styles.unit)}>{readout.unit}</span> : null}
             </div>
           ))}
         </div>
