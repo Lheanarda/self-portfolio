@@ -92,7 +92,7 @@ export const header = {
 export const hero = {
   eyebrow: "YOLO · Sophisticated Dreamer · Frontend engineer",
   title: profile.shortName,
-  note: "Design direction inspired by Susan Casey & Vescovo deep sea adventure",
+  note: "Design direction inspired by Susan Casey and Vescovo deep sea adventure",
   introduction: [
     {
       id: "one-piece",

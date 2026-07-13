@@ -62,7 +62,7 @@ export const styles = stylex.create({
     marginBottom: "1.6rem",
     maxWidth: {
       default: null,
-      [breakpoints.compact]: "28ch",
+      [breakpoints.compact]: "50ch",
     },
   },
   title: {
@@ -90,12 +90,11 @@ export const styles = stylex.create({
     },
   },
   note: {
-    color: "#eaf6f6",
+    color: "rgba(230, 241, 244, 0.85)",
     fontSize: {
       default: "1rem",
       [breakpoints.compact]: "0.6rem",
     },
-    fontStyle: "oblique",
     fontWeight: 200,
     letterSpacing: "0.1rem",
     marginTop: {
