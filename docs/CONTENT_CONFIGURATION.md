@@ -55,6 +55,10 @@ that renderer.
 Identity and contact facts live in `profile` and `contactLinks`. The email href is derived from
 `profile.email` and reused by the primary contact action, so the address has one authoritative value.
 
+Hero introductions use stable `{ id, text }` records. The first record is the statically rendered
+fallback; after hydration, one valid ID is selected and retained for the browser-tab session. IDs
+must remain unique and stable so reordering the list does not change an existing session's choice.
+
 Each section has one specialized `entry` plus zero or more generic `waypoints`. Edit the specialized
 entry to change its work/principles/disciplines layout. Edit `waypoints` to add or remove narrative
 cards without changing React:

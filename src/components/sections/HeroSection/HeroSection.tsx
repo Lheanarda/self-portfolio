@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import * as stylex from "@stylexjs/stylex";
 import type { PortfolioConfig } from "@/data/portfolio";
 import { anchorHref, isInternalHref } from "@/lib/portfolio/presentation";
+import { HeroIntroduction } from "./HeroIntroduction";
 import { styles } from "./styles";
-import { getRandomInt } from "@/lib/generic";
 
 type HeroSectionProps = Readonly<{
   hero: PortfolioConfig["hero"];
@@ -13,7 +13,6 @@ type HeroSectionProps = Readonly<{
 
 export function HeroSection({ hero, heroId, inlineSeparator }: HeroSectionProps) {
   const titleId = `${heroId}-title`;
-  const introduction = getRandomIntroduction(hero.introduction);
 
   return (
     <section {...stylex.props(styles.root)} id={heroId} aria-labelledby={titleId}>
@@ -30,9 +29,7 @@ export function HeroSection({ hero, heroId, inlineSeparator }: HeroSectionProps)
           <p {...stylex.props(styles.note, styles.arrival, styles.noteArrival)}>{hero.note}</p>
         ) : null}
 
-        <p {...stylex.props(styles.standfirst, styles.arrival, styles.standfirstArrival)}>
-          {introduction}
-        </p>
+        <HeroIntroduction introductions={hero.introduction} />
 
         <p {...stylex.props(styles.referenceLine, styles.arrival, styles.referenceArrival)}>
           {hero.refers.map((refer, index) => {
@@ -69,9 +66,4 @@ export function HeroSection({ hero, heroId, inlineSeparator }: HeroSectionProps)
       </div>
     </section>
   );
-}
-
-function getRandomIntroduction(list: readonly string[]) {
-  const randomIdx = getRandomInt(0, list.length - 1);
-  return list[randomIdx];
 }

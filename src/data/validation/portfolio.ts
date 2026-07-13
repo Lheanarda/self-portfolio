@@ -68,6 +68,18 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     "Navigation item ids",
   );
   config.header.navigation.items.forEach((item) => assertDomId(item.id, "Navigation item id"));
+  invariant(config.hero.introduction.length > 0, "At least one hero introduction is required.");
+  assertUnique(
+    config.hero.introduction.map((introduction) => introduction.id),
+    "Hero introduction ids",
+  );
+  config.hero.introduction.forEach((introduction) => {
+    assertDomId(introduction.id, "Hero introduction id");
+    invariant(
+      introduction.text.trim().length > 0,
+      `Hero introduction ${introduction.id} is empty.`,
+    );
+  });
 
   assertUnique(
     config.sections.map((section) => section.id),

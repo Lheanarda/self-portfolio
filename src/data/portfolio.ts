@@ -22,6 +22,7 @@ export type {
   CreatureId,
   DepthZone,
   DisciplinesSection,
+  HeroIntroduction,
   JourneyPoint,
   JourneyWaypoint,
   PortfolioConfig,

@@ -6,6 +6,11 @@ export type PortfolioLink = Readonly<{
   openInNewTab?: boolean;
 }>;
 
+export type HeroIntroduction = Readonly<{
+  id: string;
+  text: string;
+}>;
+
 export type AnchorLink = Readonly<{
   id: string;
   label: string;
@@ -251,7 +256,7 @@ export type PortfolioConfig = Readonly<{
     eyebrow: string;
     title: string;
     note?: string;
-    introduction: readonly string[];
+    introduction: readonly HeroIntroduction[];
     refers: readonly PortfolioLink[];
     callToAction: AnchorLink;
   }>;

@@ -88,14 +88,27 @@ export const hero = {
   eyebrow: "YOLO · Sophisticated Dreamer · Frontend engineer",
   title: profile.shortName,
   note: "Design direction inspired by Susan Casey & Vescovo deep sea adventure",
-  // a random generator for the introduction text will be placed,
-  // ultimately each session will only show one introduction
   introduction: [
-    "Say I was part of Naruto Great Ninja War, I would be a random ninja killed by Madara. Stupid enough to charge in front face to face againts him.",
-    "If I were born inside One Piece universe, I would be a nameless marine officer living paycheck to paycheck. Being hopeful the world will get better each day.",
-    "Have you ever wondered why humanity exist, why you exist? Yes I have and there are no concrete answers. We need to find it within ourself.",
-    "Most first impression toward me will say im rigid, awkward, or someone who is assertive. Partly because of my strong square jawline.",
-    "My favorite song is Alexandra by Reality Club, while my favorite melody is Gymnopedie No.1 by Erik Satie. Learnt piano for the sake to play it.",
+    {
+      id: "naruto",
+      text: "Say I was part of Naruto Great Ninja War, I would be a random ninja killed by Madara. Stupid enough to charge in front face to face againts him.",
+    },
+    {
+      id: "one-piece",
+      text: "If I were born inside One Piece universe, I would be a nameless marine officer living paycheck to paycheck. Being hopeful the world will get better each day.",
+    },
+    {
+      id: "existence",
+      text: "Have you ever wondered why humanity exist, why you exist? Yes I have and there are no concrete answers. We need to find it within ourself.",
+    },
+    {
+      id: "first-impression",
+      text: "Most first impression toward me will say im rigid, awkward, or someone who is assertive. Partly because of my strong square jawline.",
+    },
+    {
+      id: "music",
+      text: "My favorite song is Alexandra by Reality Club, while my favorite melody is Gymnopedie No.1 by Erik Satie. Learnt piano for the sake to play it.",
+    },
   ],
   refers: profile.refer,
   callToAction: {
