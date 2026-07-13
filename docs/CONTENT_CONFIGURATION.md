@@ -123,6 +123,18 @@ Protocol layouts use `{ id, title, description }`. Specimen layouts use
 `{ id, title, signal, description }`. Repeated-item numbers and count statuses update from array
 length and order. Log layouts use narrative paragraphs, focus tags, and an optional context panel.
 
+## Ocean narrative sources
+
+The depth stories are editorial summaries grounded in authoritative ocean references. Preserve that
+factual basis when changing ranges, conditions, or species records:
+
+- [NOAA Ocean Service — How far does light travel in the ocean?](https://oceanservice.noaa.gov/facts/light_travel.html)
+- [NOAA Ocean Exploration — What is marine snow?](https://oceanexplorer.noaa.gov/ocean-fact/marinesnow/)
+- [NOAA Ocean Exploration — What is the deep scattering layer?](https://oceanexplorer.noaa.gov/ocean-fact/dsl/)
+- [Smithsonian Ocean — The Deep Sea](https://ocean.si.edu/ecosystems/deep-sea/deep-sea)
+- [Woods Hole Oceanographic Institution — Hadal Zone](https://www.whoi.edu/ocean-learning-hub/ocean-topics/how-the-ocean-works/ocean-zones/hadal-zone/)
+- [MBARI — Snailfish](https://www.mbari.org/animal/snailfish/)
+
 ## Editing the descent
 
 The physical HUD and Canvas scene derive from authored data:

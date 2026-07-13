@@ -75,7 +75,7 @@ export const header = {
   navigation: {
     ariaLabel: "Primary navigation",
     items: [
-      { id: "epilagic", label: "Sunlight", targetId: sectionIds.sunlight },
+      { id: "epipelagic", label: "Sunlight", targetId: sectionIds.sunlight },
       { id: "mesopelagic", label: "Twilight", targetId: sectionIds.twilight, hideOnMobile: true },
       {
         id: "bathypelagic",
@@ -118,7 +118,7 @@ export const hero = {
   refers: profile.refer,
   callToAction: {
     id: "begin-trace",
-    label: "Begin trace",
+    label: "Begin descent",
     targetId: sectionIds.sunlight,
     symbol: symbols.down,
   },
@@ -126,12 +126,20 @@ export const hero = {
 export const contact = {
   id: sectionIds.contact,
   journey: { depth: 10911, elapsedMinutes: 258, dropVh: 115 },
-  kicker: "Contact · End of trace",
-  title: "Build something clear.",
+  kicker: "Contact · 10,911 m · Trench floor",
+  title: "A signal from the bottom.",
   paragraphs: [
     {
+      id: "bottom",
+      text: "The modeled descent ends near the deepest measured point of the Mariana Trench. The vehicle's lamps reveal only a small field of sediment while almost eleven kilometers of water press above it. There is no panoramic view—only a bright patch, a dark horizon, and instruments confirming that the bottom is real.",
+    },
+    {
+      id: "connected-ocean",
+      text: "The layers passed on the way down were never separate worlds. Surface light became living tissue, living tissue became falling particles, and trenches gathered part of what survived the journey. Even here, in permanent night, the surface remains present as food, chemistry, and history.",
+    },
+    {
       id: "invitation",
-      text: "If the problem is complex, the constraints are real, and the interface needs to hold together, I would like to hear about it.",
+      text: "This is the end of the trace, not the end of the ocean. If the story left you with a question, an observation, or an idea worth bringing back to the surface, send a signal.",
     },
   ],
   primaryLink: emailLink,
