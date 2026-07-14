@@ -85,13 +85,14 @@ export const styles = stylex.create({
       [breakpoints.reducedMotion]: "none",
     },
     animationTimingFunction: "ease-in-out",
-    filter: "drop-shadow(0 13px 18px rgba(0, 0, 0, 0.38))",
+    filter:
+      "drop-shadow(0 12px 18px rgba(0, 9, 18, 0.22)) drop-shadow(0 0 12px rgba(105, 196, 204, 0.08))",
     position: "absolute",
     transformOrigin: "50% 48%",
   },
   assemblyNavigating: {
     filter:
-      "drop-shadow(0 13px 18px rgba(0, 0, 0, 0.38)) drop-shadow(0 0 12px rgba(100, 240, 210, 0.2))",
+      "drop-shadow(0 12px 18px rgba(0, 9, 18, 0.22)) drop-shadow(0 0 12px rgba(105, 196, 204, 0.08)) drop-shadow(0 0 12px rgba(100, 240, 210, 0.14))",
   },
   assemblyHeld: {
     animationPlayState: "paused",
@@ -101,6 +102,11 @@ export const styles = stylex.create({
     display: "block",
     height: "100%",
     width: "100%",
+  },
+  submergedBody: {
+    filter:
+      "blur(0.18px) saturate(0.68) contrast(0.84) brightness(0.84) drop-shadow(0 0 4px rgba(105, 196, 204, 0.12))",
+    opacity: 0.74,
   },
   lightBeam: {
     animationDuration: "5.6s",
