@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 import { atmosphereGeometry } from "./geometry.stylex";
 
-export const TELEMETRY_TOP_OFFSIDE = "-10rem";
+export const TELEMETRY_TRANSITION_DURATION_MS = 1000;
 
 const sonarRing = stylex.keyframes({
   "0%": {
@@ -151,8 +151,11 @@ export const styles = stylex.create({
     pointerEvents: "none",
     position: "fixed",
     textAlign: "right",
-    transform: `translateY(${TELEMETRY_TOP_OFFSIDE})`,
-    transitionDuration: "1s",
+    transform: {
+      default: "translateY(-10rem)",
+      [breakpoints.compact]: "translateY(-0.75rem)",
+    },
+    transitionDuration: `${TELEMETRY_TRANSITION_DURATION_MS}ms`,
     transitionProperty: "opacity, transform",
     transitionTimingFunction: motion.easeOut,
     zIndex: 9,

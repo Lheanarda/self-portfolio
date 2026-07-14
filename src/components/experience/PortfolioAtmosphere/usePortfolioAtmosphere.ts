@@ -11,7 +11,7 @@ import {
 } from "./depth-model";
 import { ambientColor, PortfolioSea } from "./sea";
 import { atmosphereGeometry } from "./geometry.stylex";
-import { TELEMETRY_TOP_OFFSIDE } from "./PortfolioAtmosphere.styles";
+import { TELEMETRY_TRANSITION_DURATION_MS } from "./PortfolioAtmosphere.styles";
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -364,11 +364,15 @@ export function usePortfolioAtmosphere({
         });
       } else {
         telemetry.style.opacity = "0";
-        telemetry.style.transform = `translateY(${TELEMETRY_TOP_OFFSIDE})`;
-        telemetryHideTimer = schedule(() => {
-          if (!telemetryVisible) telemetry.style.visibility = "hidden";
-          telemetryHideTimer = undefined;
-        }, 240);
+        telemetry.style.removeProperty("transform");
+        if (reducedMotion) {
+          telemetry.style.visibility = "hidden";
+        } else {
+          telemetryHideTimer = schedule(() => {
+            if (!telemetryVisible) telemetry.style.visibility = "hidden";
+            telemetryHideTimer = undefined;
+          }, TELEMETRY_TRANSITION_DURATION_MS);
+        }
       }
     };
 
