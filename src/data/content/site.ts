@@ -119,6 +119,14 @@ export const hero = {
     symbol: symbols.down,
   },
 } as const;
+export const experience = {
+  limitingFactor: {
+    ariaLabel:
+      "Limiting Factor expedition vehicle. Drag to reposition, use arrow keys when focused, or activate to send a sonar ping.",
+    instruction: "Drag to reposition. Arrow keys move the vehicle; hold Shift for a larger step.",
+    // callSign: "Limiting Factor",
+  },
+} as const;
 export const contact = {
   id: sectionIds.contact,
   journey: { depth: 10911, elapsedMinutes: 258, dropVh: 115 },

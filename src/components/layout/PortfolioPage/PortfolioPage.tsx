@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { LimitingFactor } from "@/components/experience/LimitingFactor/LimitingFactor";
 import { PortfolioAtmosphere } from "@/components/experience/PortfolioAtmosphere/PortfolioAtmosphere";
 import { RevealController } from "@/components/experience/RevealController/RevealController";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
@@ -20,6 +21,7 @@ export function PortfolioPage({ config }: PortfolioPageProps) {
     anchors,
     atmosphere,
     contact,
+    experience,
     footer,
     header,
     hero,
@@ -32,6 +34,7 @@ export function PortfolioPage({ config }: PortfolioPageProps) {
     <div {...stylex.props(styles.page)}>
       <SkipLink label={accessibility.skipToContent} targetId={anchors.mainContent} />
       <PortfolioAtmosphere copy={atmosphere} />
+      <LimitingFactor copy={experience.limitingFactor} />
       <RevealController />
       <SiteHeader header={header} statusSeparator={symbols.statusSeparator} />
 

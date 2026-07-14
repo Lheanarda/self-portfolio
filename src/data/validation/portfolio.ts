@@ -80,6 +80,9 @@ function validatePortfolioConfig(config: PortfolioConfig) {
       `Hero introduction ${introduction.id} is empty.`,
     );
   });
+  Object.entries(config.experience.limitingFactor).forEach(([key, value]) => {
+    invariant(value.trim().length > 0, `Limiting Factor ${key} cannot be empty.`);
+  });
 
   assertUnique(
     config.sections.map((section) => section.id),

@@ -206,6 +206,12 @@ export type AtmosphereCopy = Readonly<{
   }>;
 }>;
 
+export type LimitingFactorCopy = Readonly<{
+  ariaLabel: string;
+  instruction: string;
+  callSign?: string;
+}>;
+
 export type PortfolioConfig = Readonly<{
   metadata: Readonly<{
     title: string;
@@ -259,6 +265,9 @@ export type PortfolioConfig = Readonly<{
     introduction: readonly HeroIntroduction[];
     refers: readonly PortfolioLink[];
     callToAction: AnchorLink;
+  }>;
+  experience: Readonly<{
+    limitingFactor: LimitingFactorCopy;
   }>;
   sections: readonly PortfolioSection[];
   contact: Readonly<{
