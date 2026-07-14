@@ -37,7 +37,7 @@ export const styles = stylex.create({
     },
     paddingBottom: {
       default: "clamp(5rem, 14vh, 9rem)",
-      [breakpoints.compact]: "20vh",
+      [breakpoints.compact]: "30vh",
     },
     paddingTop: 0,
   },
