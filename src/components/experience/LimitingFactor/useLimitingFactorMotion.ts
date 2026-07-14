@@ -50,6 +50,9 @@ type MotionStyle = CSSProperties & {
   "--limiting-factor-y": string;
   "--limiting-factor-duration": string;
   "--limiting-factor-roll": string;
+  "--limiting-factor-pressure-scale-x": string;
+  "--limiting-factor-pressure-scale-y": string;
+  "--limiting-factor-pressure-offset-y": string;
 };
 
 const DRAG_THRESHOLD_PX = 8;
@@ -58,6 +61,11 @@ const KEYBOARD_LARGE_STEP_PX = 34;
 const USER_IDLE_DELAY_MS = 3200;
 const AUTONOMOUS_DWELL_MIN_MS = 1500;
 const AUTONOMOUS_DWELL_VARIANCE_MS = 1600;
+const SCROLL_PRESSURE_FULL_DELTA_PX = 48;
+const SCROLL_PRESSURE_SETTLE_DELAY_MS = 120;
+const SCROLL_PRESSURE_HORIZONTAL_SCALE = 0.024;
+const SCROLL_PRESSURE_VERTICAL_SCALE = 0.035;
+const SCROLL_PRESSURE_TRAVEL_PX = 4;
 
 export function useLimitingFactorMotion(onActivate: () => void) {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -72,6 +80,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
   const [documentHidden, setDocumentHidden] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [scrollPressure, setScrollPressure] = useState(0);
   const [motion, setMotion] = useState<MotionState>({
     position: { x: 0, y: 0 },
     durationMs: 0,
@@ -165,6 +174,47 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     document.addEventListener("visibilitychange", syncVisibility);
     return () => document.removeEventListener("visibilitychange", syncVisibility);
   }, [freezeAtRenderedPosition]);
+
+  useEffect(() => {
+    let previousScrollY = window.scrollY;
+    let pendingDelta = 0;
+    let frameId = 0;
+    let settleTimer: number | undefined;
+
+    const settle = () => {
+      settleTimer = undefined;
+      setScrollPressure(0);
+    };
+    const applyPressure = () => {
+      frameId = 0;
+      const pressure = Math.max(-1, Math.min(1, pendingDelta / SCROLL_PRESSURE_FULL_DELTA_PX));
+      pendingDelta = 0;
+      if (Math.abs(pressure) < 0.02) return;
+
+      setScrollPressure(pressure);
+      if (settleTimer) window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(settle, SCROLL_PRESSURE_SETTLE_DELAY_MS);
+    };
+    const handleScroll = () => {
+      const nextScrollY = window.scrollY;
+      pendingDelta += nextScrollY - previousScrollY;
+      previousScrollY = nextScrollY;
+
+      if (reducedMotion || documentHidden) {
+        pendingDelta = 0;
+        return;
+      }
+      if (!frameId) frameId = window.requestAnimationFrame(applyPressure);
+    };
+
+    if (reducedMotion || documentHidden) setScrollPressure(0);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      if (settleTimer) window.clearTimeout(settleTimer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [documentHidden, reducedMotion]);
 
   useEffect(() => {
     let frameId = 0;
@@ -386,6 +436,13 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     "--limiting-factor-y": `${motion.position.y}px`,
     "--limiting-factor-duration": `${motion.durationMs}ms`,
     "--limiting-factor-roll": `${motion.rollDegrees}deg`,
+    "--limiting-factor-pressure-scale-x": String(
+      1 + scrollPressure * SCROLL_PRESSURE_HORIZONTAL_SCALE,
+    ),
+    "--limiting-factor-pressure-scale-y": String(
+      1 - scrollPressure * SCROLL_PRESSURE_VERTICAL_SCALE,
+    ),
+    "--limiting-factor-pressure-offset-y": `${-scrollPressure * SCROLL_PRESSURE_TRAVEL_PX}px`,
   } as MotionStyle;
 
   return {

@@ -26,6 +26,7 @@ export function LimitingFactorVessel({
           isDragging && styles.assemblyHeld,
         )}
         aria-hidden="true"
+        data-limiting-factor-pressure=""
       >
         <svg {...stylex.props(styles.vessel)} viewBox="0 0 160 210" focusable="false">
           <defs>
@@ -38,7 +39,7 @@ export function LimitingFactorVessel({
           </defs>
           <path
             {...stylex.props(styles.lightBeam)}
-            d="M52 137 25 210h48l3-73Z"
+            d="M52 142 25 210h48l-17-68Z"
             fill={`url(#${lightBeamGradientId})`}
           />
           <path

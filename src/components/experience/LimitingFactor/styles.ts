@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
-import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
+import { breakpoints, fonts, motion } from "@/styles/tokens.stylex";
+import { limitingFactorColors } from "./config.stylex";
 
 const neutralBuoyancy = stylex.keyframes({
   "0%, 100%": { transform: "translate3d(-2px, 3px, 0) rotate(-0.8deg)" },
@@ -63,8 +64,8 @@ export const styles = stylex.create({
   control: {
     padding: 0,
     borderWidth: 0,
-    backgroundColor: "transparent",
-    color: colors.iceBright,
+    backgroundColor: limitingFactorColors.transparent,
+    color: limitingFactorColors.iceBright,
     cursor: "grab",
     pointerEvents: "auto",
     position: "relative",
@@ -85,14 +86,26 @@ export const styles = stylex.create({
       [breakpoints.reducedMotion]: "none",
     },
     animationTimingFunction: "ease-in-out",
-    filter:
-      "drop-shadow(0 12px 18px rgba(0, 9, 18, 0.22)) drop-shadow(0 0 12px rgba(105, 196, 204, 0.08))",
+    filter: `drop-shadow(0 12px 18px ${limitingFactorColors.depthShadow}) drop-shadow(0 0 12px ${limitingFactorColors.ambientWaterGlow})`,
     position: "absolute",
+    scale: {
+      default: "var(--limiting-factor-pressure-scale-x) var(--limiting-factor-pressure-scale-y)",
+      [breakpoints.reducedMotion]: "1",
+    },
     transformOrigin: "50% 48%",
+    transitionDuration: {
+      default: "180ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    transitionProperty: "scale, translate",
+    transitionTimingFunction: motion.easeOut,
+    translate: {
+      default: "0 var(--limiting-factor-pressure-offset-y)",
+      [breakpoints.reducedMotion]: "none",
+    },
   },
   assemblyNavigating: {
-    filter:
-      "drop-shadow(0 12px 18px rgba(0, 9, 18, 0.22)) drop-shadow(0 0 12px rgba(105, 196, 204, 0.08)) drop-shadow(0 0 12px rgba(100, 240, 210, 0.14))",
+    filter: `drop-shadow(0 12px 18px ${limitingFactorColors.depthShadow}) drop-shadow(0 0 12px ${limitingFactorColors.ambientWaterGlow}) drop-shadow(0 0 12px ${limitingFactorColors.navigationGlow})`,
   },
   assemblyHeld: {
     animationPlayState: "paused",
@@ -104,8 +117,7 @@ export const styles = stylex.create({
     width: "100%",
   },
   submergedBody: {
-    filter:
-      "blur(0.18px) saturate(0.68) contrast(0.84) brightness(0.84) drop-shadow(0 0 4px rgba(105, 196, 204, 0.12))",
+    filter: `blur(0.18px) saturate(0.68) contrast(0.84) brightness(0.84) drop-shadow(0 0 4px ${limitingFactorColors.bodyWaterGlow})`,
     opacity: 0.74,
   },
   lightBeam: {
@@ -119,69 +131,69 @@ export const styles = stylex.create({
     opacity: 0.38,
   },
   lightBeamSource: {
-    stopColor: colors.floodlight,
+    stopColor: limitingFactorColors.floodlight,
     stopOpacity: 0.92,
   },
   lightBeamMid: {
-    stopColor: colors.floodlight,
+    stopColor: limitingFactorColors.floodlight,
     stopOpacity: 0.52,
   },
   lightBeamWater: {
-    stopColor: colors.ice,
+    stopColor: limitingFactorColors.ice,
     stopOpacity: 0.16,
   },
   lightBeamFade: {
-    stopColor: colors.ice,
+    stopColor: limitingFactorColors.ice,
     stopOpacity: 0,
   },
   structuralFrame: {
-    fill: "rgba(8, 37, 45, 0.96)",
-    stroke: colors.ice,
+    fill: limitingFactorColors.structuralFrame,
+    stroke: limitingFactorColors.ice,
     strokeWidth: 2,
   },
   equipmentPanel: {
-    fill: "rgba(4, 21, 38, 0.98)",
-    stroke: "rgba(159, 195, 207, 0.7)",
+    fill: limitingFactorColors.equipmentPanel,
+    stroke: limitingFactorColors.equipmentOutline,
     strokeWidth: 1.5,
   },
   pressureHull: {
-    fill: "rgba(213, 228, 232, 0.94)",
-    stroke: colors.iceBright,
+    fill: limitingFactorColors.pressureHull,
+    stroke: limitingFactorColors.iceBright,
     strokeWidth: 2.2,
   },
   pressureHullShade: {
-    fill: "rgba(70, 104, 111, 0.38)",
+    fill: limitingFactorColors.pressureHullShade,
   },
   viewport: {
-    fill: colors.midnight,
-    stroke: colors.biolume,
+    fill: limitingFactorColors.viewport,
+    stroke: limitingFactorColors.biolume,
     strokeWidth: 1.8,
   },
   viewportGlint: {
-    fill: "rgba(230, 241, 244, 0.82)",
+    fill: limitingFactorColors.viewportGlint,
   },
   warmPanel: {
-    fill: colors.floodlight,
+    fill: limitingFactorColors.floodlight,
     opacity: 0.78,
   },
   detailLine: {
     fill: "none",
-    stroke: "rgba(4, 21, 38, 0.72)",
+    stroke: limitingFactorColors.detailLine,
     strokeLinecap: "round",
     strokeWidth: 1.4,
   },
   outerDetailLine: {
     fill: "none",
-    stroke: "rgba(159, 195, 207, 0.7)",
+    stroke: limitingFactorColors.equipmentOutline,
     strokeLinecap: "round",
     strokeWidth: 1.4,
   },
   lamp: {
-    fill: colors.floodlight,
-    filter: "drop-shadow(0 0 5px rgba(255, 233, 196, 0.82))",
+    fill: limitingFactorColors.floodlight,
+    filter: `drop-shadow(0 0 5px ${limitingFactorColors.lampGlow})`,
   },
   instrument: {
-    fill: colors.biolume,
+    fill: limitingFactorColors.biolume,
     animationDuration: "2.8s",
     animationIterationCount: "infinite",
     animationName: {
@@ -189,7 +201,7 @@ export const styles = stylex.create({
       [breakpoints.reducedMotion]: "none",
     },
     animationTimingFunction: "ease-in-out",
-    filter: "drop-shadow(0 0 4px rgba(100, 240, 210, 0.78))",
+    filter: `drop-shadow(0 0 4px ${limitingFactorColors.instrumentGlow})`,
   },
   particulateField: {
     overflow: "hidden",
@@ -209,8 +221,8 @@ export const styles = stylex.create({
       [breakpoints.reducedMotion]: "none",
     },
     animationTimingFunction: "linear",
-    backgroundColor: "rgba(255, 233, 196, 0.72)",
-    boxShadow: "0 0 5px rgba(255, 233, 196, 0.38)",
+    backgroundColor: limitingFactorColors.particle,
+    boxShadow: `0 0 5px ${limitingFactorColors.particleGlow}`,
     opacity: 0,
     position: "absolute",
     height: 2,
@@ -231,14 +243,14 @@ export const styles = stylex.create({
     top: "46%",
   },
   callSign: {
-    borderColor: "rgba(100, 240, 210, 0.28)",
+    borderColor: limitingFactorColors.callSignBorder,
     borderStyle: "solid",
     borderWidth: 1,
     paddingBlock: "0.27rem",
     paddingInline: "0.42rem",
     backdropFilter: "blur(7px)",
-    backgroundColor: "rgba(1, 9, 14, 0.78)",
-    color: colors.biolume,
+    backgroundColor: limitingFactorColors.callSignPanel,
+    color: limitingFactorColors.biolume,
     fontFamily: fonts.mono,
     fontSize: {
       default: "0.48rem",
@@ -253,7 +265,7 @@ export const styles = stylex.create({
     left: "50%",
   },
   signalRing: {
-    borderColor: "rgba(100, 240, 210, 0.8)",
+    borderColor: limitingFactorColors.signalBorder,
     borderRadius: "50%",
     borderStyle: "solid",
     borderWidth: 1,
@@ -264,7 +276,7 @@ export const styles = stylex.create({
     animationFillMode: "forwards",
     animationName: signalRing,
     animationTimingFunction: motion.easeOut,
-    boxShadow: "0 0 18px rgba(100, 240, 210, 0.24)",
+    boxShadow: `0 0 18px ${limitingFactorColors.signalGlow}`,
     pointerEvents: "none",
     position: "absolute",
     transform: "translate(-50%, -50%) scale(0.18)",
