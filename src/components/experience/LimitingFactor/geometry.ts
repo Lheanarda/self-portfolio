@@ -2,14 +2,44 @@ export type Point = Readonly<{ x: number; y: number }>;
 export type Size = Readonly<{ width: number; height: number }>;
 export type Insets = Readonly<{ top: number; right: number; bottom: number; left: number }>;
 export type Bounds = Readonly<{ minX: number; maxX: number; minY: number; maxY: number }>;
+export type AutonomousMotionProfile = Readonly<{
+  initialDelayMs: number;
+  dwellMinimumMs: number;
+  dwellVarianceMs: number;
+  minimumTravelPx: number;
+  horizontalTravelPx: number;
+  verticalTravelPx: number;
+  speedPxPerSecond: number;
+  minimumDurationMs: number;
+  maximumDurationMs: number;
+}>;
 
 export const WIDE_SAFE_INSETS: Insets = { top: 92, right: 24, bottom: 68, left: 54 };
 export const COMPACT_SAFE_INSETS: Insets = { top: 72, right: 12, bottom: 56, left: 12 };
 
-const MIN_AUTONOMOUS_TRAVEL_PX = 58;
-const MAX_HORIZONTAL_TRAVEL_PX = 118;
-const MAX_VERTICAL_TRAVEL_PX = 148;
-const AUTONOMOUS_SPEED_PX_PER_SECOND = 18;
+export const WIDE_AUTONOMOUS_MOTION: AutonomousMotionProfile = {
+  initialDelayMs: 2200,
+  dwellMinimumMs: 900,
+  dwellVarianceMs: 900,
+  minimumTravelPx: 58,
+  horizontalTravelPx: 118,
+  verticalTravelPx: 148,
+  speedPxPerSecond: 18,
+  minimumDurationMs: 4200,
+  maximumDurationMs: 10500,
+};
+
+export const COMPACT_AUTONOMOUS_MOTION: AutonomousMotionProfile = {
+  initialDelayMs: 4000,
+  dwellMinimumMs: 2200,
+  dwellVarianceMs: 1600,
+  minimumTravelPx: 22,
+  horizontalTravelPx: 40,
+  verticalTravelPx: 52,
+  speedPxPerSecond: 8,
+  minimumDurationMs: 4800,
+  maximumDurationMs: 8200,
+};
 
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(maximum, Math.max(minimum, value));
@@ -57,21 +87,22 @@ function boundedRandom(random: () => number) {
 }
 
 /**
- * Returns a balanced waypoint inside the patrol area around `anchor`. Injecting `random` keeps the
- * geometry deterministic in tests while production can use `Math.random`.
+ * Returns a balanced waypoint inside `profile`'s patrol area around `anchor` and within `bounds`.
+ * Injecting `random` keeps the geometry deterministic in tests while production uses `Math.random`.
  */
 export function autonomousTarget(
   current: Point,
   anchor: Point,
   bounds: Bounds,
+  profile: AutonomousMotionProfile,
   random: () => number = Math.random,
 ): Point {
   let bestCandidate = clampPosition(current, bounds);
   let bestDistance = 0;
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
-    const horizontal = (boundedRandom(random) * 2 - 1) * MAX_HORIZONTAL_TRAVEL_PX;
-    const vertical = (boundedRandom(random) * 2 - 1) * MAX_VERTICAL_TRAVEL_PX;
+    const horizontal = (boundedRandom(random) * 2 - 1) * profile.horizontalTravelPx;
+    const vertical = (boundedRandom(random) * 2 - 1) * profile.verticalTravelPx;
     const candidate = clampPosition({ x: anchor.x + horizontal, y: anchor.y + vertical }, bounds);
     const distance = distanceBetween(current, candidate);
 
@@ -79,16 +110,16 @@ export function autonomousTarget(
       bestCandidate = candidate;
       bestDistance = distance;
     }
-    if (distance >= MIN_AUTONOMOUS_TRAVEL_PX) return candidate;
+    if (distance >= profile.minimumTravelPx) return candidate;
   }
 
-  if (bestDistance >= MIN_AUTONOMOUS_TRAVEL_PX) return bestCandidate;
+  if (bestDistance >= profile.minimumTravelPx) return bestCandidate;
 
   const fallbackCandidates = [
-    { x: anchor.x - MAX_HORIZONTAL_TRAVEL_PX, y: current.y },
-    { x: anchor.x + MAX_HORIZONTAL_TRAVEL_PX, y: current.y },
-    { x: current.x, y: anchor.y - MAX_VERTICAL_TRAVEL_PX },
-    { x: current.x, y: anchor.y + MAX_VERTICAL_TRAVEL_PX },
+    { x: anchor.x - profile.horizontalTravelPx, y: current.y },
+    { x: anchor.x + profile.horizontalTravelPx, y: current.y },
+    { x: current.x, y: anchor.y - profile.verticalTravelPx },
+    { x: current.x, y: anchor.y + profile.verticalTravelPx },
   ].map((candidate) => clampPosition(candidate, bounds));
 
   return fallbackCandidates.reduce((farthest, candidate) =>
@@ -96,9 +127,9 @@ export function autonomousTarget(
   );
 }
 
-export function autonomousDurationMs(from: Point, to: Point) {
-  const travelMs = (distanceBetween(from, to) / AUTONOMOUS_SPEED_PX_PER_SECOND) * 1000;
-  return Math.round(clamp(travelMs, 4200, 10500));
+export function autonomousDurationMs(from: Point, to: Point, profile: AutonomousMotionProfile) {
+  const travelMs = (distanceBetween(from, to) / profile.speedPxPerSecond) * 1000;
+  return Math.round(clamp(travelMs, profile.minimumDurationMs, profile.maximumDurationMs));
 }
 
 export function travelRollDegrees(from: Point, to: Point) {

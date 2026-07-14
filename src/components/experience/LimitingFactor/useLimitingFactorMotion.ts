@@ -16,10 +16,12 @@ import {
   autonomousDurationMs,
   autonomousTarget,
   clampPosition,
+  COMPACT_AUTONOMOUS_MOTION,
   COMPACT_SAFE_INSETS,
   defaultPosition,
   travelRollDegrees,
   viewportBounds,
+  WIDE_AUTONOMOUS_MOTION,
   WIDE_SAFE_INSETS,
   type Bounds,
   type Point,
@@ -58,14 +60,19 @@ type MotionStyle = CSSProperties & {
 const DRAG_THRESHOLD_PX = 8;
 const KEYBOARD_STEP_PX = 14;
 const KEYBOARD_LARGE_STEP_PX = 34;
-const USER_IDLE_DELAY_MS = 2200;
-const AUTONOMOUS_DWELL_MIN_MS = 900;
-const AUTONOMOUS_DWELL_VARIANCE_MS = 900;
 const SCROLL_PRESSURE_FULL_DELTA_PX = 48;
 const SCROLL_PRESSURE_SETTLE_DELAY_MS = 120;
 const SCROLL_PRESSURE_HORIZONTAL_SCALE = 0.024;
 const SCROLL_PRESSURE_VERTICAL_SCALE = 0.035;
 const SCROLL_PRESSURE_TRAVEL_PX = 4;
+
+function isCompactViewport() {
+  return window.innerWidth <= breakpoints.compactWidth;
+}
+
+function autonomousMotionForViewport() {
+  return isCompactViewport() ? COMPACT_AUTONOMOUS_MOTION : WIDE_AUTONOMOUS_MOTION;
+}
 
 export function useLimitingFactorMotion(onActivate: () => void) {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -119,7 +126,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     const frame = frameRef.current;
     if (!frame) return null;
 
-    const compact = window.innerWidth <= breakpoints.compactWidth;
+    const compact = isCompactViewport();
     return viewportBounds(
       { width: window.innerWidth, height: window.innerHeight },
       { width: frame.offsetWidth, height: frame.offsetHeight },
@@ -254,10 +261,11 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       return () => window.clearTimeout(settleTimer);
     }
 
+    const profile = autonomousMotionForViewport();
     const delay =
       motion.source === "settled"
-        ? AUTONOMOUS_DWELL_MIN_MS + Math.random() * AUTONOMOUS_DWELL_VARIANCE_MS
-        : USER_IDLE_DELAY_MS;
+        ? profile.dwellMinimumMs + Math.random() * profile.dwellVarianceMs
+        : profile.initialDelayMs;
     const navigationTimer = window.setTimeout(() => {
       if (pauseReasonsRef.current.size > 0 || document.visibilityState === "hidden") return;
 
@@ -265,10 +273,10 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       if (!bounds) return;
       const current = clampPosition(positionRef.current, bounds);
       const anchor = clampPosition(anchorPositionRef.current, bounds);
-      const target = autonomousTarget(current, anchor, bounds);
+      const target = autonomousTarget(current, anchor, bounds, profile);
       commitMotion(
         target,
-        autonomousDurationMs(current, target),
+        autonomousDurationMs(current, target, profile),
         travelRollDegrees(current, target),
         "autonomous",
       );

@@ -24,6 +24,7 @@ export const motion = stylex.defineConsts({
 /** Compile-time conditions shared by view styles and the canvas controller. */
 export const breakpoints = stylex.defineConsts({
   compact: "@media (max-width: 720px)",
+  compactMotion: "@media (max-width: 720px) and (prefers-reduced-motion: no-preference)",
   narrow: "@media (max-width: 480px)",
   tiny: "@media (max-width: 360px)",
   mediumDown: "@media (max-width: 960px)",

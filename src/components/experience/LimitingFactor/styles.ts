@@ -9,6 +9,13 @@ const neutralBuoyancy = stylex.keyframes({
   "74%": { transform: "translate3d(-3px, 5px, 0) rotate(-0.45deg)" },
 });
 
+const compactNeutralBuoyancy = stylex.keyframes({
+  "0%, 100%": { transform: "translate3d(-2px, 2px, 0) rotate(-0.5deg)" },
+  "23%": { transform: "translate3d(2px, -3px, 0) rotate(0.2deg)" },
+  "49%": { transform: "translate3d(3px, 1px, 0) rotate(0.55deg)" },
+  "74%": { transform: "translate3d(-2px, 3px, 0) rotate(-0.3deg)" },
+});
+
 const lightBreathing = stylex.keyframes({
   "0%, 100%": { opacity: 0.5 },
   "52%": { opacity: 0.8 },
@@ -80,10 +87,14 @@ export const styles = stylex.create({
   },
   vesselAssembly: {
     inset: "0 0 1.2rem",
-    animationDuration: "7.2s",
+    animationDuration: {
+      default: "7.2s",
+      [breakpoints.compactMotion]: "10.8s",
+    },
     animationIterationCount: "infinite",
     animationName: {
       default: neutralBuoyancy,
+      [breakpoints.compactMotion]: compactNeutralBuoyancy,
       [breakpoints.reducedMotion]: "none",
     },
     animationTimingFunction: "ease-in-out",
