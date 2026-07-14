@@ -6,7 +6,8 @@ editorial copy.
 
 The boundary is deliberate:
 
-- `src/data/content/site.ts` owns identity, chrome, metadata, hero, contact, footer, and visible symbols.
+- `src/data/content/site.ts` owns identity, chrome, metadata, hero, contact, footer, visible symbols,
+  and copy for the Limiting Factor expedition control.
 - `src/data/content/sections.ts` owns ordered sections and their authored depth/time waypoints.
 - `src/data/atmosphere/config.ts` owns scene thresholds, creature placement, and telemetry copy.
 - `src/data/portfolio.ts` assembles and validates the public `portfolioConfig` contract.
@@ -29,6 +30,7 @@ The boundary is deliberate:
 | `anchors`             | Stable page-level DOM anchors                                                       |
 | `header`              | Wordmark, status, navigation labels, targets, and mobile visibility                 |
 | `hero`                | Heading, note, paragraphs, reference links, and descent CTA                         |
+| `experience`          | Accessible labels and instrument copy for interactive expedition controls           |
 | `sections`            | Ordered log/protocol/specimen sections plus their depth waypoints                   |
 | `contact`             | Final depth point, contact copy, primary channel, and link list                     |
 | `footer`              | Repeatable footer lines and return-to-surface CTA                                   |
@@ -59,6 +61,11 @@ Hero introductions use stable `{ id, text }` records. The first record is the st
 fallback; after hydration, one valid ID is randomly selected for that document load. A reload makes
 a fresh independent draw, so it can show the same introduction again by chance. IDs must remain
 unique and stable for configuration and DOM contracts; hero introductions do not use client storage.
+
+`experience.limitingFactor` owns the draggable vehicle's accessible name, keyboard/pointer
+instruction, and visible call sign. Its geometry and movement remain component behavior rather than
+editable content. Activating the vehicle currently emits a local sonar response; no Echo Map or modal
+is part of this tracer.
 
 Each section has one specialized `entry` plus zero or more generic `waypoints`. Edit the specialized
 entry to change its log/protocol/specimen layout. Edit `waypoints` to add or remove narrative cards
