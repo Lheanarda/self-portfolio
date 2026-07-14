@@ -3,9 +3,10 @@ import { breakpoints, fonts, motion } from "@/styles/tokens.stylex";
 import { limitingFactorColors } from "./config.stylex";
 
 const neutralBuoyancy = stylex.keyframes({
-  "0%, 100%": { transform: "translate3d(-2px, 3px, 0) rotate(-0.8deg)" },
-  "28%": { transform: "translate3d(2px, -4px, 0) rotate(0.45deg)" },
-  "61%": { transform: "translate3d(3px, 1px, 0) rotate(0.9deg)" },
+  "0%, 100%": { transform: "translate3d(-4px, 3px, 0) rotate(-0.8deg)" },
+  "23%": { transform: "translate3d(3px, -5px, 0) rotate(0.35deg)" },
+  "49%": { transform: "translate3d(5px, 1px, 0) rotate(0.85deg)" },
+  "74%": { transform: "translate3d(-3px, 5px, 0) rotate(-0.45deg)" },
 });
 
 const lightBreathing = stylex.keyframes({
@@ -79,7 +80,7 @@ export const styles = stylex.create({
   },
   vesselAssembly: {
     inset: "0 0 1.2rem",
-    animationDuration: "8.4s",
+    animationDuration: "7.2s",
     animationIterationCount: "infinite",
     animationName: {
       default: neutralBuoyancy,

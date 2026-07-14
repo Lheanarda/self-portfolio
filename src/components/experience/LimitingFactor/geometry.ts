@@ -6,10 +6,10 @@ export type Bounds = Readonly<{ minX: number; maxX: number; minY: number; maxY: 
 export const WIDE_SAFE_INSETS: Insets = { top: 92, right: 24, bottom: 68, left: 54 };
 export const COMPACT_SAFE_INSETS: Insets = { top: 72, right: 12, bottom: 56, left: 12 };
 
-const MIN_AUTONOMOUS_TRAVEL_PX = 42;
-const MAX_HORIZONTAL_TRAVEL_PX = 76;
-const MAX_VERTICAL_TRAVEL_PX = 132;
-const AUTONOMOUS_SPEED_PX_PER_SECOND = 14;
+const MIN_AUTONOMOUS_TRAVEL_PX = 58;
+const MAX_HORIZONTAL_TRAVEL_PX = 118;
+const MAX_VERTICAL_TRAVEL_PX = 148;
+const AUTONOMOUS_SPEED_PX_PER_SECOND = 18;
 
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(maximum, Math.max(minimum, value));
@@ -57,8 +57,8 @@ function boundedRandom(random: () => number) {
 }
 
 /**
- * Returns a vertically biased waypoint inside the patrol area around `anchor`. Injecting `random`
- * keeps the geometry deterministic in tests while production can use `Math.random`.
+ * Returns a balanced waypoint inside the patrol area around `anchor`. Injecting `random` keeps the
+ * geometry deterministic in tests while production can use `Math.random`.
  */
 export function autonomousTarget(
   current: Point,
@@ -84,19 +84,21 @@ export function autonomousTarget(
 
   if (bestDistance >= MIN_AUTONOMOUS_TRAVEL_PX) return bestCandidate;
 
-  const roomAbove = current.y - bounds.minY;
-  const roomBelow = bounds.maxY - current.y;
-  const fallbackY =
-    roomBelow >= roomAbove
-      ? current.y + Math.min(MAX_VERTICAL_TRAVEL_PX, roomBelow)
-      : current.y - Math.min(MAX_VERTICAL_TRAVEL_PX, roomAbove);
+  const fallbackCandidates = [
+    { x: anchor.x - MAX_HORIZONTAL_TRAVEL_PX, y: current.y },
+    { x: anchor.x + MAX_HORIZONTAL_TRAVEL_PX, y: current.y },
+    { x: current.x, y: anchor.y - MAX_VERTICAL_TRAVEL_PX },
+    { x: current.x, y: anchor.y + MAX_VERTICAL_TRAVEL_PX },
+  ].map((candidate) => clampPosition(candidate, bounds));
 
-  return clampPosition({ x: current.x, y: fallbackY }, bounds);
+  return fallbackCandidates.reduce((farthest, candidate) =>
+    distanceBetween(current, candidate) > distanceBetween(current, farthest) ? candidate : farthest,
+  );
 }
 
 export function autonomousDurationMs(from: Point, to: Point) {
   const travelMs = (distanceBetween(from, to) / AUTONOMOUS_SPEED_PX_PER_SECOND) * 1000;
-  return Math.round(clamp(travelMs, 4800, 12500));
+  return Math.round(clamp(travelMs, 4200, 10500));
 }
 
 export function travelRollDegrees(from: Point, to: Point) {
