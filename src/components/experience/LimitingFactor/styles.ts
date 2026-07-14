@@ -2,15 +2,14 @@ import * as stylex from "@stylexjs/stylex";
 import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 
 const neutralBuoyancy = stylex.keyframes({
-  "0%": { transform: "translate3d(-2px, 3px, 0) rotate(-0.8deg)" },
+  "0%, 100%": { transform: "translate3d(-2px, 3px, 0) rotate(-0.8deg)" },
   "28%": { transform: "translate3d(2px, -4px, 0) rotate(0.45deg)" },
   "61%": { transform: "translate3d(3px, 1px, 0) rotate(0.9deg)" },
-  "100%": { transform: "translate3d(-1px, -3px, 0) rotate(-0.35deg)" },
 });
 
 const lightBreathing = stylex.keyframes({
-  "0%, 100%": { opacity: 0.26 },
-  "52%": { opacity: 0.48 },
+  "0%, 100%": { opacity: 0.5 },
+  "52%": { opacity: 0.8 },
 });
 
 const instrumentBreathing = stylex.keyframes({
@@ -104,7 +103,6 @@ export const styles = stylex.create({
     width: "100%",
   },
   lightBeam: {
-    fill: colors.floodlight,
     animationDuration: "5.6s",
     animationIterationCount: "infinite",
     animationName: {
@@ -112,7 +110,23 @@ export const styles = stylex.create({
       [breakpoints.reducedMotion]: "none",
     },
     animationTimingFunction: "ease-in-out",
-    opacity: 0.32,
+    opacity: 0.38,
+  },
+  lightBeamSource: {
+    stopColor: colors.floodlight,
+    stopOpacity: 0.92,
+  },
+  lightBeamMid: {
+    stopColor: colors.floodlight,
+    stopOpacity: 0.52,
+  },
+  lightBeamWater: {
+    stopColor: colors.ice,
+    stopOpacity: 0.16,
+  },
+  lightBeamFade: {
+    stopColor: colors.ice,
+    stopOpacity: 0,
   },
   structuralFrame: {
     fill: "rgba(8, 37, 45, 0.96)",

@@ -1,3 +1,4 @@
+import { useId } from "react";
 import * as stylex from "@stylexjs/stylex";
 import { styles } from "./styles";
 
@@ -14,6 +15,8 @@ export function LimitingFactorVessel({
   isNavigating,
   pingSequence,
 }: LimitingFactorVesselProps) {
+  const lightBeamGradientId = useId();
+
   return (
     <>
       <span
@@ -25,8 +28,24 @@ export function LimitingFactorVessel({
         aria-hidden="true"
       >
         <svg {...stylex.props(styles.vessel)} viewBox="0 0 160 210" focusable="false">
-          <path {...stylex.props(styles.lightBeam)} d="M52 137 25 210h48l3-73Z" />
-          <path {...stylex.props(styles.lightBeam)} d="m108 137-24 73h51l-28-73Z" />
+          <defs>
+            <linearGradient id={lightBeamGradientId} x1="0" x2="0" y1="0" y2="1">
+              <stop {...stylex.props(styles.lightBeamSource)} offset="0%" />
+              <stop {...stylex.props(styles.lightBeamMid)} offset="38%" />
+              <stop {...stylex.props(styles.lightBeamWater)} offset="76%" />
+              <stop {...stylex.props(styles.lightBeamFade)} offset="100%" />
+            </linearGradient>
+          </defs>
+          <path
+            {...stylex.props(styles.lightBeam)}
+            d="M52 137 25 210h48l3-73Z"
+            fill={`url(#${lightBeamGradientId})`}
+          />
+          <path
+            {...stylex.props(styles.lightBeam)}
+            d="m108 137-24 73h51l-28-73Z"
+            fill={`url(#${lightBeamGradientId})`}
+          />
 
           <path {...stylex.props(styles.outerDetailLine)} d="M79 18v-9m-11 22 11-13 12 13" />
           <rect
