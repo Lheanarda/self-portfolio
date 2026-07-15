@@ -19,6 +19,10 @@ import {
   COMPACT_AUTONOMOUS_MOTION,
   COMPACT_SAFE_INSETS,
   defaultPosition,
+  distanceBetween,
+  floorLandingPosition,
+  gravityDurationMs,
+  recoveryDurationMs,
   travelRollDegrees,
   viewportBounds,
   WIDE_AUTONOMOUS_MOTION,
@@ -26,9 +30,14 @@ import {
   type Bounds,
   type Point,
 } from "./geometry";
+import {
+  subscribePortfolioEnvironment,
+  type FloorEnvironment,
+} from "../PortfolioAtmosphere/environment";
 
-type MotionSource = "initial" | "autonomous" | "settled" | "user";
+type MotionSource = "initial" | "autonomous" | "gravity" | "recovery" | "settled" | "user";
 type PauseReason = "focus" | "hover" | "pointer";
+export type FloorPhase = "floating" | "falling" | "landed" | "lifting";
 
 type MotionState = Readonly<{
   position: Point;
@@ -55,6 +64,7 @@ type MotionStyle = CSSProperties & {
   "--limiting-factor-pressure-scale-x": string;
   "--limiting-factor-pressure-scale-y": string;
   "--limiting-factor-pressure-offset-y": string;
+  "--limiting-factor-beam-strength": string;
 };
 
 const DRAG_THRESHOLD_PX = 8;
@@ -65,6 +75,11 @@ const SCROLL_PRESSURE_SETTLE_DELAY_MS = 120;
 const SCROLL_PRESSURE_HORIZONTAL_SCALE = 0.024;
 const SCROLL_PRESSURE_VERTICAL_SCALE = 0.035;
 const SCROLL_PRESSURE_TRAVEL_PX = 4;
+const FLOOR_TRACKING_DURATION_MS = 160;
+const FLOOR_CONTACT_TOLERANCE_PX = 5;
+const FLOOR_POSITION_EPSILON_PX = 0.6;
+const FLOOR_RETARGET_THRESHOLD_PX = 3;
+const LANDING_GEAR_FALLBACK_RATIO = 0.8;
 
 function isCompactViewport() {
   return window.innerWidth <= breakpoints.compactWidth;
@@ -83,11 +98,19 @@ export function useLimitingFactorMotion(onActivate: () => void) {
   const pointerIsDownRef = useRef(false);
   const suppressActivationRef = useRef(false);
   const suppressTimerRef = useRef<number | undefined>(undefined);
+  const floorPhaseRef = useRef<FloorPhase>("floating");
+  const floorPhaseTimerRef = useRef<number | undefined>(undefined);
+  const floorEnvironmentRef = useRef<FloorEnvironment | null>(null);
+  const landingGearOffsetRef = useRef<number | null>(null);
+  const floorTargetRef = useRef<Point | null>(null);
+  const recoveryPositionRef = useRef<Point | null>(null);
+  const synchronizeFloorRef = useRef<() => void>(() => undefined);
   const [pauseVersion, setPauseVersion] = useState(0);
   const [documentHidden, setDocumentHidden] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [scrollPressure, setScrollPressure] = useState(0);
+  const [floorPhase, setFloorPhaseState] = useState<FloorPhase>("floating");
   const [motion, setMotion] = useState<MotionState>({
     position: { x: 0, y: 0 },
     durationMs: 0,
@@ -96,6 +119,24 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     revision: 0,
     ready: false,
   });
+
+  const setFloorPhase = useCallback((phase: FloorPhase) => {
+    floorPhaseRef.current = phase;
+    setFloorPhaseState(phase);
+  }, []);
+
+  const clearFloorPhaseTimer = useCallback(() => {
+    if (!floorPhaseTimerRef.current) return;
+    window.clearTimeout(floorPhaseTimerRef.current);
+    floorPhaseTimerRef.current = undefined;
+  }, []);
+
+  const interruptFloorMotion = useCallback(() => {
+    clearFloorPhaseTimer();
+    landingGearOffsetRef.current = null;
+    floorTargetRef.current = null;
+    if (floorPhaseRef.current !== "floating") setFloorPhase("floating");
+  }, [clearFloorPhaseTimer, setFloorPhase]);
 
   const updatePauseReason = useCallback((reason: PauseReason, paused: boolean) => {
     const reasons = pauseReasonsRef.current;
@@ -224,6 +265,164 @@ export function useLimitingFactorMotion(onActivate: () => void) {
   }, [documentHidden, reducedMotion]);
 
   useEffect(() => {
+    const measureLandingGearOffset = () => {
+      if (landingGearOffsetRef.current !== null) return landingGearOffsetRef.current;
+
+      const frame = frameRef.current;
+      const landingGear = frame?.querySelector<SVGGraphicsElement>(
+        "[data-limiting-factor-landing-gear]",
+      );
+      if (!frame || !landingGear) return 0;
+
+      const frameRect = frame.getBoundingClientRect();
+      const gearRect = landingGear.getBoundingClientRect();
+      const measuredOffset = gearRect.bottom - frameRect.top;
+      landingGearOffsetRef.current =
+        Number.isFinite(measuredOffset) && measuredOffset > 0
+          ? measuredOffset
+          : frame.offsetHeight * LANDING_GEAR_FALLBACK_RATIO;
+      return landingGearOffsetRef.current;
+    };
+
+    const updateBeam = (floor: FloorEnvironment | null) => {
+      const frame = frameRef.current;
+      if (!frame) return;
+
+      const strength = Math.max(0, Math.min(1, 1 - (floor?.lightAlpha ?? 0)));
+      frame.style.setProperty("--limiting-factor-beam-strength", strength.toFixed(3));
+      frame.dataset.beamStrength = strength.toFixed(3);
+    };
+
+    const completeRecovery = (target: Point) => {
+      if (floorPhaseRef.current !== "lifting" || floorEnvironmentRef.current?.isInViewport) return;
+
+      floorPhaseTimerRef.current = undefined;
+      anchorPositionRef.current = target;
+      recoveryPositionRef.current = null;
+      floorTargetRef.current = null;
+      setFloorPhase("floating");
+      commitMotion(target, 0, 0, "user");
+    };
+
+    const startRecovery = () => {
+      const frame = frameRef.current;
+      const bounds = getBounds();
+      if (
+        !frame ||
+        !bounds ||
+        (floorPhaseRef.current === "floating" && recoveryPositionRef.current === null) ||
+        (floorPhaseRef.current === "lifting" && floorPhaseTimerRef.current !== undefined)
+      ) {
+        return;
+      }
+
+      clearFloorPhaseTimer();
+      const frameRect = frame.getBoundingClientRect();
+      const current = clampPosition({ x: frameRect.left, y: frameRect.top }, bounds);
+      const target = clampPosition(recoveryPositionRef.current ?? defaultPosition(bounds), bounds);
+      const duration = reducedMotion ? 0 : recoveryDurationMs(current, target);
+
+      landingGearOffsetRef.current = null;
+      floorTargetRef.current = null;
+      setFloorPhase("lifting");
+      commitMotion(target, duration, 0, "recovery");
+      floorPhaseTimerRef.current = window.setTimeout(() => completeRecovery(target), duration);
+    };
+
+    const moveToFloor = (floor: FloorEnvironment) => {
+      const frame = frameRef.current;
+      const bounds = getBounds();
+      if (!frame || !bounds) return;
+
+      const frameRect = frame.getBoundingClientRect();
+      const current = clampPosition({ x: frameRect.left, y: frameRect.top }, bounds);
+      const landingGearOffset = measureLandingGearOffset();
+      if (landingGearOffset <= 0) return;
+
+      const target = floorLandingPosition(current, bounds, floor.y, landingGearOffset);
+      const distance = distanceBetween(current, target);
+      const phase = floorPhaseRef.current;
+      const previousTarget = floorTargetRef.current;
+      const retargetThreshold =
+        phase === "landed" ? FLOOR_POSITION_EPSILON_PX : FLOOR_RETARGET_THRESHOLD_PX;
+      const targetMoved =
+        previousTarget === null || distanceBetween(previousTarget, target) >= retargetThreshold;
+      let motionDuration = 0;
+      if (distance > FLOOR_POSITION_EPSILON_PX && targetMoved) {
+        motionDuration = reducedMotion
+          ? 0
+          : phase === "falling" && target.y > current.y
+            ? gravityDurationMs(current, target)
+            : FLOOR_TRACKING_DURATION_MS;
+        commitMotion(target, motionDuration, 0, "gravity");
+        floorTargetRef.current = target;
+      }
+
+      const unclampedTargetY = floor.y - landingGearOffset;
+      const floorIsReachable =
+        unclampedTargetY >= bounds.minY - FLOOR_CONTACT_TOLERANCE_PX &&
+        unclampedTargetY <= bounds.maxY + FLOOR_CONTACT_TOLERANCE_PX;
+      const gearBottom = frameRect.top + landingGearOffset;
+      if (
+        phase === "falling" &&
+        floorIsReachable &&
+        Math.abs(gearBottom - floor.y) <= FLOOR_CONTACT_TOLERANCE_PX
+      ) {
+        setFloorPhase("landed");
+        floorTargetRef.current = target;
+        commitMotion(target, reducedMotion ? 0 : 100, 0, "gravity");
+      } else if (phase === "falling" && floorIsReachable) {
+        clearFloorPhaseTimer();
+        floorPhaseTimerRef.current = window.setTimeout(() => {
+          floorPhaseTimerRef.current = undefined;
+          synchronizeFloorRef.current();
+        }, motionDuration + 34);
+      }
+    };
+
+    const synchronizeFloor = () => {
+      const floor = floorEnvironmentRef.current;
+      updateBeam(floor);
+      if (pointerIsDownRef.current) return;
+
+      if (!floor?.isInViewport) {
+        if (floorPhaseRef.current !== "floating" || recoveryPositionRef.current !== null) {
+          startRecovery();
+        }
+        return;
+      }
+
+      if (floorPhaseRef.current === "floating" || floorPhaseRef.current === "lifting") {
+        clearFloorPhaseTimer();
+        recoveryPositionRef.current ??= freezeAtRenderedPosition();
+        landingGearOffsetRef.current = null;
+        floorTargetRef.current = null;
+        setFloorPhase("falling");
+      }
+      moveToFloor(floor);
+    };
+
+    synchronizeFloorRef.current = synchronizeFloor;
+    const unsubscribe = subscribePortfolioEnvironment((environment) => {
+      floorEnvironmentRef.current = environment.floor;
+      synchronizeFloor();
+    });
+
+    return () => {
+      unsubscribe();
+      synchronizeFloorRef.current = () => undefined;
+      clearFloorPhaseTimer();
+    };
+  }, [
+    clearFloorPhaseTimer,
+    commitMotion,
+    freezeAtRenderedPosition,
+    getBounds,
+    reducedMotion,
+    setFloorPhase,
+  ]);
+
+  useEffect(() => {
     let frameId = 0;
 
     const handleResize = () => {
@@ -235,8 +434,11 @@ export function useLimitingFactorMotion(onActivate: () => void) {
 
         const rect = frame.getBoundingClientRect();
         const clamped = clampPosition({ x: rect.left, y: rect.top }, bounds);
+        landingGearOffsetRef.current = null;
+        floorTargetRef.current = null;
         anchorPositionRef.current = clampPosition(anchorPositionRef.current, bounds);
         commitMotion(clamped, 0, 0, "user");
+        window.requestAnimationFrame(() => synchronizeFloorRef.current());
       });
     };
 
@@ -250,7 +452,13 @@ export function useLimitingFactorMotion(onActivate: () => void) {
   }, [commitMotion, getBounds]);
 
   useEffect(() => {
-    if (!motion.ready || reducedMotion || documentHidden || pauseReasonsRef.current.size > 0) {
+    if (
+      !motion.ready ||
+      reducedMotion ||
+      documentHidden ||
+      floorPhase !== "floating" ||
+      pauseReasonsRef.current.size > 0
+    ) {
       return;
     }
 
@@ -293,6 +501,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     motion.source,
     pauseVersion,
     reducedMotion,
+    floorPhase,
   ]);
 
   useEffect(
@@ -325,6 +534,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       if (!bounds) return;
 
       pointerIsDownRef.current = true;
+      interruptFloorMotion();
       updatePauseReason("pointer", true);
       const position = freezeAtRenderedPosition();
       dragRef.current = {
@@ -336,7 +546,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       };
       event.currentTarget.setPointerCapture(event.pointerId);
     },
-    [freezeAtRenderedPosition, getBounds, updatePauseReason],
+    [freezeAtRenderedPosition, getBounds, interruptFloorMotion, updatePauseReason],
   );
 
   const handlePointerMove = useCallback(
@@ -372,6 +582,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       }
       if (drag.hasMoved) {
         suppressActivationRef.current = true;
+        recoveryPositionRef.current = positionRef.current;
         if (suppressTimerRef.current) window.clearTimeout(suppressTimerRef.current);
         suppressTimerRef.current = window.setTimeout(() => {
           suppressActivationRef.current = false;
@@ -384,6 +595,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       updatePauseReason("pointer", false);
       anchorPositionRef.current = positionRef.current;
       commitMotion(positionRef.current, 520, 0, "user");
+      window.requestAnimationFrame(() => synchronizeFloorRef.current());
     },
     [commitMotion, updatePauseReason],
   );
@@ -417,15 +629,18 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       const bounds = getBounds();
       if (!bounds) return;
       const step = event.shiftKey ? KEYBOARD_LARGE_STEP_PX : KEYBOARD_STEP_PX;
+      interruptFloorMotion();
       const current = positionRef.current;
       const target = clampPosition(
         { x: current.x + direction.x * step, y: current.y + direction.y * step },
         bounds,
       );
       anchorPositionRef.current = target;
+      if (floorEnvironmentRef.current?.isInViewport) recoveryPositionRef.current = target;
       commitMotion(target, 260, travelRollDegrees(current, target), "user");
+      window.requestAnimationFrame(() => synchronizeFloorRef.current());
     },
-    [commitMotion, getBounds],
+    [commitMotion, getBounds, interruptFloorMotion],
   );
 
   const handleClick = useCallback(
@@ -439,18 +654,20 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     [onActivate],
   );
 
+  const effectiveScrollPressure = floorPhase === "floating" ? scrollPressure : 0;
   const motionStyle = {
     "--limiting-factor-x": `${motion.position.x}px`,
     "--limiting-factor-y": `${motion.position.y}px`,
     "--limiting-factor-duration": `${motion.durationMs}ms`,
     "--limiting-factor-roll": `${motion.rollDegrees}deg`,
     "--limiting-factor-pressure-scale-x": String(
-      1 + scrollPressure * SCROLL_PRESSURE_HORIZONTAL_SCALE,
+      1 + effectiveScrollPressure * SCROLL_PRESSURE_HORIZONTAL_SCALE,
     ),
     "--limiting-factor-pressure-scale-y": String(
-      1 - scrollPressure * SCROLL_PRESSURE_VERTICAL_SCALE,
+      1 - effectiveScrollPressure * SCROLL_PRESSURE_VERTICAL_SCALE,
     ),
-    "--limiting-factor-pressure-offset-y": `${-scrollPressure * SCROLL_PRESSURE_TRAVEL_PX}px`,
+    "--limiting-factor-pressure-offset-y": `${-effectiveScrollPressure * SCROLL_PRESSURE_TRAVEL_PX}px`,
+    "--limiting-factor-beam-strength": "1",
   } as MotionStyle;
 
   return {
@@ -459,6 +676,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     isReady: motion.ready,
     isDragging,
     isNavigating: motion.source === "autonomous",
+    floorPhase,
     interactionProps: {
       onBlur: handleBlur,
       onClick: handleClick,

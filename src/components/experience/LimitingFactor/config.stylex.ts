@@ -26,6 +26,10 @@ const PALETTE_CUSTOM = {
   callSignPanel: "rgba(1, 10, 16, 0.82)",
   signalBorder: "rgba(91, 241, 214, 0.86)",
   signalGlow: "rgba(91, 241, 214, 0.30)",
+  sedimentCloud: "rgba(184, 150, 102, 0.48)",
+  sedimentMist: "rgba(150, 118, 78, 0.24)",
+  sedimentRipple: "rgba(207, 172, 119, 0.42)",
+  sedimentGrain: "rgba(214, 179, 126, 0.72)",
 };
 
 const PALETTE_HADAL_BRASS = {
@@ -54,6 +58,10 @@ const PALETTE_HADAL_BRASS = {
   callSignPanel: "rgba(8, 10, 14, 0.84)",
   signalBorder: "rgba(255, 177, 72, 0.86)",
   signalGlow: "rgba(255, 177, 72, 0.30)",
+  sedimentCloud: "rgba(192, 154, 94, 0.5)",
+  sedimentMist: "rgba(151, 113, 65, 0.26)",
+  sedimentRipple: "rgba(224, 184, 112, 0.44)",
+  sedimentGrain: "rgba(232, 194, 124, 0.74)",
 };
 
 const PALETTE_VIOLET_THERMOCLINE = {
@@ -82,6 +90,10 @@ const PALETTE_VIOLET_THERMOCLINE = {
   callSignPanel: "rgba(4, 5, 15, 0.86)",
   signalBorder: "rgba(194, 126, 255, 0.88)",
   signalGlow: "rgba(194, 126, 255, 0.32)",
+  sedimentCloud: "rgba(176, 146, 112, 0.46)",
+  sedimentMist: "rgba(132, 105, 92, 0.24)",
+  sedimentRipple: "rgba(204, 173, 133, 0.4)",
+  sedimentGrain: "rgba(217, 184, 143, 0.7)",
 };
 
 const PALETTE_DEFAULT = {
@@ -110,6 +122,10 @@ const PALETTE_DEFAULT = {
   callSignPanel: "rgba(1, 9, 14, 0.78)",
   signalBorder: "rgba(100, 240, 210, 0.8)",
   signalGlow: "rgba(100, 240, 210, 0.24)",
+  sedimentCloud: "rgba(184, 150, 102, 0.48)",
+  sedimentMist: "rgba(142, 112, 76, 0.24)",
+  sedimentRipple: "rgba(210, 174, 116, 0.42)",
+  sedimentGrain: "rgba(218, 181, 124, 0.72)",
 };
 
 /**

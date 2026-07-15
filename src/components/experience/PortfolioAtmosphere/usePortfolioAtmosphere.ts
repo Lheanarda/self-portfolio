@@ -10,6 +10,7 @@ import {
   zoneIndexAt,
 } from "./depth-model";
 import { ambientColor, PortfolioSea } from "./sea";
+import { publishPortfolioEnvironment, resetPortfolioEnvironment } from "./environment";
 import { atmosphereGeometry } from "./geometry.stylex";
 import { TELEMETRY_TRANSITION_DURATION_MS } from "./PortfolioAtmosphere.styles";
 
@@ -413,7 +414,7 @@ export function usePortfolioAtmosphere({
       paintAmbient(smoothDepth);
 
       if (!reducedMotion || dirty) {
-        sea.render({
+        const floor = sea.render({
           time: reducedMotion ? 1.7 : now / 1000,
           depth: smoothDepth,
           depthDelta: reducedMotion ? 0 : depthDelta,
@@ -421,6 +422,7 @@ export function usePortfolioAtmosphere({
           reducedMotion,
           deltaTime,
         });
+        publishPortfolioEnvironment({ floor });
         drawTape(smoothDepth);
         dirty = false;
       }
@@ -472,6 +474,7 @@ export function usePortfolioAtmosphere({
       document.removeEventListener("visibilitychange", handleVisibility);
       motionQuery.removeEventListener("change", handleMotionChange);
       sonar.replaceChildren();
+      resetPortfolioEnvironment();
     };
   }, [copy, imperativeClassNames, readoutRefs]);
 

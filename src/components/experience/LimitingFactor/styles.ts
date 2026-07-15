@@ -38,6 +38,35 @@ const signalRing = stylex.keyframes({
   "100%": { opacity: 0, transform: "translate(-50%, -50%) scale(1.45)" },
 });
 
+const landingSettle = stylex.keyframes({
+  "0%": { transform: "translate3d(0, -3px, 0) rotate(0.35deg) scale(1, 1)" },
+  "22%": { transform: "translate3d(0, 2px, 0) rotate(-0.2deg) scale(1.025, 0.965)" },
+  "48%": { transform: "translate3d(0, -1.5px, 0) rotate(0.14deg) scale(0.992, 1.012)" },
+  "72%": { transform: "translate3d(0, 0.6px, 0) rotate(-0.06deg) scale(1.006, 0.994)" },
+  "100%": { transform: "translate3d(0, 0, 0) rotate(0) scale(1, 1)" },
+});
+
+const sedimentBloom = stylex.keyframes({
+  "0%": { opacity: 0.66, transform: "translate(-50%, -34%) scale(0.18, 0.12)" },
+  "42%": { opacity: 0.46, transform: "translate(-50%, -52%) scale(0.85, 0.58)" },
+  "100%": { opacity: 0, transform: "translate(-50%, -72%) scale(1.35, 0.84)" },
+});
+
+const sedimentRipple = stylex.keyframes({
+  "0%": { opacity: 0.7, transform: "translate(-50%, -50%) scaleX(0.2)" },
+  "100%": { opacity: 0, transform: "translate(-50%, -50%) scaleX(1.25)" },
+});
+
+const sedimentLiftLeft = stylex.keyframes({
+  "0%": { opacity: 0.75, transform: "translate3d(0, 0, 0) scale(1)" },
+  "100%": { opacity: 0, transform: "translate3d(-25px, -22px, 0) scale(0.35)" },
+});
+
+const sedimentLiftRight = stylex.keyframes({
+  "0%": { opacity: 0.7, transform: "translate3d(0, 0, 0) scale(1)" },
+  "100%": { opacity: 0, transform: "translate3d(27px, -19px, 0) scale(0.3)" },
+});
+
 export const styles = stylex.create({
   frame: {
     opacity: 0,
@@ -60,6 +89,12 @@ export const styles = stylex.create({
   },
   ready: {
     opacity: 1,
+  },
+  frameFalling: {
+    transitionTimingFunction: "cubic-bezier(0.42, 0.02, 0.86, 0.5), ease-out",
+  },
+  frameLifting: {
+    transitionTimingFunction: `${motion.easeOut}, ease-out`,
   },
   travelTilt: {
     transform: "rotate(var(--limiting-factor-roll))",
@@ -122,6 +157,23 @@ export const styles = stylex.create({
   assemblyHeld: {
     animationPlayState: "paused",
   },
+  assemblyFloorBound: {
+    animationName: "none",
+    transform: "translate3d(0, 0, 0)",
+  },
+  assemblyLanded: {
+    animationDuration: {
+      default: "760ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationIterationCount: 1,
+    animationName: {
+      default: landingSettle,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+  },
   vessel: {
     overflow: "visible",
     display: "block",
@@ -131,6 +183,15 @@ export const styles = stylex.create({
   submergedBody: {
     filter: `blur(0.18px) saturate(0.68) contrast(0.84) brightness(0.84) drop-shadow(0 0 4px ${limitingFactorColors.bodyWaterGlow})`,
     opacity: 0.74,
+  },
+  lightField: {
+    opacity: "var(--limiting-factor-beam-strength)",
+    transitionDuration: {
+      default: "260ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    transitionProperty: "opacity",
+    transitionTimingFunction: "ease-out",
   },
   lightBeam: {
     animationDuration: "5.6s",
@@ -217,8 +278,15 @@ export const styles = stylex.create({
   },
   particulateField: {
     overflow: "hidden",
+    opacity: "var(--limiting-factor-beam-strength)",
     pointerEvents: "none",
     position: "absolute",
+    transitionDuration: {
+      default: "260ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    transitionProperty: "opacity",
+    transitionTimingFunction: "ease-out",
     bottom: "2%",
     left: "25%",
     right: "25%",
@@ -253,6 +321,141 @@ export const styles = stylex.create({
     animationDelay: "-3.4s",
     left: "42%",
     top: "46%",
+  },
+  sedimentImpact: {
+    pointerEvents: "none",
+    position: "absolute",
+    transform: "translateX(-50%)",
+    height: 42,
+    left: "50%",
+    top: "88%",
+    width: "112%",
+  },
+  sedimentCloud: {
+    animationDuration: {
+      default: "1050ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentBloom,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    backgroundImage: `radial-gradient(ellipse at center, ${limitingFactorColors.sedimentCloud} 0%, ${limitingFactorColors.sedimentMist} 58%, ${limitingFactorColors.transparent} 76%)`,
+    filter: "blur(1.8px)",
+    opacity: 0,
+    position: "absolute",
+    transform: "translate(-50%, -34%) scale(0.18, 0.12)",
+    height: 38,
+    left: "50%",
+    top: "50%",
+    width: "100%",
+  },
+  sedimentRipple: {
+    borderRadius: "50%",
+    animationDuration: {
+      default: "780ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentRipple,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    opacity: 0,
+    position: "absolute",
+    transform: "translate(-50%, -50%) scaleX(0.2)",
+    borderTopColor: limitingFactorColors.sedimentRipple,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+    height: 12,
+    left: "50%",
+    top: "45%",
+    width: "92%",
+  },
+  sedimentGrain: {
+    borderRadius: "50%",
+    backgroundColor: limitingFactorColors.sedimentGrain,
+    boxShadow: `0 0 4px ${limitingFactorColors.sedimentMist}`,
+    opacity: 0,
+    position: "absolute",
+    height: 2,
+    top: "42%",
+    width: 3,
+  },
+  sedimentGrainOne: {
+    animationDuration: {
+      default: "720ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentLiftLeft,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    left: "42%",
+  },
+  sedimentGrainTwo: {
+    animationDelay: "70ms",
+    animationDuration: {
+      default: "840ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentLiftRight,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    left: "55%",
+  },
+  sedimentGrainThree: {
+    animationDelay: "120ms",
+    animationDuration: {
+      default: "920ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentLiftLeft,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    left: "62%",
+    top: "48%",
+  },
+  sedimentGrainFour: {
+    animationDelay: "35ms",
+    animationDuration: {
+      default: "760ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentLiftRight,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    left: "35%",
+    top: "52%",
+  },
+  sedimentGrainFive: {
+    animationDelay: "155ms",
+    animationDuration: {
+      default: "980ms",
+      [breakpoints.reducedMotion]: "0.01ms",
+    },
+    animationFillMode: "forwards",
+    animationName: {
+      default: sedimentLiftRight,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
+    left: "48%",
+    top: "54%",
   },
   callSign: {
     borderColor: limitingFactorColors.callSignBorder,

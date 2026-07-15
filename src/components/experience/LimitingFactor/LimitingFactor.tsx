@@ -19,12 +19,21 @@ export function LimitingFactor({ copy, onActivate }: LimitingFactorProps) {
     setPingSequence((sequence) => sequence + 1);
     onActivate?.();
   }, [onActivate]);
-  const { frameRef, interactionProps, isDragging, isNavigating, isReady, motionStyle } =
+  const { floorPhase, frameRef, interactionProps, isDragging, isNavigating, isReady, motionStyle } =
     useLimitingFactorMotion(handleActivate);
 
   return (
     <div style={{ ...motionStyle, display: "contents" }}>
-      <div ref={frameRef} {...stylex.props(styles.frame, isReady && styles.ready)}>
+      <div
+        ref={frameRef}
+        {...stylex.props(
+          styles.frame,
+          floorPhase === "falling" && styles.frameFalling,
+          floorPhase === "lifting" && styles.frameLifting,
+          isReady && styles.ready,
+        )}
+        data-limiting-factor-floor-phase={floorPhase}
+      >
         <div {...stylex.props(styles.travelTilt)}>
           <button
             {...stylex.props(styles.control, isDragging && styles.dragging)}
@@ -38,6 +47,7 @@ export function LimitingFactor({ copy, onActivate }: LimitingFactorProps) {
               callSign={copy.callSign}
               isDragging={isDragging}
               isNavigating={isNavigating}
+              floorPhase={floorPhase}
               pingSequence={pingSequence}
             />
             <span {...stylex.props(styles.visuallyHidden)} id={instructionId}>

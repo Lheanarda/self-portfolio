@@ -1,5 +1,6 @@
 import type { AtmosphereScene } from "@/data/portfolio";
 import { createCreatures } from "./creatures";
+import { floorEnvironmentAtDepth, type FloorEnvironment } from "./environment";
 
 const TAU = Math.PI * 2;
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -54,13 +55,6 @@ type Amphipod = {
   scale: number;
   retargetIn: number;
 };
-
-type FloorGeometry = Readonly<{
-  remaining: number;
-  y: number;
-  lightAlpha: number;
-  centerX: number;
-}>;
 
 export type SeaRenderState = Readonly<{
   time: number;
@@ -293,32 +287,22 @@ export class PortfolioSea {
     });
   }
 
-  private floorGeometry(depth: number): FloorGeometry | null {
-    const remaining = this.maxDepth - depth;
-    if (remaining > this.scene.floor.visibleWithinMeters) return null;
-    const y =
-      this.height * 0.84 +
-      remaining * ((this.height * 1.08) / this.scene.floor.visibleWithinMeters);
-    return {
-      remaining,
-      y,
-      lightAlpha: smooth(
-        this.scene.floor.lightsWithinMeters,
-        this.scene.floor.lightsWithinMeters - 90,
-        remaining,
-      ),
-      centerX: this.width * 0.5,
-    };
+  private floorEnvironment(depth: number) {
+    return floorEnvironmentAtDepth(
+      depth,
+      this.maxDepth,
+      { width: this.width, height: this.height },
+      this.scene.floor,
+    );
   }
 
   private drawFloor(
     time: number,
-    depth: number,
+    geometry: FloorEnvironment | null,
     now: number,
     reducedMotion: boolean,
     deltaTime: number,
   ) {
-    const geometry = this.floorGeometry(depth);
     if (!geometry) {
       this.lightsOnAt = -1;
       return;
@@ -486,13 +470,13 @@ export class PortfolioSea {
     depthDelta: number,
     reducedMotion: boolean,
     deltaTime: number,
+    floor: FloorEnvironment | null,
   ) {
     if (reducedMotion) {
       this.plankton = [];
       return;
     }
     let intensity = smooth(750, 1500, depth);
-    const floor = this.floorGeometry(depth);
     if (floor) intensity *= 1 - floor.lightAlpha * 0.9;
     if (intensity <= 0.01) {
       this.plankton = [];
@@ -541,9 +525,9 @@ export class PortfolioSea {
     depthDelta: number,
     reducedMotion: boolean,
     deltaTime: number,
+    floor: FloorEnvironment | null,
   ) {
     const context = this.context;
-    const floor = this.floorGeometry(depth);
     const depthBoost = 0.5 + 0.5 * clamp(depth / 900, 0, 1);
     this.snow.forEach((particle) => {
       if (!reducedMotion) {
@@ -583,6 +567,7 @@ export class PortfolioSea {
   render(state: SeaRenderState) {
     const { time, depth, depthDelta, now, reducedMotion } = state;
     const deltaTime = clamp(state.deltaTime || 1 / 60, 0.001, 0.1);
+    const floor = this.floorEnvironment(depth);
     this.context.clearRect(0, 0, this.width, this.height);
     this.drawSurface(time, depth);
     this.drawTrenchWalls(time, depth, reducedMotion);
@@ -601,8 +586,9 @@ export class PortfolioSea {
       });
     });
 
-    this.drawPlankton(time, depth, depthDelta, reducedMotion, deltaTime);
-    this.drawFloor(time, depth, now, reducedMotion, deltaTime);
-    this.drawSnow(time, depth, depthDelta, reducedMotion, deltaTime);
+    this.drawPlankton(time, depth, depthDelta, reducedMotion, deltaTime, floor);
+    this.drawFloor(time, floor, now, reducedMotion, deltaTime);
+    this.drawSnow(time, depth, depthDelta, reducedMotion, deltaTime, floor);
+    return floor;
   }
 }

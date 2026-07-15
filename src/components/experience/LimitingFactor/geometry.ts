@@ -78,6 +78,25 @@ export function defaultPosition(bounds: Bounds): Point {
   };
 }
 
+/**
+ * Preconditions: `landingGearOffsetY` measures the rendered gear contact from the frame's top edge.
+ * Postcondition: horizontal placement is preserved and the returned frame position remains safe.
+ */
+export function floorLandingPosition(
+  current: Point,
+  bounds: Bounds,
+  floorY: number,
+  landingGearOffsetY: number,
+): Point {
+  return clampPosition(
+    {
+      x: current.x,
+      y: floorY - Math.max(0, landingGearOffsetY),
+    },
+    bounds,
+  );
+}
+
 export function distanceBetween(first: Point, second: Point) {
   return Math.hypot(second.x - first.x, second.y - first.y);
 }
@@ -130,6 +149,21 @@ export function autonomousTarget(
 export function autonomousDurationMs(from: Point, to: Point, profile: AutonomousMotionProfile) {
   const travelMs = (distanceBetween(from, to) / profile.speedPxPerSecond) * 1000;
   return Math.round(clamp(travelMs, profile.minimumDurationMs, profile.maximumDurationMs));
+}
+
+/** Models a short gravity fall without allowing an abrupt or theatrical duration. */
+export function gravityDurationMs(from: Point, to: Point) {
+  const distance = Math.max(0, to.y - from.y);
+  if (distance < 1) return 0;
+  const duration = Math.sqrt((2 * distance) / 620) * 1000;
+  return Math.round(clamp(duration, 360, 980));
+}
+
+/** Returns a restrained ballast-assisted recovery duration for leaving the floor. */
+export function recoveryDurationMs(from: Point, to: Point) {
+  const distance = distanceBetween(from, to);
+  if (distance < 1) return 0;
+  return Math.round(clamp((distance / 190) * 1000, 420, 920));
 }
 
 export function travelRollDegrees(from: Point, to: Point) {
