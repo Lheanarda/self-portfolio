@@ -122,7 +122,6 @@ export function EchoMap({
 }: EchoMapProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const consoleRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
   const destinationListRef = useRef<HTMLOListElement>(null);
   const currentItemRef = useRef<HTMLLIElement>(null);
   const destinationLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
@@ -286,16 +285,14 @@ export function EchoMap({
     if (reducedMotion) {
       setIsExpanded(true);
       setPhase("open");
-      headingRef.current?.focus({ preventScroll: true });
       openingFrameRef.current = window.requestAnimationFrame(centerCurrentDestination);
       return;
     }
 
     openingFrameRef.current = window.requestAnimationFrame(() => {
+      centerCurrentDestination();
       openingFrameRef.current = window.requestAnimationFrame(() => {
         setIsExpanded(true);
-        headingRef.current?.focus({ preventScroll: true });
-        centerCurrentDestination();
         transitionTimerRef.current = window.setTimeout(
           finishOpening,
           ECHO_MAP_OPEN_DURATION_MS + ECHO_MAP_TRANSITION_GUARD_MS,
@@ -322,8 +319,10 @@ export function EchoMap({
     }
   }, [finishClosing, finishOpening, reducedMotion]);
 
+  const radarCanRun = phase === "open";
+
   useEffect(() => {
-    if (phase !== "open" || reducedMotion || documentHidden || copy.radar.contacts.length < 2) {
+    if (!radarCanRun || reducedMotion || documentHidden || copy.radar.contacts.length < 2) {
       return;
     }
 
@@ -332,7 +331,7 @@ export function EchoMap({
       2350,
     );
     return () => window.clearInterval(timer);
-  }, [copy.radar.contacts.length, documentHidden, phase, reducedMotion]);
+  }, [copy.radar.contacts.length, documentHidden, radarCanRun, reducedMotion]);
 
   useEffect(
     () => () => {
@@ -356,8 +355,8 @@ export function EchoMap({
   );
   const previewDestination = destinations[previewIndex] ?? destinations[0];
   const scannedContact = copy.radar.contacts[scanIndex] ?? copy.radar.contacts[0];
-  const radarIsActive = phase === "opening" || phase === "open";
-  const motionIsPaused = documentHidden || phase === "closing";
+  const radarIsActive = radarCanRun;
+  const motionIsPaused = documentHidden || !radarCanRun;
   const morphStyle = {
     "--echo-map-translate-x": `${morph.translateX}px`,
     "--echo-map-translate-y": `${morph.translateY}px`,
@@ -367,6 +366,7 @@ export function EchoMap({
   } satisfies MorphStyle;
   const headingId = `${copy.id}-heading`;
   const descriptionId = `${copy.id}-description`;
+  const radarContentId = `${copy.id}-radar-content`;
   const activePosition = String(activeIndex + 1).padStart(2, "0");
   const destinationCount = String(destinations.length).padStart(2, "0");
 
@@ -439,12 +439,7 @@ export function EchoMap({
                 </span>
                 <div {...stylex.props(styles.titleGroup)}>
                   <p {...stylex.props(styles.eyebrow)}>{copy.eyebrow}</p>
-                  <h2
-                    ref={headingRef}
-                    {...stylex.props(styles.heading)}
-                    id={headingId}
-                    tabIndex={-1}
-                  >
+                  <h2 {...stylex.props(styles.heading)} id={headingId}>
                     {copy.title}
                   </h2>
                 </div>
@@ -459,10 +454,13 @@ export function EchoMap({
               </button>
             </header>
 
-            <div {...stylex.props(styles.consoleBody)}>
-              <section {...stylex.props(styles.radarPanel)} aria-labelledby={`${copy.id}-radar`}>
+            <div
+              {...stylex.props(styles.consoleBody, phase !== "open" && styles.consoleBodyDormant)}
+              aria-hidden={phase !== "open"}
+            >
+              <section {...stylex.props(styles.radarPanel)} aria-label={copy.radar.ariaLabel}>
                 <div {...stylex.props(styles.panelHeader)}>
-                  <p {...stylex.props(styles.panelLabel)} id={`${copy.id}-radar`}>
+                  <p {...stylex.props(styles.panelLabel, styles.radarDesktopLabel)}>
                     {copy.radar.ariaLabel}
                   </p>
                   <p {...stylex.props(styles.liveStatus)}>
@@ -473,96 +471,99 @@ export function EchoMap({
                     {copy.radar.statusLabel}
                   </p>
                 </div>
-                <p {...stylex.props(styles.description)} id={descriptionId}>
-                  {copy.description}
-                </p>
 
-                <figure {...stylex.props(styles.radarField)}>
-                  <figcaption {...stylex.props(styles.visuallyHidden)}>
-                    {copy.radar.ariaLabel}. {copy.radar.contacts.length} {copy.radar.contactLabel}.
-                  </figcaption>
-                  <span {...stylex.props(styles.radarAxes)} aria-hidden="true" />
-                  <span
-                    {...stylex.props(
-                      styles.radarSweep,
-                      radarIsActive && styles.radarSweepActive,
-                      motionIsPaused && styles.motionPaused,
-                    )}
-                    aria-hidden="true"
-                  />
-                  <span
-                    {...stylex.props(
-                      styles.searchPulse,
-                      radarIsActive && styles.searchPulseActive,
-                      motionIsPaused && styles.motionPaused,
-                    )}
-                    aria-hidden="true"
-                  />
+                <div {...stylex.props(styles.radarContent)} id={radarContentId}>
+                  <p {...stylex.props(styles.description)} id={descriptionId}>
+                    {copy.description}
+                  </p>
 
-                  {copy.radar.contacts.map((contact, index) => {
-                    const isScanned = index === scanIndex;
-                    return (
-                      <span
-                        key={contact.id}
-                        style={{
-                          left: `${contact.xPercent}%`,
-                          position: "absolute",
-                          top: `${contact.yPercent}%`,
-                          transform: "translate(-50%, -50%)",
-                        }}
-                        aria-hidden="true"
-                        data-echo-map-contact={contact.kind}
-                      >
+                  <figure {...stylex.props(styles.radarField)}>
+                    <figcaption {...stylex.props(styles.visuallyHidden)}>
+                      {`${copy.radar.ariaLabel}. ${copy.radar.contacts.length} ${copy.radar.contactLabel}.`}
+                    </figcaption>
+                    <span {...stylex.props(styles.radarAxes)} aria-hidden="true" />
+                    <span
+                      {...stylex.props(
+                        styles.radarSweep,
+                        radarIsActive && styles.radarSweepActive,
+                        motionIsPaused && styles.motionPaused,
+                      )}
+                      aria-hidden="true"
+                    />
+                    <span
+                      {...stylex.props(
+                        styles.searchPulse,
+                        radarIsActive && styles.searchPulseActive,
+                        motionIsPaused && styles.motionPaused,
+                      )}
+                      aria-hidden="true"
+                    />
+
+                    {copy.radar.contacts.map((contact, index) => {
+                      const isScanned = index === scanIndex;
+                      return (
                         <span
-                          {...stylex.props(
-                            styles.contact,
-                            isScanned && styles.contactActive,
-                            motionIsPaused && styles.motionPaused,
-                          )}
-                        />
-                        <span
-                          {...stylex.props(
-                            styles.contactLabel,
-                            isScanned && styles.contactLabelActive,
-                          )}
+                          key={contact.id}
+                          style={{
+                            left: `${contact.xPercent}%`,
+                            position: "absolute",
+                            top: `${contact.yPercent}%`,
+                            transform: "translate(-50%, -50%)",
+                          }}
+                          aria-hidden="true"
+                          data-echo-map-contact={contact.kind}
                         >
-                          {contact.label}
+                          <span
+                            {...stylex.props(
+                              styles.contact,
+                              isScanned && styles.contactActive,
+                              motionIsPaused && styles.motionPaused,
+                            )}
+                          />
+                          <span
+                            {...stylex.props(
+                              styles.contactLabel,
+                              isScanned && styles.contactLabelActive,
+                            )}
+                          >
+                            {contact.label}
+                          </span>
                         </span>
+                      );
+                    })}
+
+                    <span
+                      {...stylex.props(
+                        styles.centerLock,
+                        radarIsActive && styles.centerLockActive,
+                        motionIsPaused && styles.motionPaused,
+                      )}
+                      aria-hidden="true"
+                    >
+                      <span {...stylex.props(styles.centerDepth)}>
+                        {previewDestination ? formatDepth(previewDestination.depth) : null}
                       </span>
-                    );
-                  })}
+                    </span>
+                  </figure>
 
-                  <span
-                    {...stylex.props(
-                      styles.centerLock,
-                      radarIsActive && styles.centerLockActive,
-                      motionIsPaused && styles.motionPaused,
-                    )}
-                    aria-hidden="true"
-                  >
-                    <span {...stylex.props(styles.centerDepth)}>
-                      {previewDestination ? formatDepth(previewDestination.depth) : null}
-                    </span>
-                  </span>
-                </figure>
-
-                {scannedContact ? (
-                  <div {...stylex.props(styles.radarReadout)} aria-hidden="true">
-                    <span {...stylex.props(styles.contactKind)}>
-                      {copy.radar.kindLabels[scannedContact.kind]}
-                    </span>
-                    <span {...stylex.props(styles.contactName)}>
-                      {copy.radar.trackingLabel}: {scannedContact.label}
-                    </span>
-                    <span {...stylex.props(styles.contactVector)}>
-                      {scannedContact.bearingDegrees}
-                      {copy.radar.bearingSuffix}
-                      {inlineSeparator}
-                      {scannedContact.rangeMeters}
-                      {copy.radar.rangeUnit}
-                    </span>
-                  </div>
-                ) : null}
+                  {scannedContact ? (
+                    <div {...stylex.props(styles.radarReadout)} aria-hidden="true">
+                      <span {...stylex.props(styles.contactKind)}>
+                        {copy.radar.kindLabels[scannedContact.kind]}
+                      </span>
+                      <span {...stylex.props(styles.contactName)}>
+                        {copy.radar.trackingLabel}: {scannedContact.label}
+                      </span>
+                      <span {...stylex.props(styles.contactVector)}>
+                        {scannedContact.bearingDegrees}
+                        {copy.radar.bearingSuffix}
+                        {inlineSeparator}
+                        {scannedContact.rangeMeters}
+                        {copy.radar.rangeUnit}
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
               </section>
 
               <nav {...stylex.props(styles.navigationPanel)} aria-label={copy.navigationLabel}>

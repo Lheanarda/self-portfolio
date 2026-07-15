@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { memo, useId } from "react";
 import * as stylex from "@stylexjs/stylex";
 import { styles } from "./styles";
 import type { FloorPhase } from "./useLimitingFactorMotion";
@@ -12,7 +12,7 @@ type LimitingFactorVesselProps = Readonly<{
   presentation?: "launcher" | "console";
 }>;
 
-export function LimitingFactorVessel({
+export const LimitingFactorVessel = memo(function LimitingFactorVessel({
   callSign,
   isDragging,
   isNavigating,
@@ -48,12 +48,12 @@ export function LimitingFactorVessel({
           </defs>
           <g {...stylex.props(styles.lightField)} data-limiting-factor-beam="">
             <path
-              {...stylex.props(styles.lightBeam)}
+              {...stylex.props(styles.lightBeam, isConsoleMark && styles.consoleDetailStatic)}
               d="M52 142 25 210h48l-17-68Z"
               fill={`url(#${lightBeamGradientId})`}
             />
             <path
-              {...stylex.props(styles.lightBeam)}
+              {...stylex.props(styles.lightBeam, isConsoleMark && styles.consoleDetailStatic)}
               d="m108 137-24 73h51l-28-73Z"
               fill={`url(#${lightBeamGradientId})`}
             />
@@ -70,7 +70,12 @@ export function LimitingFactorVessel({
               rx="5"
             />
             <rect {...stylex.props(styles.warmPanel)} x="71" y="31" width="18" height="4" rx="2" />
-            <circle {...stylex.props(styles.instrument)} cx="80" cy="41" r="2.4" />
+            <circle
+              {...stylex.props(styles.instrument, isConsoleMark && styles.consoleDetailStatic)}
+              cx="80"
+              cy="41"
+              r="2.4"
+            />
 
             <path
               {...stylex.props(styles.structuralFrame)}
@@ -181,4 +186,4 @@ export function LimitingFactorVessel({
       ) : null}
     </>
   );
-}
+});

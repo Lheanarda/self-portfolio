@@ -38,7 +38,7 @@ export const styles = stylex.create({
     backgroundColor: "rgba(0, 4, 9, 0)",
     color: colors.bodyText,
     transitionDuration: echoMapMotion.closeDuration,
-    transitionProperty: "background-color, backdrop-filter",
+    transitionProperty: "background-color",
     transitionTimingFunction: motion.easeOut,
     height: {
       default: "100vh",
@@ -52,8 +52,7 @@ export const styles = stylex.create({
     },
   },
   dialogExpanded: {
-    backdropFilter: "blur(13px) saturate(0.72)",
-    backgroundColor: "rgba(0, 4, 9, 0.76)",
+    backgroundColor: "rgba(0, 4, 9, 0.82)",
   },
   stage: {
     padding: {
@@ -194,6 +193,7 @@ export const styles = stylex.create({
     marginTop: "0.28rem",
   },
   closeButton: {
+    padding: 0,
     borderColor: {
       default: "rgba(159, 195, 207, 0.34)",
       ":hover": "rgba(100, 240, 210, 0.78)",
@@ -201,7 +201,7 @@ export const styles = stylex.create({
     borderRadius: 999,
     borderStyle: "solid",
     borderWidth: 1,
-    padding: 0,
+    placeItems: "center",
     backgroundColor: {
       default: "rgba(1, 9, 14, 0.54)",
       ":hover": "rgba(100, 240, 210, 0.09)",
@@ -219,11 +219,10 @@ export const styles = stylex.create({
     fontSize: "1.45rem",
     fontWeight: 300,
     lineHeight: 1,
-    placeItems: "center",
     scale: {
       default: "1",
-      ":active": "0.94",
       ":hover": "1.04",
+      ":active": "0.94",
     },
     transitionDuration: "220ms",
     transitionProperty: "background-color, border-color, color, scale",
@@ -246,19 +245,51 @@ export const styles = stylex.create({
       default: "hidden",
       [breakpoints.compact]: "auto",
     },
+    alignContent: {
+      default: "stretch",
+      [breakpoints.compact]: "start",
+    },
     display: "grid",
+    gridAutoRows: {
+      default: "minmax(0, 1fr)",
+      [breakpoints.compact]: "max-content",
+    },
     gridTemplateColumns: {
       default: "minmax(18rem, 1.05fr) minmax(20rem, 0.95fr)",
       [breakpoints.mediumOnly]: "minmax(16rem, 0.92fr) minmax(18rem, 1.08fr)",
       [breakpoints.compact]: "1fr",
     },
+    opacity: 1,
+    transitionDuration: "180ms",
+    transitionProperty: "opacity",
+    transitionTimingFunction: motion.easeOut,
+    visibility: "visible",
     minHeight: 0,
+  },
+  consoleBodyDormant: {
+    opacity: 0,
+    pointerEvents: "none",
+    visibility: "hidden",
   },
   radarPanel: {
     gap: "0.85rem",
     alignContent: "start",
+    alignSelf: {
+      default: "stretch",
+      [breakpoints.compact]: "start",
+    },
     display: "grid",
-    minHeight: 0,
+    minHeight: {
+      default: 0,
+      [breakpoints.compact]: "max-content",
+    },
+  },
+  radarContent: {
+    gap: "0.85rem",
+    overflow: "visible",
+    display: "grid",
+    gridAutoRows: "max-content",
+    minHeight: "max-content",
   },
   panelHeader: {
     gap: "1rem",
@@ -274,11 +305,57 @@ export const styles = stylex.create({
     lineHeight: 1.5,
     textTransform: "uppercase",
   },
+  radarDesktopLabel: {
+    display: {
+      default: "block",
+      [breakpoints.compact]: "none",
+    },
+  },
+  radarToggle: {
+    padding: 0,
+    borderWidth: 0,
+    gap: "0.55rem",
+    alignItems: "center",
+    backgroundColor: "transparent",
+    color: colors.ice,
+    cursor: "pointer",
+    display: {
+      default: "none",
+      [breakpoints.compact]: "inline-flex",
+    },
+    textAlign: "left",
+    minHeight: 44,
+    minWidth: 0,
+  },
+  radarToggleIcon: {
+    borderColor: "rgba(100, 240, 210, 0.36)",
+    borderWidth: 1,
+    color: colors.biolume,
+    display: "grid",
+    flexShrink: 0,
+    fontFamily: fonts.mono,
+    fontSize: "0.82rem",
+    lineHeight: 1,
+    transform: "rotate(0deg)",
+    transitionDuration: "220ms",
+    transitionProperty: "transform, border-color, background-color",
+    transitionTimingFunction: motion.easeOut,
+    height: 24,
+    width: 24,
+  },
+  radarToggleIconExpanded: {
+    borderColor: "rgba(100, 240, 210, 0.68)",
+    backgroundColor: "rgba(100, 240, 210, 0.08)",
+    transform: "rotate(180deg)",
+  },
   liveStatus: {
     gap: "0.42rem",
     alignItems: "center",
     color: "rgba(100, 240, 210, 0.76)",
-    display: "inline-flex",
+    display: {
+      default: "inline-flex",
+      [breakpoints.compact]: "none",
+    },
     fontFamily: fonts.mono,
     fontSize: "0.48rem",
     letterSpacing: "0.1em",
@@ -320,6 +397,10 @@ export const styles = stylex.create({
     boxShadow: "inset 0 0 44px rgba(0, 0, 0, 0.62), 0 0 40px rgba(100, 240, 210, 0.055)",
     justifySelf: "center",
     position: "relative",
+    height: {
+      default: "auto",
+      [breakpoints.compact]: "min(58vw, 13.5rem)",
+    },
     width: {
       default: "min(100%, 28.5rem)",
       [breakpoints.compact]: "min(58vw, 13.5rem)",
@@ -484,6 +565,10 @@ export const styles = stylex.create({
     backgroundColor: "rgba(2, 15, 22, 0.72)",
     display: "grid",
     gridTemplateColumns: "auto minmax(0, 1fr) auto",
+    marginTop: {
+      default: 0,
+      [breakpoints.compact]: "1rem",
+    },
     minWidth: 0,
   },
   contactKind: {
@@ -517,9 +602,19 @@ export const styles = stylex.create({
   },
   navigationPanel: {
     gap: "0.9rem",
+    alignSelf: {
+      default: "stretch",
+      [breakpoints.compact]: "start",
+    },
     display: "grid",
-    gridTemplateRows: "auto minmax(0, 1fr)",
-    minHeight: 0,
+    gridTemplateRows: {
+      default: "auto minmax(0, 1fr)",
+      [breakpoints.compact]: "max-content max-content",
+    },
+    minHeight: {
+      default: 0,
+      [breakpoints.compact]: "max-content",
+    },
   },
   navigationHeader: {
     gap: "1rem",
@@ -545,11 +640,9 @@ export const styles = stylex.create({
     scrollbarWidth: "thin",
     maxHeight: {
       default: "100%",
-      [breakpoints.compact]: "min(42vh, 21rem)",
+      [breakpoints.compact]: null,
     },
-    minHeight: 0,
     overflowX: "hidden",
-    overflowY: "auto",
     paddingBottom: "2.5rem",
     paddingTop: "0.1rem",
     "::before": {

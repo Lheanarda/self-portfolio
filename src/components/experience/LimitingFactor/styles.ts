@@ -160,6 +160,9 @@ export const styles = stylex.create({
     filter: `drop-shadow(0 4px 8px ${limitingFactorColors.depthShadow}) drop-shadow(0 0 8px ${limitingFactorColors.ambientWaterGlow})`,
     transform: "translate3d(0, 0, 0)",
   },
+  consoleDetailStatic: {
+    animationName: "none",
+  },
   assemblyHeld: {
     animationPlayState: "paused",
   },
