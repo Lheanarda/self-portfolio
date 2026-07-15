@@ -9,6 +9,7 @@ type LimitingFactorVesselProps = Readonly<{
   isNavigating: boolean;
   floorPhase: FloorPhase;
   pingSequence: number;
+  presentation?: "launcher" | "console";
 }>;
 
 export function LimitingFactorVessel({
@@ -17,14 +18,17 @@ export function LimitingFactorVessel({
   isNavigating,
   floorPhase,
   pingSequence,
+  presentation = "launcher",
 }: LimitingFactorVesselProps) {
   const lightBeamGradientId = useId();
+  const isConsoleMark = presentation === "console";
 
   return (
     <>
       <span
         {...stylex.props(
           styles.vesselAssembly,
+          isConsoleMark && styles.assemblyConsoleMark,
           isNavigating && styles.assemblyNavigating,
           floorPhase !== "floating" && styles.assemblyFloorBound,
           floorPhase === "landed" && styles.assemblyLanded,
@@ -138,13 +142,15 @@ export function LimitingFactorVessel({
           <circle {...stylex.props(styles.lamp)} cx="106" cy="142" r="4" />
         </svg>
 
-        <span {...stylex.props(styles.particulateField)}>
-          <span {...stylex.props(styles.particle, styles.particleOne)} />
-          <span {...stylex.props(styles.particle, styles.particleTwo)} />
-          <span {...stylex.props(styles.particle, styles.particleThree)} />
-        </span>
+        {!isConsoleMark ? (
+          <span {...stylex.props(styles.particulateField)}>
+            <span {...stylex.props(styles.particle, styles.particleOne)} />
+            <span {...stylex.props(styles.particle, styles.particleTwo)} />
+            <span {...stylex.props(styles.particle, styles.particleThree)} />
+          </span>
+        ) : null}
 
-        {floorPhase === "landed" ? (
+        {!isConsoleMark && floorPhase === "landed" ? (
           <span
             {...stylex.props(styles.sedimentImpact)}
             aria-hidden="true"
@@ -161,13 +167,13 @@ export function LimitingFactorVessel({
         ) : null}
       </span>
 
-      {callSign && (
+      {!isConsoleMark && callSign && (
         <span {...stylex.props(styles.callSign)} aria-hidden="true">
           {callSign}
         </span>
       )}
 
-      {pingSequence > 0 ? (
+      {!isConsoleMark && pingSequence > 0 ? (
         <span key={pingSequence} aria-hidden="true">
           <span {...stylex.props(styles.signalRing)} />
           <span {...stylex.props(styles.signalRing, styles.signalRingDelayed)} />

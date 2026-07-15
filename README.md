@@ -42,9 +42,10 @@ than by page file size:
   trace stamp, and trace card.
 - `src/components/layout/` contains persistent site chrome such as the header and footer.
 - `src/components/sections/` contains page-level organisms: hero, trace journey, and contact.
-- `src/components/experience/` contains the two small client-side controllers:
-  `PortfolioAtmosphere/` keeps its controller beside the Canvas engines it coordinates, while
-  `RevealController/` independently owns section intersection reveals.
+- `src/components/experience/` contains narrow client-side boundaries: `PortfolioAtmosphere/` owns
+  the Canvas environment, `RevealController/` owns section intersections, `HeroIntroduction` owns
+  its hydration-safe selection, and `LimitingFactor/` coordinates vehicle motion with its `EchoMap/`
+  navigation dialog.
 - `src/styles/tokens.stylex.ts` owns shared theme variables, media conditions, and motion constants.
 - `src/lib/portfolio/` contains pure presentation helpers with no rendering or browser lifecycle.
 

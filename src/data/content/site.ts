@@ -122,9 +122,79 @@ export const hero = {
 export const experience = {
   limitingFactor: {
     ariaLabel:
-      "Limiting Factor expedition vehicle. Drag to reposition, use arrow keys when focused, or activate to send a sonar ping.",
-    instruction: "Drag to reposition. Arrow keys move the vehicle; hold Shift for a larger step.",
-    // callSign: "Limiting Factor",
+      "Limiting Factor expedition vehicle. Drag to reposition, use arrow keys when focused, or activate to open Echo Map.",
+    instruction:
+      "Drag to reposition. Arrow keys move the vehicle; hold Shift for a larger step. Press Enter or activate to open Echo Map.",
+  },
+  echoMap: {
+    id: "echo-map",
+    eyebrow: "Limiting Factor / Navigation console",
+    title: "Echo Map",
+    description:
+      "A live acoustic picture of the water nearby, with every expedition coordinate within reach.",
+    closeLabel: "Dismiss map",
+    navigationLabel: "Expedition coordinates",
+    positionLabel: "of",
+    surfaceLabel: "Surface signal",
+    surfaceZoneLabel: "Surface",
+    contactLabel: "Trench contact",
+    contactZoneLabel: "Trench floor",
+    currentLabel: "Current",
+    passedLabel: "Passed",
+    upcomingLabel: "Uncharted",
+    depthUnit: "m",
+    numberLocale: "en-US",
+    radar: {
+      ariaLabel: "Active sonar scan of nearby returns",
+      statusLabel: "Search field active",
+      trackingLabel: "Tracking",
+      contactLabel: "returns",
+      bearingSuffix: "°",
+      rangeUnit: "m",
+      kindLabels: {
+        lifeform: "Lifeform",
+        object: "Object",
+        signal: "Unknown",
+      },
+      contacts: [
+        {
+          id: "drifting-lifeform",
+          label: "Drifting lifeform",
+          kind: "lifeform",
+          bearingDegrees: 318,
+          rangeMeters: 42,
+          xPercent: 27,
+          yPercent: 31,
+        },
+        {
+          id: "small-school",
+          label: "Small biological cluster",
+          kind: "lifeform",
+          bearingDegrees: 74,
+          rangeMeters: 18,
+          xPercent: 69,
+          yPercent: 27,
+        },
+        {
+          id: "mineral-return",
+          label: "Dense mineral return",
+          kind: "object",
+          bearingDegrees: 146,
+          rangeMeters: 31,
+          xPercent: 72,
+          yPercent: 72,
+        },
+        {
+          id: "unknown-return",
+          label: "Unclassified moving echo",
+          kind: "signal",
+          bearingDegrees: 226,
+          rangeMeters: 55,
+          xPercent: 31,
+          yPercent: 76,
+        },
+      ],
+    },
   },
 } as const;
 export const contact = {

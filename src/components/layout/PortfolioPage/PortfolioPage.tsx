@@ -9,6 +9,7 @@ import { HeroSection } from "@/components/sections/HeroSection/HeroSection";
 import { TraceJourney } from "@/components/sections/TraceJourney/TraceJourney";
 import { SkipLink } from "@/components/ui/SkipLink/SkipLink";
 import type { PortfolioConfig } from "@/data/portfolio";
+import { buildEchoMapDestinations } from "@/lib/portfolio/echo-map";
 import { styles } from "./styles";
 
 type PortfolioPageProps = Readonly<{
@@ -34,7 +35,13 @@ export function PortfolioPage({ config }: PortfolioPageProps) {
     <div {...stylex.props(styles.page)}>
       <SkipLink label={accessibility.skipToContent} targetId={anchors.mainContent} />
       <PortfolioAtmosphere copy={atmosphere} />
-      <LimitingFactor copy={experience.limitingFactor} />
+      <LimitingFactor
+        copy={experience.limitingFactor}
+        echoMapCopy={experience.echoMap}
+        destinations={buildEchoMapDestinations(config)}
+        inlineSeparator={symbols.inlineSeparator}
+        sectionDivider={symbols.sectionDivider}
+      />
       <RevealController />
       <SiteHeader header={header} statusSeparator={symbols.statusSeparator} />
 
