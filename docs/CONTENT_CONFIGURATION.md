@@ -7,7 +7,7 @@ editorial copy.
 The boundary is deliberate:
 
 - `src/data/content/site.ts` owns identity, chrome, metadata, hero, contact, footer, visible symbols,
-  and copy for the Limiting Factor expedition control.
+  and copy/contact records for the Limiting Factor and Echo Map expedition controls.
 - `src/data/content/sections.ts` owns ordered sections and their authored depth/time waypoints.
 - `src/data/atmosphere/config.ts` owns scene thresholds, creature placement, and telemetry copy.
 - `src/data/portfolio.ts` assembles and validates the public `portfolioConfig` contract.
@@ -63,9 +63,11 @@ a fresh independent draw, so it can show the same introduction again by chance. 
 unique and stable for configuration and DOM contracts; hero introductions do not use client storage.
 
 `experience.limitingFactor` owns the draggable vehicle's accessible name, keyboard/pointer
-instruction, and visible call sign. Its geometry and movement remain component behavior rather than
-editable content. Activating the vehicle currently emits a local sonar response; no Echo Map or modal
-is part of this tracer.
+instruction, and visible call sign. `experience.echoMap` owns the dialog copy, navigation states,
+units, and typed nearby radar returns. Vehicle placement, FLIP geometry, scan cadence, and menu rhythm
+remain component behavior rather than editable content. Echo Map destinations are derived in document
+order from the canonical hero, `sections`, and `contact` configuration, so adding or reordering a
+section updates the map without maintaining a second navigation list.
 
 Each section has one specialized `entry` plus zero or more generic `waypoints`. Edit the specialized
 entry to change its log/protocol/specimen layout. Edit `waypoints` to add or remove narrative cards

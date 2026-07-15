@@ -212,6 +212,58 @@ export type LimitingFactorCopy = Readonly<{
   callSign?: string;
 }>;
 
+export type EchoMapContactKind = "lifeform" | "object" | "signal";
+
+export type EchoMapContact = Readonly<{
+  id: string;
+  label: string;
+  kind: EchoMapContactKind;
+  bearingDegrees: number;
+  rangeMeters: number;
+  xPercent: number;
+  yPercent: number;
+}>;
+
+export type EchoMapCopy = Readonly<{
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  closeLabel: string;
+  navigationLabel: string;
+  positionLabel: string;
+  surfaceLabel: string;
+  surfaceZoneLabel: string;
+  contactLabel: string;
+  contactZoneLabel: string;
+  currentLabel: string;
+  passedLabel: string;
+  upcomingLabel: string;
+  depthUnit: string;
+  numberLocale: string;
+  radar: Readonly<{
+    ariaLabel: string;
+    statusLabel: string;
+    trackingLabel: string;
+    contactLabel: string;
+    bearingSuffix: string;
+    rangeUnit: string;
+    kindLabels: Readonly<Record<EchoMapContactKind, string>>;
+    contacts: readonly EchoMapContact[];
+  }>;
+}>;
+
+export type EchoMapDestination = Readonly<{
+  id: string;
+  targetId: string;
+  kind: "surface" | "story" | "contact";
+  portfolioLabel: string;
+  zone: string;
+  title: string;
+  summary: string;
+  depth: number;
+}>;
+
 export type PortfolioConfig = Readonly<{
   metadata: Readonly<{
     title: string;
@@ -268,6 +320,7 @@ export type PortfolioConfig = Readonly<{
   }>;
   experience: Readonly<{
     limitingFactor: LimitingFactorCopy;
+    echoMap: EchoMapCopy;
   }>;
   sections: readonly PortfolioSection[];
   contact: Readonly<{

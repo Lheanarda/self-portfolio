@@ -81,7 +81,49 @@ function validatePortfolioConfig(config: PortfolioConfig) {
     );
   });
   Object.entries(config.experience.limitingFactor).forEach(([key, value]) => {
-    invariant(value.trim().length > 0, `Limiting Factor ${key} cannot be empty.`);
+    if (value !== undefined) {
+      invariant(value.trim().length > 0, `Limiting Factor ${key} cannot be empty.`);
+    }
+  });
+  const { radar, ...echoMapCopy } = config.experience.echoMap;
+  assertDomId(echoMapCopy.id, "Echo Map id");
+  invariant(
+    !anchorIds.includes(echoMapCopy.id),
+    "Echo Map id must not collide with a page anchor.",
+  );
+  Object.entries(echoMapCopy).forEach(([key, value]) => {
+    invariant(value.trim().length > 0, `Echo Map ${key} cannot be empty.`);
+  });
+  const { contacts, kindLabels, ...radarCopy } = radar;
+  Object.entries(radarCopy).forEach(([key, value]) => {
+    invariant(value.trim().length > 0, `Echo Map radar ${key} cannot be empty.`);
+  });
+  Object.entries(kindLabels).forEach(([key, value]) => {
+    invariant(value.trim().length > 0, `Echo Map radar kind label ${key} cannot be empty.`);
+  });
+  invariant(contacts.length > 0, "Echo Map radar requires at least one contact.");
+  assertUnique(
+    contacts.map((contact) => contact.id),
+    "Echo Map radar contact ids",
+  );
+  contacts.forEach((contact) => {
+    assertDomId(contact.id, "Echo Map radar contact id");
+    invariant(contact.label.trim().length > 0, `Echo Map radar contact ${contact.id} is empty.`);
+    invariant(
+      contact.bearingDegrees >= 0 && contact.bearingDegrees < 360,
+      `Echo Map radar contact ${contact.id} has an invalid bearing.`,
+    );
+    invariant(
+      contact.rangeMeters > 0,
+      `Echo Map radar contact ${contact.id} must have a positive range.`,
+    );
+    invariant(
+      contact.xPercent >= 0 &&
+        contact.xPercent <= 100 &&
+        contact.yPercent >= 0 &&
+        contact.yPercent <= 100,
+      `Echo Map radar contact ${contact.id} must remain inside the radar field.`,
+    );
   });
 
   assertUnique(

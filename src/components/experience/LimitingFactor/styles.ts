@@ -154,6 +154,12 @@ export const styles = stylex.create({
   assemblyNavigating: {
     filter: `drop-shadow(0 12px 18px ${limitingFactorColors.depthShadow}) drop-shadow(0 0 12px ${limitingFactorColors.ambientWaterGlow}) drop-shadow(0 0 12px ${limitingFactorColors.navigationGlow})`,
   },
+  assemblyConsoleMark: {
+    inset: 0,
+    animationName: "none",
+    filter: `drop-shadow(0 4px 8px ${limitingFactorColors.depthShadow}) drop-shadow(0 0 8px ${limitingFactorColors.ambientWaterGlow})`,
+    transform: "translate3d(0, 0, 0)",
+  },
   assemblyHeld: {
     animationPlayState: "paused",
   },

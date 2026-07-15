@@ -36,7 +36,7 @@ import {
 } from "../PortfolioAtmosphere/environment";
 
 type MotionSource = "initial" | "autonomous" | "gravity" | "recovery" | "settled" | "user";
-type PauseReason = "focus" | "hover" | "pointer";
+type PauseReason = "focus" | "hover" | "map" | "pointer";
 export type FloorPhase = "floating" | "falling" | "landed" | "lifting";
 
 type MotionState = Readonly<{
@@ -90,7 +90,10 @@ function autonomousMotionForViewport() {
   return isCompactViewport() ? COMPACT_AUTONOMOUS_MOTION : WIDE_AUTONOMOUS_MOTION;
 }
 
-export function useLimitingFactorMotion(onActivate: () => void) {
+export function useLimitingFactorMotion(
+  onActivate: (source: DOMRectReadOnly) => void,
+  suspended = false,
+) {
   const frameRef = useRef<HTMLDivElement>(null);
   const positionRef = useRef<Point>({ x: 0, y: 0 });
   const anchorPositionRef = useRef<Point>({ x: 0, y: 0 });
@@ -186,6 +189,11 @@ export function useLimitingFactorMotion(onActivate: () => void) {
     commitMotion(position, 0, 0, "user");
     return position;
   }, [commitMotion, getBounds]);
+
+  useEffect(() => {
+    updatePauseReason("map", suspended);
+    if (suspended) freezeAtRenderedPosition();
+  }, [freezeAtRenderedPosition, suspended, updatePauseReason]);
 
   useEffect(() => {
     const frameId = window.requestAnimationFrame(() => {
@@ -651,7 +659,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
         event.preventDefault();
         return;
       }
-      onActivate();
+      onActivate(event.currentTarget.getBoundingClientRect());
     },
     [onActivate],
   );
