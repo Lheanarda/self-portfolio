@@ -77,6 +77,7 @@ const SCROLL_PRESSURE_VERTICAL_SCALE = 0.035;
 const SCROLL_PRESSURE_TRAVEL_PX = 4;
 const FLOOR_TRACKING_DURATION_MS = 160;
 const FLOOR_CONTACT_TOLERANCE_PX = 5;
+const FLOOR_LANDING_EMBED_PX = 15;
 const FLOOR_POSITION_EPSILON_PX = 0.6;
 const FLOOR_RETARGET_THRESHOLD_PX = 3;
 const LANDING_GEAR_FALLBACK_RATIO = 0.8;
@@ -339,7 +340,8 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       const landingGearOffset = measureLandingGearOffset();
       if (landingGearOffset <= 0) return;
 
-      const target = floorLandingPosition(current, bounds, floor.y, landingGearOffset);
+      const landingSurfaceY = floor.y + FLOOR_LANDING_EMBED_PX;
+      const target = floorLandingPosition(current, bounds, landingSurfaceY, landingGearOffset);
       const distance = distanceBetween(current, target);
       const phase = floorPhaseRef.current;
       const previousTarget = floorTargetRef.current;
@@ -358,7 +360,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
         floorTargetRef.current = target;
       }
 
-      const unclampedTargetY = floor.y - landingGearOffset;
+      const unclampedTargetY = landingSurfaceY - landingGearOffset;
       const floorIsReachable =
         unclampedTargetY >= bounds.minY - FLOOR_CONTACT_TOLERANCE_PX &&
         unclampedTargetY <= bounds.maxY + FLOOR_CONTACT_TOLERANCE_PX;
@@ -366,7 +368,7 @@ export function useLimitingFactorMotion(onActivate: () => void) {
       if (
         phase === "falling" &&
         floorIsReachable &&
-        Math.abs(gearBottom - floor.y) <= FLOOR_CONTACT_TOLERANCE_PX
+        Math.abs(gearBottom - landingSurfaceY) <= FLOOR_CONTACT_TOLERANCE_PX
       ) {
         setFloorPhase("landed");
         floorTargetRef.current = target;
