@@ -254,6 +254,7 @@ export type EchoMapCopy = Readonly<{
   eyebrow: string;
   title: string;
   description: string;
+  openingLabel: string;
   closeLabel: string;
   navigationLabel: string;
   positionLabel: string;

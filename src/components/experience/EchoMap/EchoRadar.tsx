@@ -130,7 +130,10 @@ export function EchoRadar({
   } satisfies RadarMotionStyle;
 
   return (
-    <section {...stylex.props(styles.radarPanel)} aria-label={copy.ariaLabel}>
+    <section
+      {...stylex.props(styles.radarPanel, isOpen && styles.radarPanelArrived)}
+      aria-label={copy.ariaLabel}
+    >
       <div {...stylex.props(styles.panelHeader)}>
         <p {...stylex.props(styles.panelLabel)}>{copy.ariaLabel}</p>
         <p {...stylex.props(styles.liveStatus)}>

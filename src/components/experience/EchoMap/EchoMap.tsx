@@ -430,6 +430,30 @@ export function EchoMap({
               </p>
             </header>
 
+            {/* Bridge the shell morph while the paint-heavy radar and navigation stay dormant. */}
+            <div
+              {...stylex.props(styles.openingCue, phase === "opening" && styles.openingCueActive)}
+              aria-hidden="true"
+            >
+              <span
+                {...stylex.props(
+                  styles.openingCueSignal,
+                  phase === "opening" && styles.openingCueSignalActive,
+                )}
+              >
+                <span {...stylex.props(styles.openingCueSignalCore)} />
+              </span>
+              <p {...stylex.props(styles.openingCueLabel)}>{copy.openingLabel}</p>
+              <span {...stylex.props(styles.openingCueTrack)}>
+                <span
+                  {...stylex.props(
+                    styles.openingCueProgress,
+                    phase === "opening" && styles.openingCueProgressActive,
+                  )}
+                />
+              </span>
+            </div>
+
             <div
               {...stylex.props(styles.consoleBody, phase !== "open" && styles.consoleBodyDormant)}
               aria-hidden={phase !== "open"}
@@ -447,7 +471,13 @@ export function EchoMap({
                 />
               ) : null}
 
-              <nav {...stylex.props(styles.navigationPanel)} aria-label={copy.navigationLabel}>
+              <nav
+                {...stylex.props(
+                  styles.navigationPanel,
+                  phase === "open" && styles.navigationPanelArrived,
+                )}
+                aria-label={copy.navigationLabel}
+              >
                 <div {...stylex.props(styles.navigationHeader)}>
                   <p {...stylex.props(styles.panelLabel)}>{copy.navigationLabel}</p>
                   <p

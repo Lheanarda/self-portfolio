@@ -68,6 +68,24 @@ const statusBlink = stylex.keyframes({
   "67%": { opacity: 0.68, scale: "0.94" },
 });
 
+const openingCueBreath = stylex.keyframes({
+  "0%, 100%": { opacity: 0.58, scale: "0.9" },
+  "48%": { opacity: 1, scale: "1.06" },
+  "76%": { opacity: 0.74, scale: "0.98" },
+});
+
+const openingCueProgress = stylex.keyframes({
+  "0%": { opacity: 0.28, transform: "scaleX(0.04)" },
+  "64%": { opacity: 0.62 },
+  "100%": { opacity: 0.82, transform: "scaleX(1)" },
+});
+
+const panelArrival = stylex.keyframes({
+  "0%": { opacity: 0, transform: "translate3d(0, 0.6rem, 0)" },
+  "66%": { opacity: 0.88 },
+  "100%": { opacity: 1, transform: "none" },
+});
+
 export const styles = stylex.create({
   dialog: {
     inset: 0,
@@ -272,6 +290,99 @@ export const styles = stylex.create({
     minWidth: 44,
     width: 44,
   },
+  openingCue: {
+    gap: "0.65rem",
+    padding: "clamp(1rem, 3vw, 2.5rem)",
+    alignContent: "center",
+    display: "grid",
+    justifyItems: "center",
+    gridColumn: "1",
+    gridRow: "2",
+    opacity: 0,
+    pointerEvents: "none",
+    transform: "translate3d(0, 0.35rem, 0)",
+    transitionDuration: {
+      default: "200ms",
+      [breakpoints.reducedMotion]: "0ms",
+    },
+    transitionProperty: "opacity, transform",
+    transitionTimingFunction: motion.easeOut,
+    zIndex: 1,
+    minHeight: 0,
+  },
+  openingCueActive: {
+    opacity: 1,
+    transform: "translate3d(0, 0, 0)",
+  },
+  openingCueSignal: {
+    borderColor: "rgba(100, 240, 210, 0.38)",
+    borderRadius: "50%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    boxShadow: "0 0 24px rgba(100, 240, 210, 0.08)",
+    display: "block",
+    position: "relative",
+    height: 38,
+    width: 38,
+  },
+  openingCueSignalActive: {
+    animationDuration: "1.05s",
+    animationIterationCount: "infinite",
+    animationName: {
+      default: openingCueBreath,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "ease-in-out",
+  },
+  openingCueSignalCore: {
+    borderRadius: "50%",
+    backgroundColor: colors.biolume,
+    boxShadow: "0 0 12px rgba(100, 240, 210, 0.68)",
+    display: "block",
+    position: "absolute",
+    transform: "translate(-50%, -50%)",
+    height: 5,
+    left: "50%",
+    top: "50%",
+    width: 5,
+  },
+  openingCueLabel: {
+    color: "rgba(201, 218, 225, 0.72)",
+    fontFamily: fonts.mono,
+    fontSize: {
+      default: "0.52rem",
+      [breakpoints.compact]: "0.48rem",
+    },
+    letterSpacing: "0.15em",
+    lineHeight: 1.5,
+    textAlign: "center",
+    textTransform: "uppercase",
+  },
+  openingCueTrack: {
+    overflow: "hidden",
+    backgroundColor: "rgba(159, 195, 207, 0.13)",
+    display: "block",
+    height: 1,
+    width: "min(11rem, 46vw)",
+  },
+  openingCueProgress: {
+    backgroundImage: "linear-gradient(90deg, rgba(100, 240, 210, 0.18), rgba(100, 240, 210, 0.92))",
+    display: "block",
+    opacity: 0.28,
+    transform: "scaleX(0.04)",
+    transformOrigin: "0 50%",
+    height: "100%",
+    width: "100%",
+  },
+  openingCueProgressActive: {
+    animationDuration: echoMapMotion.openDuration,
+    animationFillMode: "both",
+    animationName: {
+      default: openingCueProgress,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+  },
   consoleBody: {
     padding: {
       default: "clamp(1rem, 2.4vw, 2rem)",
@@ -290,6 +401,8 @@ export const styles = stylex.create({
       [breakpoints.compact]: "start",
     },
     display: "grid",
+    gridColumn: "1",
+    gridRow: "2",
     gridAutoRows: {
       default: "minmax(0, 1fr)",
       [breakpoints.compact]: "max-content",
@@ -300,7 +413,10 @@ export const styles = stylex.create({
       [breakpoints.compact]: "1fr",
     },
     opacity: 1,
-    transitionDuration: "180ms",
+    transitionDuration: {
+      default: "220ms",
+      [breakpoints.reducedMotion]: "0ms",
+    },
     transitionProperty: "opacity",
     transitionTimingFunction: motion.easeOut,
     visibility: "visible",
@@ -328,6 +444,16 @@ export const styles = stylex.create({
       default: 0,
       [breakpoints.compact]: "max-content",
     },
+  },
+  radarPanelArrived: {
+    animationDelay: "15ms",
+    animationDuration: "300ms",
+    animationFillMode: "both",
+    animationName: {
+      default: panelArrival,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
   },
   radarContent: {
     gap: "0.85rem",
@@ -799,6 +925,16 @@ export const styles = stylex.create({
       default: 0,
       [breakpoints.compact]: "max-content",
     },
+  },
+  navigationPanelArrived: {
+    animationDelay: "85ms",
+    animationDuration: "330ms",
+    animationFillMode: "both",
+    animationName: {
+      default: panelArrival,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: motion.easeOut,
   },
   navigationHeader: {
     gap: "1rem",

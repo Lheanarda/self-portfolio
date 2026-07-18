@@ -133,6 +133,7 @@ export const experience = {
     title: "Echo Map",
     description:
       "A live acoustic picture of the water nearby, with every expedition coordinate within reach.",
+    openingLabel: "Synchronizing local depth field",
     closeLabel: "Dismiss map",
     navigationLabel: "Expedition coordinates",
     positionLabel: "of",
