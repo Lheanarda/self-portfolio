@@ -272,13 +272,16 @@ export function createEchoMapRadarSnapshot(
     const { bearingDegrees, radiusPercent, xPercent, yPercent } = positions[index];
     const rangeMeters = Math.round(10 + radiusPercent * 1.45);
     const motionProfile = RADAR_MOTION_PROFILES[contact.motion];
+    const [minimumDriftDurationSeconds, maximumDriftDurationSeconds] =
+      motionProfile.durationSeconds;
     const amplitude = movingIds.has(contact.id)
       ? motionProfile.maxTravelPixels * between(random, 0.74, 1)
       : 0;
     const driftAngle = between(random, 0, TAU);
     const secondDriftAngle = driftAngle + between(random, 1.35, 2.15);
     const driftDurationSeconds = round(
-      between(random, ...motionProfile.durationSeconds) * (0.9 + contact.dotScale * 0.12),
+      between(random, minimumDriftDurationSeconds, maximumDriftDurationSeconds) *
+        (0.9 + contact.dotScale * 0.12),
     );
     const pulseDurationSeconds = round(between(random, 3.2, 5.8) + contact.dotScale * 0.18);
     const markerSizePixels = Math.round(6 + contact.dotScale * 5.5);
