@@ -1,4 +1,5 @@
 import type { AtmosphereScene, CreatureId } from "@/data/portfolio";
+import { createSeededRandom } from "@/lib/random";
 
 const TAU = Math.PI * 2;
 
@@ -27,14 +28,6 @@ type SchoolFish = Readonly<{
   blink: number;
   size: number;
 }>;
-
-function seededRandom(seed: number) {
-  let state = seed >>> 0;
-  return () => {
-    state = (state * 1664525 + 1013904223) >>> 0;
-    return state / 4294967296;
-  };
-}
 
 function transitY(frame: CreatureFrame, gain = 0.78) {
   return frame.height * (0.5 - frame.transit * gain);
@@ -118,7 +111,7 @@ function createSiphonophore(placement: Placement): SeaCreature {
 }
 
 function createScatteringLayer(placement: Placement): SeaCreature {
-  const random = seededRandom(800);
+  const random = createSeededRandom(800);
   const bodies = Array.from({ length: 84 }, (_, index) => ({
     horizontal: random(),
     vertical: random() - 0.5,
@@ -236,7 +229,7 @@ function drawLanternfish(
 }
 
 function createLanternfish(placement: Placement): SeaCreature {
-  const random = seededRandom(1210);
+  const random = createSeededRandom(1210);
   const school: SchoolFish[] = Array.from({ length: 11 }, () => ({
     phase: random() * TAU,
     speed: 0.24 + random() * 0.22,

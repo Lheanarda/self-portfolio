@@ -1,4 +1,5 @@
 import type { AtmosphereScene } from "@/data/portfolio";
+import { createSeededRandom } from "@/lib/random";
 import { createCreatures } from "./creatures";
 import { floorEnvironmentAtDepth, type FloorEnvironment } from "./environment";
 
@@ -65,14 +66,6 @@ export type SeaRenderState = Readonly<{
   deltaTime: number;
 }>;
 
-function seededRandom(seed: number) {
-  let state = seed >>> 0;
-  return () => {
-    state = (state * 1664525 + 1013904223) >>> 0;
-    return state / 4294967296;
-  };
-}
-
 export function ambientColor(depth: number): readonly [number, number, number] {
   if (depth <= COLOR_RAMP[0][0]) {
     return [COLOR_RAMP[0][1], COLOR_RAMP[0][2], COLOR_RAMP[0][3]];
@@ -97,7 +90,7 @@ export function ambientColor(depth: number): readonly [number, number, number] {
 export class PortfolioSea {
   private readonly context: CanvasRenderingContext2D;
   private readonly creatures;
-  private readonly random = seededRandom(47);
+  private readonly random = createSeededRandom(47);
   private width = 0;
   private height = 0;
   private dpr = 1;

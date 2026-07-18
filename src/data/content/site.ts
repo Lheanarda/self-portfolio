@@ -1,4 +1,5 @@
 import type { PortfolioLink } from "@/data/types/portfolio";
+import { echoMapRadar } from "./echo-map";
 
 export const profile = {
   shortName: "Alexander",
@@ -144,57 +145,7 @@ export const experience = {
     upcomingLabel: "Uncharted",
     depthUnit: "m",
     numberLocale: "en-US",
-    radar: {
-      ariaLabel: "Active sonar scan of nearby returns",
-      statusLabel: "Search field active",
-      trackingLabel: "Tracking",
-      contactLabel: "returns",
-      bearingSuffix: "°",
-      rangeUnit: "m",
-      kindLabels: {
-        lifeform: "Lifeform",
-        object: "Object",
-        signal: "Unknown",
-      },
-      contacts: [
-        {
-          id: "drifting-lifeform",
-          label: "Drifting lifeform",
-          kind: "lifeform",
-          bearingDegrees: 318,
-          rangeMeters: 42,
-          xPercent: 27,
-          yPercent: 31,
-        },
-        {
-          id: "small-school",
-          label: "Small biological cluster",
-          kind: "lifeform",
-          bearingDegrees: 74,
-          rangeMeters: 18,
-          xPercent: 69,
-          yPercent: 27,
-        },
-        {
-          id: "mineral-return",
-          label: "Dense mineral return",
-          kind: "object",
-          bearingDegrees: 146,
-          rangeMeters: 31,
-          xPercent: 72,
-          yPercent: 72,
-        },
-        {
-          id: "unknown-return",
-          label: "Unclassified moving echo",
-          kind: "signal",
-          bearingDegrees: 226,
-          rangeMeters: 55,
-          xPercent: 31,
-          yPercent: 76,
-        },
-      ],
-    },
+    radar: echoMapRadar,
   },
 } as const;
 export const contact = {

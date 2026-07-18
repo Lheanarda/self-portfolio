@@ -3,29 +3,69 @@ import { breakpoints, colors, fonts, motion } from "@/styles/tokens.stylex";
 import { echoMapMotion } from "./motion.stylex";
 
 const radarSweep = stylex.keyframes({
-  from: { transform: "rotate(-38deg)" },
-  to: { transform: "rotate(322deg)" },
+  "0%": { opacity: 0.56, transform: "rotate(var(--echo-radar-sweep-start))" },
+  "24%": { opacity: 0.82 },
+  "57%": { opacity: 0.64 },
+  "81%": { opacity: 0.9 },
+  "100%": {
+    opacity: 0.56,
+    transform: "rotate(calc(var(--echo-radar-sweep-start) + 360deg))",
+  },
 });
 
 const searchPulse = stylex.keyframes({
-  "0%": { opacity: 0.62, transform: "translate(-50%, -50%) scale(0.12)" },
-  "70%, 100%": { opacity: 0, transform: "translate(-50%, -50%) scale(1)" },
+  "0%": { opacity: 0, transform: "translate(-50%, -50%) scale(0.1)" },
+  "9%": { opacity: 0.58 },
+  "74%, 100%": { opacity: 0, transform: "translate(-50%, -50%) scale(1)" },
 });
 
-const contactAnswer = stylex.keyframes({
-  "0%, 100%": { opacity: 0.5, scale: "0.78" },
-  "38%": { opacity: 1, scale: "1.3" },
-  "64%": { opacity: 0.82, scale: "1" },
+const fieldShimmer = stylex.keyframes({
+  "0%, 100%": { opacity: 0.62 },
+  "31%": { opacity: 0.9 },
+  "66%": { opacity: 0.7 },
+  "82%": { opacity: 1 },
+});
+
+const contactBreathing = stylex.keyframes({
+  "0%, 100%": { opacity: 0.48, scale: "0.84" },
+  "27%": { opacity: 0.78, scale: "1.02" },
+  "58%": { opacity: 0.61, scale: "0.92" },
+  "79%": { opacity: 0.94, scale: "1.08" },
+});
+
+const contactAuraBreathing = stylex.keyframes({
+  "0%, 100%": { opacity: 0.16, scale: "0.72" },
+  "34%": { opacity: 0.38, scale: "1.04" },
+  "68%": { opacity: 0.22, scale: "0.88" },
+});
+
+const contactDrift = stylex.keyframes({
+  "0%, 100%": { transform: "translate3d(0, 0, 0)" },
+  "32%": {
+    transform: "translate3d(var(--echo-contact-drift-x-1), var(--echo-contact-drift-y-1), 0)",
+  },
+  "69%": {
+    transform: "translate3d(var(--echo-contact-drift-x-2), var(--echo-contact-drift-y-2), 0)",
+  },
+});
+
+const contactSweepAnswer = stylex.keyframes({
+  "0%": { opacity: 0, scale: "0.62" },
+  "1.5%": { opacity: 0.8, scale: "1" },
+  "4.5%": { opacity: 0.22, scale: "1.42" },
+  "7.5%, 100%": { opacity: 0, scale: "1.58" },
 });
 
 const lockBreathing = stylex.keyframes({
-  "0%, 100%": { boxShadow: "0 0 0 0 rgba(100, 240, 210, 0.2)" },
-  "50%": { boxShadow: "0 0 0 9px rgba(100, 240, 210, 0)" },
+  "0%, 100%": { opacity: 0.74, scale: "0.96" },
+  "46%": { opacity: 1, scale: "1.03" },
+  "73%": { opacity: 0.82, scale: "0.99" },
 });
 
 const statusBlink = stylex.keyframes({
-  "0%, 42%, 100%": { opacity: 1 },
-  "48%, 55%": { opacity: 0.36 },
+  "0%, 100%": { opacity: 0.42, scale: "0.82" },
+  "38%": { opacity: 1, scale: "1.08" },
+  "67%": { opacity: 0.68, scale: "0.94" },
 });
 
 export const styles = stylex.create({
@@ -279,6 +319,11 @@ export const styles = stylex.create({
       [breakpoints.compact]: "start",
     },
     display: "grid",
+    overflowY: {
+      default: "auto",
+      [breakpoints.compact]: "visible",
+    },
+    overscrollBehaviorY: "contain",
     minHeight: {
       default: 0,
       [breakpoints.compact]: "max-content",
@@ -305,49 +350,6 @@ export const styles = stylex.create({
     lineHeight: 1.5,
     textTransform: "uppercase",
   },
-  radarDesktopLabel: {
-    display: {
-      default: "block",
-      [breakpoints.compact]: "none",
-    },
-  },
-  radarToggle: {
-    padding: 0,
-    borderWidth: 0,
-    gap: "0.55rem",
-    alignItems: "center",
-    backgroundColor: "transparent",
-    color: colors.ice,
-    cursor: "pointer",
-    display: {
-      default: "none",
-      [breakpoints.compact]: "inline-flex",
-    },
-    textAlign: "left",
-    minHeight: 44,
-    minWidth: 0,
-  },
-  radarToggleIcon: {
-    borderColor: "rgba(100, 240, 210, 0.36)",
-    borderWidth: 1,
-    color: colors.biolume,
-    display: "grid",
-    flexShrink: 0,
-    fontFamily: fonts.mono,
-    fontSize: "0.82rem",
-    lineHeight: 1,
-    transform: "rotate(0deg)",
-    transitionDuration: "220ms",
-    transitionProperty: "transform, border-color, background-color",
-    transitionTimingFunction: motion.easeOut,
-    height: 24,
-    width: 24,
-  },
-  radarToggleIconExpanded: {
-    borderColor: "rgba(100, 240, 210, 0.68)",
-    backgroundColor: "rgba(100, 240, 210, 0.08)",
-    transform: "rotate(180deg)",
-  },
   liveStatus: {
     gap: "0.42rem",
     alignItems: "center",
@@ -363,7 +365,7 @@ export const styles = stylex.create({
   },
   liveDot: {
     borderRadius: "50%",
-    animationDuration: "3.8s",
+    animationDuration: "5.2s",
     animationIterationCount: "infinite",
     animationName: {
       default: statusBlink,
@@ -383,6 +385,32 @@ export const styles = stylex.create({
     lineHeight: 1.55,
     maxWidth: "54ch",
   },
+  radarZoneMeta: {
+    gap: "0.8rem",
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "space-between",
+    minWidth: 0,
+  },
+  radarZoneName: {
+    overflow: "hidden",
+    color: colors.iceBright,
+    fontSize: "0.74rem",
+    fontWeight: 600,
+    letterSpacing: "0.04em",
+    textOverflow: "ellipsis",
+    textTransform: "uppercase",
+    whiteSpace: "nowrap",
+  },
+  radarZoneRange: {
+    color: "rgba(100, 240, 210, 0.72)",
+    flexShrink: 0,
+    fontFamily: fonts.mono,
+    fontSize: "0.47rem",
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    whiteSpace: "nowrap",
+  },
   radarField: {
     margin: 0,
     borderColor: "rgba(100, 240, 210, 0.25)",
@@ -399,11 +427,11 @@ export const styles = stylex.create({
     position: "relative",
     height: {
       default: "auto",
-      [breakpoints.compact]: "min(58vw, 13.5rem)",
+      [breakpoints.compact]: "min(76vw, 18rem)",
     },
     width: {
-      default: "min(100%, 28.5rem)",
-      [breakpoints.compact]: "min(58vw, 13.5rem)",
+      default: "min(100%, 22rem)",
+      [breakpoints.compact]: "min(76vw, 18rem)",
     },
   },
   radarAxes: {
@@ -411,20 +439,32 @@ export const styles = stylex.create({
     borderRadius: "50%",
     backgroundImage:
       "linear-gradient(transparent 49.7%, rgba(100, 240, 210, 0.11) 50%, transparent 50.3%), linear-gradient(90deg, transparent 49.7%, rgba(100, 240, 210, 0.11) 50%, transparent 50.3%)",
+    opacity: 0.72,
+    pointerEvents: "none",
     position: "absolute",
+  },
+  radarAxesActive: {
+    animationDuration: "var(--echo-radar-shimmer-duration)",
+    animationIterationCount: "infinite",
+    animationName: {
+      default: fieldShimmer,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "ease-in-out",
   },
   radarSweep: {
     inset: "2.5%",
     borderRadius: "50%",
     backgroundImage:
-      "conic-gradient(from -18deg, transparent 0deg, rgba(100, 240, 210, 0.02) 25deg, rgba(100, 240, 210, 0.34) 43deg, transparent 47deg)",
+      "conic-gradient(from -61deg, transparent 0deg, rgba(100, 240, 210, 0.012) 18deg, rgba(100, 240, 210, 0.08) 44deg, rgba(100, 240, 210, 0.38) 61deg, transparent 66deg)",
     opacity: 0,
+    pointerEvents: "none",
     position: "absolute",
-    transform: "rotate(-38deg)",
+    transform: "rotate(var(--echo-radar-sweep-start))",
     transformOrigin: "50% 50%",
   },
   radarSweepActive: {
-    animationDuration: "5.4s",
+    animationDuration: "var(--echo-radar-sweep-duration)",
     animationIterationCount: "infinite",
     animationName: {
       default: radarSweep,
@@ -439,6 +479,7 @@ export const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: 1,
     opacity: 0,
+    pointerEvents: "none",
     position: "absolute",
     transform: "translate(-50%, -50%) scale(0.12)",
     height: "94%",
@@ -447,7 +488,7 @@ export const styles = stylex.create({
     width: "94%",
   },
   searchPulseActive: {
-    animationDuration: "3.1s",
+    animationDuration: "var(--echo-radar-search-duration)",
     animationIterationCount: "infinite",
     animationName: {
       default: searchPulse,
@@ -455,39 +496,133 @@ export const styles = stylex.create({
     },
     animationTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
   },
-  contact: {
+  searchPulseSecondary: {
+    animationDelay: "-3.1s",
+    opacity: 0,
+  },
+  contactList: {
+    inset: 0,
+    listStyle: "none",
+    margin: 0,
+    padding: 0,
+    position: "absolute",
+    zIndex: 2,
+  },
+  contactDriftFrame: {
+    inset: 0,
+    placeItems: "center",
+    display: "grid",
+    pointerEvents: "none",
+    position: "absolute",
+  },
+  contactDrifting: {
+    animationDelay: "var(--echo-contact-drift-delay)",
+    animationDuration: "var(--echo-contact-drift-duration)",
+    animationIterationCount: "infinite",
+    animationName: {
+      default: contactDrift,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "ease-in-out",
+  },
+  contactTarget: {
+    padding: 0,
+    borderWidth: 0,
+    borderRadius: "50%",
+    outlineColor: {
+      default: "transparent",
+      ":focus-visible": colors.biolume,
+    },
+    outlineOffset: 4,
+    outlineStyle: "solid",
+    outlineWidth: 2,
+    placeItems: "center",
+    backgroundColor: "transparent",
+    cursor: "pointer",
+    display: "grid",
+    position: "relative",
+    transitionDuration: "220ms",
+    transitionProperty: "background-color, outline-color",
+    transitionTimingFunction: motion.easeOut,
+    height: 44,
+    width: 44,
+  },
+  contactTargetActive: {
+    backgroundColor: "rgba(100, 240, 210, 0.055)",
+  },
+  contactTargetSelected: {
+    backgroundColor: "rgba(100, 240, 210, 0.11)",
+    outlineColor: "rgba(100, 240, 210, 0.58)",
+  },
+  contactAura: {
     borderColor: "rgba(100, 240, 210, 0.72)",
     borderRadius: "50%",
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundColor: "rgba(100, 240, 210, 0.2)",
-    boxShadow: "0 0 8px rgba(100, 240, 210, 0.38)",
-    display: "block",
-    opacity: 0.52,
-    scale: "0.78",
-    transitionDuration: "260ms",
-    transitionProperty: "background-color, box-shadow, opacity, scale",
-    transitionTimingFunction: motion.easeOut,
-    height: {
-      default: 10,
-      [breakpoints.compact]: 8,
-    },
-    width: {
-      default: 10,
-      [breakpoints.compact]: 8,
-    },
-  },
-  contactActive: {
-    animationDuration: "1.25s",
+    animationDelay: "var(--echo-contact-pulse-delay)",
+    animationDuration: "var(--echo-contact-pulse-duration)",
+    animationIterationCount: "infinite",
     animationName: {
-      default: contactAnswer,
+      default: contactAuraBreathing,
       [breakpoints.reducedMotion]: "none",
     },
-    animationTimingFunction: motion.easeOut,
+    animationTimingFunction: "cubic-bezier(0.42, 0, 0.24, 1)",
+    opacity: 0.18,
+    pointerEvents: "none",
+    position: "absolute",
+    height: "var(--echo-contact-aura-size)",
+    width: "var(--echo-contact-aura-size)",
+  },
+  contactAuraActive: {
+    borderColor: colors.biolume,
+    opacity: 0.52,
+  },
+  contactSweepHit: {
+    borderColor: "rgba(230, 241, 244, 0.78)",
+    borderRadius: "50%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    opacity: 0,
+    pointerEvents: "none",
+    position: "absolute",
+    height: "var(--echo-contact-aura-size)",
+    width: "var(--echo-contact-aura-size)",
+  },
+  contactSweepHitActive: {
+    animationDelay: "var(--echo-contact-hit-delay)",
+    animationDuration: "var(--echo-radar-sweep-duration)",
+    animationIterationCount: "infinite",
+    animationName: {
+      default: contactSweepAnswer,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "linear",
+  },
+  contactDot: {
+    borderColor: "rgba(100, 240, 210, 0.82)",
+    borderRadius: "50%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    animationDelay: "var(--echo-contact-pulse-delay)",
+    animationDuration: "var(--echo-contact-pulse-duration)",
+    animationIterationCount: "infinite",
+    animationName: {
+      default: contactBreathing,
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "cubic-bezier(0.42, 0, 0.24, 1)",
+    backgroundColor: "rgba(100, 240, 210, 0.34)",
+    boxShadow: "0 0 8px rgba(100, 240, 210, 0.42)",
+    opacity: 0.62,
+    pointerEvents: "none",
+    position: "absolute",
+    height: "var(--echo-contact-size)",
+    width: "var(--echo-contact-size)",
+  },
+  contactDotActive: {
     backgroundColor: colors.biolume,
     boxShadow: "0 0 5px rgba(230, 241, 244, 0.8), 0 0 20px rgba(100, 240, 210, 0.9)",
     opacity: 1,
-    scale: "1.15",
   },
   contactLabel: {
     color: colors.biolume,
@@ -495,21 +630,24 @@ export const styles = stylex.create({
     fontSize: "0.42rem",
     letterSpacing: "0.08em",
     opacity: 0,
+    pointerEvents: "none",
     position: "absolute",
     textShadow: "0 0 10px rgba(100, 240, 210, 0.8)",
     textTransform: "uppercase",
-    transform: "translate(-42%, 0.7rem)",
+    transform: "translate(-50%, 1rem)",
     transitionDuration: "260ms",
     transitionProperty: "opacity, transform",
     transitionTimingFunction: motion.easeOut,
     whiteSpace: "nowrap",
+    left: "50%",
+    top: "50%",
   },
   contactLabelActive: {
     opacity: {
       default: 0.92,
       [breakpoints.compact]: 0,
     },
-    transform: "translate(-42%, 0.9rem)",
+    transform: "translate(-50%, 1.2rem)",
   },
   centerLock: {
     borderColor: "rgba(100, 240, 210, 0.46)",
@@ -519,6 +657,7 @@ export const styles = stylex.create({
     placeItems: "center",
     backgroundColor: "rgba(1, 9, 16, 0.86)",
     display: "grid",
+    pointerEvents: "none",
     position: "absolute",
     transform: "translate(-50%, -50%)",
     height: {
@@ -531,9 +670,10 @@ export const styles = stylex.create({
       default: 72,
       [breakpoints.compact]: 58,
     },
+    zIndex: 3,
   },
   centerLockActive: {
-    animationDuration: "3.2s",
+    animationDuration: "5.6s",
     animationIterationCount: "infinite",
     animationName: {
       default: lockBreathing,
@@ -558,17 +698,22 @@ export const styles = stylex.create({
     borderRadius: 14,
     borderStyle: "solid",
     borderWidth: 1,
-    gap: "0.75rem",
+    gap: "0.48rem",
     paddingBlock: "0.72rem",
     paddingInline: "0.8rem",
-    alignItems: "center",
     backgroundColor: "rgba(2, 15, 22, 0.72)",
     display: "grid",
-    gridTemplateColumns: "auto minmax(0, 1fr) auto",
     marginTop: {
       default: 0,
       [breakpoints.compact]: "1rem",
     },
+    minWidth: 0,
+  },
+  contactReadoutHeader: {
+    gap: "0.8rem",
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "space-between",
     minWidth: 0,
   },
   contactKind: {
@@ -578,16 +723,55 @@ export const styles = stylex.create({
     letterSpacing: "0.11em",
     textTransform: "uppercase",
   },
+  contactIdentity: {
+    gap: "0.4rem",
+    alignItems: "baseline",
+    display: "flex",
+    flexWrap: "wrap",
+    minWidth: 0,
+  },
   contactName: {
-    overflow: "hidden",
     color: colors.iceBright,
     fontSize: {
       default: "0.76rem",
       [breakpoints.compact]: "0.7rem",
     },
-    fontWeight: 560,
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    fontWeight: 600,
+    lineHeight: 1.35,
+  },
+  contactScientificName: {
+    color: "rgba(159, 195, 207, 0.74)",
+    fontFamily: fonts.mono,
+    fontSize: "0.51rem",
+    fontStyle: "italic",
+  },
+  contactDescription: {
+    color: "rgba(201, 218, 225, 0.76)",
+    fontSize: {
+      default: "0.68rem",
+      [breakpoints.compact]: "0.65rem",
+    },
+    lineHeight: 1.48,
+  },
+  contactMeta: {
+    gap: "0.35rem 0.9rem",
+    color: "rgba(159, 195, 207, 0.66)",
+    display: "flex",
+    flexWrap: "wrap",
+    fontFamily: fonts.mono,
+    fontSize: "0.44rem",
+    letterSpacing: "0.035em",
+    lineHeight: 1.45,
+    textTransform: "uppercase",
+  },
+  contactNote: {
+    borderLeftColor: "rgba(100, 240, 210, 0.34)",
+    borderLeftStyle: "solid",
+    borderLeftWidth: 1,
+    paddingLeft: "0.55rem",
+    color: "rgba(159, 195, 207, 0.58)",
+    fontSize: "0.58rem",
+    lineHeight: 1.45,
   },
   contactVector: {
     color: "rgba(159, 195, 207, 0.72)",

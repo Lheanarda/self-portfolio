@@ -1,8 +1,9 @@
-import type {
-  CreatureId,
-  JourneyPoint,
-  PortfolioConfig,
-  PortfolioLink,
+import {
+  ECHO_MAP_MAX_CONTACTS_PER_FIELD,
+  type CreatureId,
+  type JourneyPoint,
+  type PortfolioConfig,
+  type PortfolioLink,
 } from "@/data/types/portfolio";
 
 function invariant(condition: unknown, message: string): asserts condition {
@@ -94,36 +95,119 @@ function validatePortfolioConfig(config: PortfolioConfig) {
   Object.entries(echoMapCopy).forEach(([key, value]) => {
     invariant(value.trim().length > 0, `Echo Map ${key} cannot be empty.`);
   });
-  const { contacts, kindLabels, ...radarCopy } = radar;
+  const { fields, kindLabels, ...radarCopy } = radar;
   Object.entries(radarCopy).forEach(([key, value]) => {
     invariant(value.trim().length > 0, `Echo Map radar ${key} cannot be empty.`);
   });
   Object.entries(kindLabels).forEach(([key, value]) => {
     invariant(value.trim().length > 0, `Echo Map radar kind label ${key} cannot be empty.`);
   });
-  invariant(contacts.length > 0, "Echo Map radar requires at least one contact.");
+  const expectedRadarTargets = [
+    config.anchors.hero,
+    ...config.sections.map((section) => section.id),
+    config.contact.id,
+  ];
+  invariant(fields.length > 0, "Echo Map radar requires at least one depth field.");
   assertUnique(
-    contacts.map((contact) => contact.id),
-    "Echo Map radar contact ids",
+    fields.map((field) => field.id),
+    "Echo Map radar field ids",
   );
-  contacts.forEach((contact) => {
-    assertDomId(contact.id, "Echo Map radar contact id");
-    invariant(contact.label.trim().length > 0, `Echo Map radar contact ${contact.id} is empty.`);
+  assertUnique(
+    fields.map((field) => field.targetId),
+    "Echo Map radar field targets",
+  );
+  invariant(
+    fields.length === expectedRadarTargets.length &&
+      fields.every((field, index) => field.targetId === expectedRadarTargets[index]),
+    "Echo Map radar fields must cover Surface, every section, and Contact in document order.",
+  );
+
+  const destinationDepths = new Map<string, number>([
+    [config.anchors.hero, 0],
+    ...config.sections.map((section): [string, number] => [
+      section.id,
+      section.journey.stratum.depth,
+    ]),
+    [config.contact.id, config.contact.journey.depth],
+  ]);
+  const contactsById = new Map<string, (typeof fields)[number]["contacts"][number]>();
+
+  fields.forEach((field) => {
+    assertDomId(field.id, "Echo Map radar field id");
+    assertDomId(field.targetId, "Echo Map radar field target");
+    invariant(field.label.trim().length > 0, `Echo Map radar field ${field.id} needs a label.`);
     invariant(
-      contact.bearingDegrees >= 0 && contact.bearingDegrees < 360,
-      `Echo Map radar contact ${contact.id} has an invalid bearing.`,
+      field.description.trim().length > 0,
+      `Echo Map radar field ${field.id} needs a description.`,
     );
+    const [minimumDepth, maximumDepth] = field.depthRangeMeters;
+    assertFiniteNumber(minimumDepth, `Echo Map radar field ${field.id} minimum depth`);
+    assertFiniteNumber(maximumDepth, `Echo Map radar field ${field.id} maximum depth`);
     invariant(
-      contact.rangeMeters > 0,
-      `Echo Map radar contact ${contact.id} must have a positive range.`,
+      minimumDepth >= 0 && maximumDepth >= minimumDepth && maximumDepth <= model.maxDepth,
+      `Echo Map radar field ${field.id} has an invalid depth range.`,
     );
+    const destinationDepth = destinationDepths.get(field.targetId);
     invariant(
-      contact.xPercent >= 0 &&
-        contact.xPercent <= 100 &&
-        contact.yPercent >= 0 &&
-        contact.yPercent <= 100,
-      `Echo Map radar contact ${contact.id} must remain inside the radar field.`,
+      destinationDepth !== undefined &&
+        destinationDepth >= minimumDepth &&
+        destinationDepth <= maximumDepth,
+      `Echo Map radar field ${field.id} does not contain its destination depth.`,
     );
+    invariant(field.contacts.length > 0, `Echo Map radar field ${field.id} needs contacts.`);
+    invariant(
+      field.contacts.length <= ECHO_MAP_MAX_CONTACTS_PER_FIELD,
+      `Echo Map radar field ${field.id} supports at most ${ECHO_MAP_MAX_CONTACTS_PER_FIELD} contacts.`,
+    );
+    assertUnique(
+      field.contacts.map((contact) => contact.id),
+      `Echo Map radar field ${field.id} contact ids`,
+    );
+
+    field.contacts.forEach((contact) => {
+      assertDomId(contact.id, "Echo Map radar contact id");
+      invariant(
+        contact.label.trim().length > 0,
+        `Echo Map radar contact ${contact.id} needs a label.`,
+      );
+      invariant(
+        contact.scientificName.trim().length > 0,
+        `Echo Map radar contact ${contact.id} needs a scientific name or taxon.`,
+      );
+      invariant(
+        contact.description.trim().length > 0,
+        `Echo Map radar contact ${contact.id} needs a description.`,
+      );
+      invariant(
+        contact.depthRangeLabel.trim().length > 0,
+        `Echo Map radar contact ${contact.id} needs a depth range.`,
+      );
+      invariant(
+        contact.sizeLabel.trim().length > 0,
+        `Echo Map radar contact ${contact.id} needs a size label.`,
+      );
+      invariant(
+        contact.dotScale >= 0.5 && contact.dotScale <= 2,
+        `Echo Map radar contact ${contact.id} dot scale must be between 0.5 and 2.`,
+      );
+      invariant(
+        contact.sourceUrl.startsWith("https://"),
+        `Echo Map radar contact ${contact.id} needs an HTTPS research source.`,
+      );
+      if (contact.overlapNote !== undefined) {
+        invariant(
+          contact.overlapNote.trim().length > 0,
+          `Echo Map radar contact ${contact.id} has an empty overlap note.`,
+        );
+      }
+
+      const existing = contactsById.get(contact.id);
+      invariant(
+        existing === undefined || existing === contact,
+        `Echo Map radar contact ${contact.id} must reuse one authoritative record.`,
+      );
+      contactsById.set(contact.id, contact);
+    });
   });
 
   assertUnique(

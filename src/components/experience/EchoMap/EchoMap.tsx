@@ -15,6 +15,7 @@ import type { EchoMapCopy, EchoMapDestination } from "@/data/portfolio";
 import { anchorHref } from "@/lib/portfolio/presentation";
 import { destinationIndexAt } from "@/lib/portfolio/echo-map";
 import { LimitingFactorVessel } from "../LimitingFactor/LimitingFactorVessel";
+import { EchoRadar } from "./EchoRadar";
 import { morphGeometry, snapshotRect, type MorphGeometry, type RectSnapshot } from "./geometry";
 import { echoMapMotion } from "./motion.stylex";
 import { styles } from "./styles";
@@ -140,9 +141,7 @@ export function EchoMap({
   const [morph, setMorph] = useState<MorphGeometry>(INITIAL_MORPH);
   const [activeIndex, setActiveIndex] = useState(0);
   const [previewIndex, setPreviewIndex] = useState(0);
-  const [scanIndex, setScanIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [documentHidden, setDocumentHidden] = useState(false);
 
   const setPhase = useCallback((nextPhase: EchoMapPhase) => {
     phaseRef.current = nextPhase;
@@ -252,13 +251,6 @@ export function EchoMap({
     return () => query.removeEventListener("change", syncPreference);
   }, []);
 
-  useEffect(() => {
-    const syncVisibility = () => setDocumentHidden(document.visibilityState === "hidden");
-    syncVisibility();
-    document.addEventListener("visibilitychange", syncVisibility);
-    return () => document.removeEventListener("visibilitychange", syncVisibility);
-  }, []);
-
   useLayoutEffect(() => {
     if (!launch || handledLaunchRef.current === launch.sequence || phaseRef.current !== "closed") {
       return;
@@ -273,7 +265,6 @@ export function EchoMap({
     const nextActiveIndex = activeDestinationIndex(destinations);
     setActiveIndex(nextActiveIndex);
     setPreviewIndex(nextActiveIndex);
-    setScanIndex(0);
     setIsExpanded(false);
     setPhase("opening");
     lockDocument();
@@ -319,20 +310,6 @@ export function EchoMap({
     }
   }, [finishClosing, finishOpening, reducedMotion]);
 
-  const radarCanRun = phase === "open";
-
-  useEffect(() => {
-    if (!radarCanRun || reducedMotion || documentHidden || copy.radar.contacts.length < 2) {
-      return;
-    }
-
-    const timer = window.setInterval(
-      () => setScanIndex((index) => (index + 1) % copy.radar.contacts.length),
-      2350,
-    );
-    return () => window.clearInterval(timer);
-  }, [copy.radar.contacts.length, documentHidden, radarCanRun, reducedMotion]);
-
   useEffect(
     () => () => {
       window.cancelAnimationFrame(openingFrameRef.current);
@@ -353,10 +330,7 @@ export function EchoMap({
     (depth: number) => `${depthFormatter.format(depth)} ${copy.depthUnit}`,
     [copy.depthUnit, depthFormatter],
   );
-  const previewDestination = destinations[previewIndex] ?? destinations[0];
-  const scannedContact = copy.radar.contacts[scanIndex] ?? copy.radar.contacts[0];
-  const radarIsActive = radarCanRun;
-  const motionIsPaused = documentHidden || !radarCanRun;
+  const activeDestination = destinations[activeIndex] ?? destinations[0];
   const morphStyle = {
     "--echo-map-translate-x": `${morph.translateX}px`,
     "--echo-map-translate-y": `${morph.translateY}px`,
@@ -366,7 +340,6 @@ export function EchoMap({
   } satisfies MorphStyle;
   const headingId = `${copy.id}-heading`;
   const descriptionId = `${copy.id}-description`;
-  const radarContentId = `${copy.id}-radar-content`;
   const activePosition = String(activeIndex + 1).padStart(2, "0");
   const destinationCount = String(destinations.length).padStart(2, "0");
 
@@ -452,119 +425,27 @@ export function EchoMap({
               >
                 <span aria-hidden="true">×</span>
               </button>
+              <p {...stylex.props(styles.visuallyHidden)} id={descriptionId}>
+                {copy.description}
+              </p>
             </header>
 
             <div
               {...stylex.props(styles.consoleBody, phase !== "open" && styles.consoleBodyDormant)}
               aria-hidden={phase !== "open"}
             >
-              <section {...stylex.props(styles.radarPanel)} aria-label={copy.radar.ariaLabel}>
-                <div {...stylex.props(styles.panelHeader)}>
-                  <p {...stylex.props(styles.panelLabel, styles.radarDesktopLabel)}>
-                    {copy.radar.ariaLabel}
-                  </p>
-                  <p {...stylex.props(styles.liveStatus)}>
-                    <span
-                      {...stylex.props(styles.liveDot, motionIsPaused && styles.motionPaused)}
-                      aria-hidden="true"
-                    />
-                    {copy.radar.statusLabel}
-                  </p>
-                </div>
-
-                <div {...stylex.props(styles.radarContent)} id={radarContentId}>
-                  <p {...stylex.props(styles.description)} id={descriptionId}>
-                    {copy.description}
-                  </p>
-
-                  <figure {...stylex.props(styles.radarField)}>
-                    <figcaption {...stylex.props(styles.visuallyHidden)}>
-                      {`${copy.radar.ariaLabel}. ${copy.radar.contacts.length} ${copy.radar.contactLabel}.`}
-                    </figcaption>
-                    <span {...stylex.props(styles.radarAxes)} aria-hidden="true" />
-                    <span
-                      {...stylex.props(
-                        styles.radarSweep,
-                        radarIsActive && styles.radarSweepActive,
-                        motionIsPaused && styles.motionPaused,
-                      )}
-                      aria-hidden="true"
-                    />
-                    <span
-                      {...stylex.props(
-                        styles.searchPulse,
-                        radarIsActive && styles.searchPulseActive,
-                        motionIsPaused && styles.motionPaused,
-                      )}
-                      aria-hidden="true"
-                    />
-
-                    {copy.radar.contacts.map((contact, index) => {
-                      const isScanned = index === scanIndex;
-                      return (
-                        <span
-                          key={contact.id}
-                          style={{
-                            left: `${contact.xPercent}%`,
-                            position: "absolute",
-                            top: `${contact.yPercent}%`,
-                            transform: "translate(-50%, -50%)",
-                          }}
-                          aria-hidden="true"
-                          data-echo-map-contact={contact.kind}
-                        >
-                          <span
-                            {...stylex.props(
-                              styles.contact,
-                              isScanned && styles.contactActive,
-                              motionIsPaused && styles.motionPaused,
-                            )}
-                          />
-                          <span
-                            {...stylex.props(
-                              styles.contactLabel,
-                              isScanned && styles.contactLabelActive,
-                            )}
-                          >
-                            {contact.label}
-                          </span>
-                        </span>
-                      );
-                    })}
-
-                    <span
-                      {...stylex.props(
-                        styles.centerLock,
-                        radarIsActive && styles.centerLockActive,
-                        motionIsPaused && styles.motionPaused,
-                      )}
-                      aria-hidden="true"
-                    >
-                      <span {...stylex.props(styles.centerDepth)}>
-                        {previewDestination ? formatDepth(previewDestination.depth) : null}
-                      </span>
-                    </span>
-                  </figure>
-
-                  {scannedContact ? (
-                    <div {...stylex.props(styles.radarReadout)} aria-hidden="true">
-                      <span {...stylex.props(styles.contactKind)}>
-                        {copy.radar.kindLabels[scannedContact.kind]}
-                      </span>
-                      <span {...stylex.props(styles.contactName)}>
-                        {copy.radar.trackingLabel}: {scannedContact.label}
-                      </span>
-                      <span {...stylex.props(styles.contactVector)}>
-                        {scannedContact.bearingDegrees}
-                        {copy.radar.bearingSuffix}
-                        {inlineSeparator}
-                        {scannedContact.rangeMeters}
-                        {copy.radar.rangeUnit}
-                      </span>
-                    </div>
-                  ) : null}
-                </div>
-              </section>
+              {activeDestination ? (
+                <EchoRadar
+                  copy={copy.radar}
+                  description={copy.description}
+                  destination={activeDestination}
+                  formatDepth={formatDepth}
+                  inlineSeparator={inlineSeparator}
+                  isOpen={phase === "open"}
+                  launch={launch}
+                  reducedMotion={reducedMotion}
+                />
+              ) : null}
 
               <nav {...stylex.props(styles.navigationPanel)} aria-label={copy.navigationLabel}>
                 <div {...stylex.props(styles.navigationHeader)}>

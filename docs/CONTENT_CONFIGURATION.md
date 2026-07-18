@@ -7,7 +7,9 @@ editorial copy.
 The boundary is deliberate:
 
 - `src/data/content/site.ts` owns identity, chrome, metadata, hero, contact, footer, visible symbols,
-  and copy/contact records for the Limiting Factor and Echo Map expedition controls.
+  and shell copy for the Limiting Factor and Echo Map expedition controls.
+- `src/data/content/echo-map.ts` owns every Echo Map depth field, creature record, visible fact,
+  relative return size, movement character, and research source.
 - `src/data/content/sections.ts` owns ordered sections and their authored depth/time waypoints.
 - `src/data/atmosphere/config.ts` owns scene thresholds, creature placement, and telemetry copy.
 - `src/data/portfolio.ts` assembles and validates the public `portfolioConfig` contract.
@@ -63,11 +65,29 @@ a fresh independent draw, so it can show the same introduction again by chance. 
 unique and stable for configuration and DOM contracts; hero introductions do not use client storage.
 
 `experience.limitingFactor` owns the draggable vehicle's accessible name, keyboard/pointer
-instruction, and visible call sign. `experience.echoMap` owns the dialog copy, navigation states,
-units, and typed nearby radar returns. Vehicle placement, FLIP geometry, scan cadence, and menu rhythm
-remain component behavior rather than editable content. Echo Map destinations are derived in document
-order from the canonical hero, `sections`, and `contact` configuration, so adding or reordering a
-section updates the map without maintaining a second navigation list.
+instruction, and visible call sign. `experience.echoMap` owns the dialog copy and navigation states;
+`src/data/content/echo-map.ts` owns the radar labels and typed depth fields. Vehicle placement, FLIP
+geometry, generated acoustic coordinates, and menu rhythm remain component behavior rather than
+editable content. Echo Map destinations are derived in document order from the canonical hero,
+`sections`, and `contact` configuration, so adding or reordering a section updates the map without
+maintaining a second navigation list.
+
+### Editing Echo Map creatures
+
+Edit only `src/data/content/echo-map.ts` to change which lifeforms appear at Surface, Sunlight,
+Twilight, Midnight, Abyss, Hadal, or the trench floor. Each catalog record owns its common and
+scientific names, visitor-facing description, observed depth, size, `dotScale`, motion character,
+overlap caveat, and authoritative `sourceUrl`. Fields reference those records instead of duplicating
+facts when an animal crosses zones. Keep each field to one through six returns so its full-size touch
+targets remain comfortably separated on compact screens.
+
+`dotScale` is a restrained visual rank from `0.5` to `2`; it is not a literal body-length
+ratio. Motion selects one bounded behavior profile (`fixed`, `crawl`, `hover`, `drift`, `glide`,
+`cruise`, `school`, or `prowl`). Each refreshed snapshot moves only a calm subset of eligible
+returns. The renderer derives position, bearing, range, breathing phase, and slow drift from the
+current destination plus a seed containing the fresh launch sequence and the vehicle's live screen
+coordinate. Opening again always refreshes the field, while one open snapshot remains stable enough
+to inspect.
 
 Each section has one specialized `entry` plus zero or more generic `waypoints`. Edit the specialized
 entry to change its log/protocol/specimen layout. Edit `waypoints` to add or remove narrative cards

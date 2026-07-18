@@ -212,16 +212,41 @@ export type LimitingFactorCopy = Readonly<{
   callSign?: string;
 }>;
 
+export const ECHO_MAP_MAX_CONTACTS_PER_FIELD = 6;
+
 export type EchoMapContactKind = "lifeform" | "object" | "signal";
+
+export type EchoMapContactMotion =
+  | "fixed"
+  | "crawl"
+  | "hover"
+  | "drift"
+  | "glide"
+  | "cruise"
+  | "school"
+  | "prowl";
 
 export type EchoMapContact = Readonly<{
   id: string;
   label: string;
+  scientificName: string;
+  description: string;
   kind: EchoMapContactKind;
-  bearingDegrees: number;
-  rangeMeters: number;
-  xPercent: number;
-  yPercent: number;
+  depthRangeLabel: string;
+  sizeLabel: string;
+  dotScale: number;
+  motion: EchoMapContactMotion;
+  overlapNote?: string;
+  sourceUrl: string;
+}>;
+
+export type EchoMapRadarField = Readonly<{
+  id: string;
+  targetId: string;
+  label: string;
+  description: string;
+  depthRangeMeters: readonly [number, number];
+  contacts: readonly EchoMapContact[];
 }>;
 
 export type EchoMapCopy = Readonly<{
@@ -248,8 +273,10 @@ export type EchoMapCopy = Readonly<{
     contactLabel: string;
     bearingSuffix: string;
     rangeUnit: string;
+    depthRangeLabel: string;
+    sizeLabel: string;
     kindLabels: Readonly<Record<EchoMapContactKind, string>>;
-    contacts: readonly EchoMapContact[];
+    fields: readonly EchoMapRadarField[];
   }>;
 }>;
 
