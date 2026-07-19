@@ -63,13 +63,14 @@ export function LimitingFactor({
           ref={frameRef}
           {...stylex.props(
             styles.frame,
+            isNavigating && styles.frameNavigating,
             floorPhase === "falling" && styles.frameFalling,
             floorPhase === "lifting" && styles.frameLifting,
             isReady && styles.ready,
           )}
           data-limiting-factor-floor-phase={floorPhase}
         >
-          <div {...stylex.props(styles.travelTilt)}>
+          <div {...stylex.props(styles.travelTilt, isNavigating && styles.travelTiltNavigating)}>
             <button
               ref={controlRef}
               {...stylex.props(styles.control, isDragging && styles.dragging)}

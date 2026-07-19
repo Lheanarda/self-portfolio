@@ -16,6 +16,12 @@ const compactNeutralBuoyancy = stylex.keyframes({
   "74%": { transform: "translate3d(-2px, 3px, 0) rotate(-0.3deg)" },
 });
 
+const desktopNavigationBank = stylex.keyframes({
+  "0%": { transform: "rotate(0deg)" },
+  "14%": { transform: "rotate(var(--limiting-factor-roll))" },
+  "76%, 100%": { transform: "rotate(0deg)" },
+});
+
 const lightBreathing = stylex.keyframes({
   "0%, 100%": { opacity: 0.5 },
   "52%": { opacity: 0.8 },
@@ -90,6 +96,12 @@ export const styles = stylex.create({
   ready: {
     opacity: 1,
   },
+  frameNavigating: {
+    transitionTimingFunction: {
+      default: "cubic-bezier(0.45, 0.08, 0.55, 0.92), ease-out",
+      [breakpoints.compact]: "cubic-bezier(0.44, 0.08, 0.2, 1), ease-out",
+    },
+  },
   frameFalling: {
     transitionTimingFunction: "cubic-bezier(0.42, 0.02, 0.86, 0.5), ease-out",
   },
@@ -103,6 +115,17 @@ export const styles = stylex.create({
     transitionTimingFunction: motion.easeOut,
     height: "100%",
     width: "100%",
+  },
+  travelTiltNavigating: {
+    animationDuration: "var(--limiting-factor-duration)",
+    animationFillMode: "both",
+    animationIterationCount: 1,
+    animationName: {
+      default: desktopNavigationBank,
+      [breakpoints.compact]: "none",
+      [breakpoints.reducedMotion]: "none",
+    },
+    animationTimingFunction: "linear",
   },
   control: {
     padding: 0,
